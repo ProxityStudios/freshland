@@ -84,6 +84,8 @@ async function freshClone(repo, options) {
 
   // TODO: install deps automaticly (support npm, pnpm & yarn)
   // TODO: open vscode when its done
+  shell.echo("IMPORTANT - You need to install dependencies - IMPORTANT");
+
   shell.echo("You are ready to go!");
 }
 
