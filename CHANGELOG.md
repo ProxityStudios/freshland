@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/ProxityStudios/freshland/compare/v1.0.1...v1.0.2) (2024-01-22)
+
+
+### Bug Fixes
+
+* typo fixes ([dbd81a3](https://github.com/ProxityStudios/freshland/commit/dbd81a38c9ce493e1616b5ff1deaabacd0f639a2))
+
 ## 1.0.1 (2024-01-22)
 
 
