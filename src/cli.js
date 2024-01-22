@@ -12,13 +12,13 @@ program.name(name).description(description).version(version);
 program
   .command("fresh")
   .description("Clone the repo to specified path")
-  .argument("<repo>", "repo EX: proxitystudios/typescript-starter")
-  .argument("<path_to_clone>", "path to clone EX: path/to/clone'")
+  .argument("<repo>", "repo EG: proxitystudios/typescript-starter")
+  .argument("<path_to_clone>", "path to clone EG: path/to/clone'")
   .action(freshClone);
 
 async function freshClone(repo, options) {
   if (!shell.which("git")) {
-    shell.echo("fatal: Sorry, this script requires git");
+    shell.echo("fatal: Sorry, this script requires 'git'");
     shell.exit(1);
   }
 
