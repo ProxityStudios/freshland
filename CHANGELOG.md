@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.3](https://github.com/ProxityStudios/freshland/compare/v1.0.2...v1.0.3) (2024-01-23)
+
+
+### Bug Fixes
+
+* some text updates ([139f5b9](https://github.com/ProxityStudios/freshland/commit/139f5b95f0171e445700d42ea3a6672a8d3fbfea))
+* some text updates ([381bbd7](https://github.com/ProxityStudios/freshland/commit/381bbd74c4d693a83365ebbcf94ae63f7a04cfa1))
+
 ## [1.0.2](https://github.com/ProxityStudios/freshland/compare/v1.0.1...v1.0.2) (2024-01-22)
 
 
