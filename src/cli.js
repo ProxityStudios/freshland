@@ -5,6 +5,7 @@ const { Command } = require("commander");
 const path = require("node:path");
 const shell = require("shelljs");
 const { version, name, description } = require("../package.json");
+
 const program = new Command();
 
 program.name(name).description(description).version(version);
@@ -16,7 +17,7 @@ program
   .argument("<path_to_clone>", "path to clone EG: path/to/clone'")
   .action(freshClone);
 
-async function freshClone(repo, options) {
+async function freshCloneCommand(repo, options) {
   if (!shell.which("git")) {
     shell.echo("fatal: Sorry, this script requires 'git'");
     shell.exit(1);
@@ -36,7 +37,7 @@ async function freshClone(repo, options) {
 
   shell.echo("info: Cloning repo to", pathToClone);
   if (shell.exec(`git clone ${repoURI} ${pathToClone}`).code !== 0) {
-    shell.echo("fatal: Cannot clone repo");
+    shell.echo("fatal: Cannot clone the repo");
     shell.exit(1);
   }
   shell.echo("info: Repo cloned");
@@ -50,16 +51,16 @@ async function freshClone(repo, options) {
 
   shell.echo("info: Initializing git");
   if (shell.exec("git init").code !== 0) {
-    shell.echo("fatal: Git add failed");
+    shell.echo("fatal: git add command failed");
     shell.exit(1);
   }
   if (shell.exec("git add .").code !== 0) {
-    shell.echo("fatal: Git add failed");
+    shell.echo("fatal: git add command failed");
     shell.exit(1);
   }
 
   if (shell.exec(`git commit -am "Auto-commit by Freshland"`).code !== 0) {
-    shell.echo("fatal: Git commit failed");
+    shell.echo("fatal: git commit failed");
     shell.exit(1);
   }
 
@@ -86,7 +87,7 @@ async function freshClone(repo, options) {
   // TODO: open vscode when its done
   shell.echo("IMPORTANT - You need to install dependencies - IMPORTANT");
 
-  shell.echo("You are ready to go!");
+  shell.echo("Done, you are ready to go!");
 }
 
 program.parse();
