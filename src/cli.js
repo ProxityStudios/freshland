@@ -30,12 +30,12 @@ async function freshCloneCommand(repo, options) {
     await axios.get(`https://api.github.com/repos/${repo}`);
   } catch (error) {
     shell.echo(
-      "fatal: Provided repo not exists or an unexpected error occured. Please try again..."
+      "fatal: Repo is not available or an unexpected error has occurred. Please try again..."
     );
     shell.exit(1);
   }
 
-  shell.echo("info: Cloning repo to", pathToClone);
+  shell.echo("info: Cloning to", pathToClone);
   if (shell.exec(`git clone ${repoURI} ${pathToClone}`).code !== 0) {
     shell.echo("fatal: Cannot clone the repo");
     shell.exit(1);
