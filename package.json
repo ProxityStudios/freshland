@@ -10,8 +10,13 @@
     "test": "node ./src/cli.js"
   },
   "keywords": [
-    "freshrep",
-    "repo-cloner"
+    "freshland",
+    "repo-cloner",
+    "clone",
+    "repocloner",
+    "cloner",
+    "js",
+    "javascript"
   ],
   "author": "ProxityStudios",
   "license": "MIT",
