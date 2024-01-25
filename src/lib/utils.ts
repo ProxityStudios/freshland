@@ -13,23 +13,14 @@ export function cloneGithubRepo(repo: string, destination: string) {
 	if (repo.startsWith('http') || repo.startsWith('git@')) {
 		repoURI = repo;
 	}
-	const pathToClone = path.resolve(destination);
-
-	logger.info('Cloning to', pathToClone);
-	if (shell.exec(`git clone ${repoURI} ${pathToClone}`).code !== 0) {
+	logger.info('Cloning to', destination);
+	if (shell.exec(`git clone ${repoURI} ${destination}`).code !== 0) {
 		logger.error('Cannot clone the repo');
 		shell.exit(1);
 	}
 	logger.info('Repo cloned');
 
-	deleteAndInitGit(pathToClone);
-	updatePackageJSON(destination.replaceAll('/', '-'), pathToClone);
-
-	// TODO: install deps automaticly (support npm, pnpm & yarn)
-	// TODO: open vscode when its done
-	logger.warn('IMPORTANT - You need to install dependencies - IMPORTANT');
-
-	logger.info('Done, you are ready to go!');
+	deleteAndInitGit(destination);
 }
 
 export function deleteAndInitGit(pth: string) {
@@ -54,6 +45,8 @@ export function deleteAndInitGit(pth: string) {
 		logger.error('"git commit" command failed');
 		shell.exit(1);
 	}
+
+	logger.info('Git initialized');
 }
 
 export function updatePackageJSON(projectName: string, pth: string) {
@@ -84,4 +77,41 @@ export function updatePackageJSON(projectName: string, pth: string) {
 			shell.sed('-i', /"version":\s*"(.*?)"/i, `"version": "1.0.0"`, file);
 		});
 	}
+}
+
+export enum PackageManager {
+	npm = 'npm',
+	pnpm = 'pnpm',
+	yarn = 'yarn',
+	bun = 'bun',
+}
+type PackageManagerKeys = keyof typeof PackageManager;
+
+export function installDeps(
+	packageManager: PackageManagerKeys,
+	projectName: string,
+	pth: string
+) {
+	shell.cd(pth);
+	logger.info(pth);
+	// TODO: pick package manager automaticly (support npm, pnpm, yarn & bun)
+
+	if (packageManager === PackageManager.npm) {
+		updatePackageJSON(projectName, pth);
+
+		if (!shell.which('npm')) {
+			logger.error('Sorry, you need to install "npm" first');
+			return;
+		}
+
+		logger.info('Installing dependencies...');
+		if (shell.exec('npm install').code === 0) {
+			logger.info('Dependencies installed');
+		} else {
+			logger.error('"npm install" command failed');
+			logger.warn('You need to install dependencies manually!');
+		}
+	}
+
+	// TODO: support other package managers
 }
