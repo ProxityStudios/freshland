@@ -93,8 +93,7 @@ export function installDeps(
 	pth: string
 ) {
 	shell.cd(pth);
-	logger.info(pth);
-	// TODO: pick package manager automaticly (support npm, pnpm, yarn & bun)
+	// TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
 
 	if (packageManager === PackageManager.npm) {
 		updatePackageJSON(projectName, pth);
