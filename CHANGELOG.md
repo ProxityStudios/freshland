@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.4](https://github.com/ProxityStudios/freshland/compare/v1.0.3...v1.0.4) (2024-01-25)
+
+
+### Bug Fixes
+
+* trigger build ([87e39b3](https://github.com/ProxityStudios/freshland/commit/87e39b35b2fccd8c911a5edcbbfa02efbb72f1aa))
+
 ## [1.0.3](https://github.com/ProxityStudios/freshland/compare/v1.0.2...v1.0.3) (2024-01-23)
 
 
