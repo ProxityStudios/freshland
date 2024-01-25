@@ -3,37 +3,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePackageJSON = exports.deleteAndInitGit = exports.cloneGithubRepo = void 0;
-const axios_1 = __importDefault(require("axios"));
-const node_path_1 = __importDefault(require("node:path"));
+exports.installDeps = exports.PackageManager = exports.updatePackageJSON = exports.deleteAndInitGit = exports.cloneGithubRepo = void 0;
 const shelljs_1 = __importDefault(require("shelljs"));
 const logger_1 = require("./logger");
-async function cloneGithubRepo(repo, destination) {
+function cloneGithubRepo(repo, destination) {
     if (!shelljs_1.default.which('git')) {
         logger_1.logger.error('Sorry, this script requires "git"');
         shelljs_1.default.exit(1);
     }
-    const repoURI = `https://github.com/${repo}`;
-    const pathToClone = node_path_1.default.resolve(destination);
-    try {
-        await axios_1.default.get(`https://api.github.com/repos/${repo}`);
+    let repoURI = `https://github.com/${repo}`;
+    if (repo.startsWith('http') || repo.startsWith('git@')) {
+        repoURI = repo;
     }
-    catch {
-        logger_1.logger.error('Repo is not available or an unexpected error has occurred. Please try again...');
-        shelljs_1.default.exit(1);
-    }
-    logger_1.logger.info('Cloning to', pathToClone);
-    if (shelljs_1.default.exec(`git clone ${repoURI} ${pathToClone}`).code !== 0) {
+    logger_1.logger.info('Cloning to', destination);
+    if (shelljs_1.default.exec(`git clone ${repoURI} ${destination}`).code !== 0) {
         logger_1.logger.error('Cannot clone the repo');
         shelljs_1.default.exit(1);
     }
     logger_1.logger.info('Repo cloned');
-    deleteAndInitGit(pathToClone);
-    updatePackageJSON(destination.replaceAll('/', '-'), pathToClone);
-    // TODO: install deps automaticly (support npm, pnpm & yarn)
-    // TODO: open vscode when its done
-    logger_1.logger.warn('IMPORTANT - You need to install dependencies - IMPORTANT');
-    logger_1.logger.info('Done, you are ready to go!');
+    deleteAndInitGit(destination);
 }
 exports.cloneGithubRepo = cloneGithubRepo;
 function deleteAndInitGit(pth) {
@@ -55,6 +43,7 @@ function deleteAndInitGit(pth) {
         logger_1.logger.error('"git commit" command failed');
         shelljs_1.default.exit(1);
     }
+    logger_1.logger.info('Git initialized');
 }
 exports.deleteAndInitGit = deleteAndInitGit;
 function updatePackageJSON(projectName, pth) {
@@ -75,3 +64,32 @@ function updatePackageJSON(projectName, pth) {
     }
 }
 exports.updatePackageJSON = updatePackageJSON;
+var PackageManager;
+(function (PackageManager) {
+    PackageManager["npm"] = "npm";
+    PackageManager["pnpm"] = "pnpm";
+    PackageManager["yarn"] = "yarn";
+    PackageManager["bun"] = "bun";
+})(PackageManager || (exports.PackageManager = PackageManager = {}));
+function installDeps(packageManager, projectName, pth) {
+    shelljs_1.default.cd(pth);
+    logger_1.logger.info(pth);
+    // TODO: pick package manager automaticly (support npm, pnpm, yarn & bun)
+    if (packageManager === PackageManager.npm) {
+        updatePackageJSON(projectName, pth);
+        if (!shelljs_1.default.which('npm')) {
+            logger_1.logger.error('Sorry, you need to install "npm" first');
+            return;
+        }
+        logger_1.logger.info('Installing dependencies...');
+        if (shelljs_1.default.exec('npm install').code === 0) {
+            logger_1.logger.info('Dependencies installed');
+        }
+        else {
+            logger_1.logger.error('"npm install" command failed');
+            logger_1.logger.warn('You need to install dependencies manually!');
+        }
+    }
+    // TODO: support other package managers
+}
+exports.installDeps = installDeps;
