@@ -1,3 +1,3 @@
 import { Logger } from 'tslog';
-export declare const mainLogger: Logger<unknown>;
+export declare const logger: Logger<unknown>;
 //# sourceMappingURL=logger.d.ts.map
