@@ -73,8 +73,7 @@ var PackageManager;
 })(PackageManager || (exports.PackageManager = PackageManager = {}));
 function installDeps(packageManager, projectName, pth) {
     shelljs_1.default.cd(pth);
-    logger_1.logger.info(pth);
-    // TODO: pick package manager automaticly (support npm, pnpm, yarn & bun)
+    // TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
     if (packageManager === PackageManager.npm) {
         updatePackageJSON(projectName, pth);
         if (!shelljs_1.default.which('npm')) {
