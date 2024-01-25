@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { input } from '@inquirer/prompts';
+import { input, select, confirm } from '@inquirer/prompts';
 import { Command } from '@commander-js/extra-typings';
 import { logger } from './lib/logger';
 import { cloneGithubRepo } from './lib/utils';
@@ -11,11 +11,12 @@ export const program = new Command()
 	.version(version)
 	.description(description)
 	.option('-d, --debug', 'Enable debug mode')
-	// default
+	// default command
 	.action(GUIcloneCommand);
 
 program
 	.command('clone')
+	// .option('-lr, --latest-release', 'Use latest release')
 	.description('Clone the repo to specified path as much as fresh')
 	.argument(
 		'<repo>',
@@ -34,23 +35,45 @@ async function NOGUIcloneCommand(repo: string, path: string) {
 	try {
 		await cloneGithubRepo(repo, path);
 	} catch {
-		logger.error('An unexpected error occured');
+		logger.error('An unexpected error occured or user canceled the process.');
 	}
 }
-
 async function GUIcloneCommand() {
 	// options.debug
+	let repo: string;
 
 	try {
-		const repo = await input({
-			message: 'What repo do you want to clone?',
-			validate: (i) => {
-				if (i.trim() === '') {
-					return 'Repo name cannot be empty.';
-				}
-				return true;
-			},
+		const usingTemplate = await confirm({
+			message: 'Do you want to use a starter?',
+			default: false,
 		});
+
+		repo = await (usingTemplate
+			? select({
+					message: 'Select a starter',
+					choices: [
+						{
+							name: 'typescript-starter',
+							value: 'proxitystudios/typescript-starter',
+							description: 'typescript-starter',
+						},
+						{
+							name: 'express-api-starter-ts',
+							value: 'proxitystudios/express-api-starter-ts',
+							description: 'express-api-starter-ts',
+						},
+					],
+				})
+			: input({
+					message: 'What repo do you want to clone?',
+					validate: (i) => {
+						if (i.trim() === '') {
+							return 'Repo name cannot be empty.';
+						}
+						return true;
+					},
+				}));
+
 		const path = await input({
 			message: 'Where do you want to clone?',
 			validate: (i) => {
@@ -63,6 +86,6 @@ async function GUIcloneCommand() {
 
 		await cloneGithubRepo(repo, path);
 	} catch {
-		logger.error('An unexpected error occured');
+		logger.error('An unexpected error occured or user canceled the process.');
 	}
 }
