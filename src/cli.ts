@@ -2,7 +2,7 @@
 
 import { input } from '@inquirer/prompts';
 import { Command } from '@commander-js/extra-typings';
-import { mainLogger } from './lib/logger';
+import { logger } from './lib/logger';
 import { cloneGithubRepo } from './lib/utils';
 import { version, name, description } from '../package.json';
 
@@ -34,7 +34,7 @@ async function NOGUIcloneCommand(repo: string, path: string) {
 	try {
 		await cloneGithubRepo(repo, path);
 	} catch {
-		mainLogger.error('An unexpected error occured');
+		logger.error('An unexpected error occured');
 	}
 }
 
@@ -63,6 +63,6 @@ async function GUIcloneCommand() {
 
 		await cloneGithubRepo(repo, path);
 	} catch {
-		mainLogger.error('An unexpected error occured');
+		logger.error('An unexpected error occured');
 	}
 }

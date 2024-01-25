@@ -27,7 +27,7 @@
 		"url": "https://github.com/ProxityStudios/freshland.git"
 	},
 	"scripts": {
-		"test": "node -r ts-node/register src/cli.ts",
+		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/cli.ts",
 		"build": "run-s fix clean build:tsc",
 		"build:tsc": "tsc --build",
 		"clean": "rimraf dist/",

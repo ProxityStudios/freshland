@@ -1,3 +1,6 @@
 import { Logger } from 'tslog';
 
-export const mainLogger = new Logger({ type: 'pretty', name: 'CLI' });
+export const logger = new Logger({
+	type: 'pretty',
+	prettyLogTemplate: '{{MM}}:{{ss}} {{logLevelName}} ',
+});
