@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.5](https://github.com/ProxityStudios/freshland/compare/v1.0.4...v1.0.5) (2024-01-25)
+
+
+### Bug Fixes
+
+* rename to match the function name ([411ca4e](https://github.com/ProxityStudios/freshland/commit/411ca4e4294860f9e8056d8a6609ac90296f1fd2))
+
 ## [1.0.4](https://github.com/ProxityStudios/freshland/compare/v1.0.3...v1.0.4) (2024-01-25)
 
 
