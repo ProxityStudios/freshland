@@ -1,0 +1,72 @@
+{
+    "name": "freshland",
+    "description": "A tool to clone github repos without git history",
+    "version": "2.0.1-rc.0",
+    "author": "ProxityStudios",
+    "license": "MIT",
+    "homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
+    "readme": "./README.md",
+    "engines": {
+        "node": ">=12.0.0"
+    },
+    "bugs": {
+        "url": "https://github.com/ProxityStudios/freshland/issues"
+    },
+    "keywords": [
+        "freshland",
+        "repo-cloner",
+        "clone",
+        "repocloner",
+        "cloner",
+        "js",
+        "javascript",
+        "git"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ProxityStudios/freshland.git"
+    },
+    "scripts": {
+        "test": "node -r ts-node/register src/main.ts",
+        "build": "run-s fix clean build:tsc",
+        "build:tsc": "tsc --build",
+        "clean": "rimraf dist/",
+        "fix": "eslint . --fix"
+    },
+    "bin": {
+        "freshland": "dist/src/cli.js"
+    },
+    "exports": "./dist/src/cli.js",
+    "devDependencies": {
+        "@types/node": "^20.11.0",
+        "@types/shelljs": "^0.8.15",
+        "@types/yargs": "^17.0.32",
+        "@typescript-eslint/eslint-plugin": "^6.18.1",
+        "@typescript-eslint/parser": "^6.18.1",
+        "eslint": "^8.56.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-config-airbnb-typescript": "^17.1.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-formatter-pretty": "^6.0.1",
+        "eslint-plugin-eslint-comments": "^3.2.0",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-prettier": "^5.1.3",
+        "eslint-plugin-promise": "^6.1.1",
+        "eslint-plugin-unicorn": "^50.0.1",
+        "npm-run-all": "^4.1.5",
+        "prettier": "^3.2.2",
+        "rimraf": "^5.0.5",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "@commander-js/extra-typings": "^11.1.0",
+        "@inquirer/prompts": "^3.3.0",
+        "axios": "^1.6.6",
+        "commander": "^11.1.0",
+        "dotenv": "^16.3.1",
+        "shelljs": "^0.8.5",
+        "ts-node": "^10.9.2",
+        "tslog": "^4.9.2",
+        "yargs": "^17.7.2"
+    }
+}
