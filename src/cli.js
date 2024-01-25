@@ -15,7 +15,7 @@ program
   .description("Clone the repo to specified path")
   .argument("<repo>", "repo EG: proxitystudios/typescript-starter")
   .argument("<path_to_clone>", "path to clone EG: path/to/clone'")
-  .action(freshClone);
+  .action(freshCloneCommand);
 
 async function freshCloneCommand(repo, options) {
   if (!shell.which("git")) {
