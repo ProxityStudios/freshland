@@ -1,25 +1,19 @@
-import axios from 'axios';
 import path from 'node:path';
 import shell from 'shelljs';
 import { logger } from './logger';
 
-export async function cloneGithubRepo(repo: string, destination: string) {
+export function cloneGithubRepo(repo: string, destination: string) {
 	if (!shell.which('git')) {
 		logger.error('Sorry, this script requires "git"');
 		shell.exit(1);
 	}
 
-	const repoURI = `https://github.com/${repo}`;
-	const pathToClone = path.resolve(destination);
+	let repoURI = `https://github.com/${repo}`;
 
-	try {
-		await axios.get(`https://api.github.com/repos/${repo}`);
-	} catch {
-		logger.error(
-			'Repo is not available or an unexpected error has occurred. Please try again...'
-		);
-		shell.exit(1);
+	if (repo.startsWith('http') || repo.startsWith('git@')) {
+		repoURI = repo;
 	}
+	const pathToClone = path.resolve(destination);
 
 	logger.info('Cloning to', pathToClone);
 	if (shell.exec(`git clone ${repoURI} ${pathToClone}`).code !== 0) {

@@ -30,10 +30,10 @@ program.parse(process.argv);
 
 const options = program.opts();
 
-async function NOGUIcloneCommand(repo: string, path: string) {
+function NOGUIcloneCommand(repo: string, path: string) {
 	// options.debug
 	try {
-		await cloneGithubRepo(repo, path);
+		cloneGithubRepo(repo, path);
 	} catch {
 		logger.error('An unexpected error occured or user canceled the process.');
 	}
@@ -62,6 +62,11 @@ async function GUIcloneCommand() {
 							value: 'proxitystudios/express-api-starter-ts',
 							description: 'express-api-starter-ts',
 						},
+						{
+							name: 'discord-bot-starter-ts',
+							value: 'proxitystudios/discord-bot-starter-ts',
+							description: 'discord-bot-starter-ts',
+						},
 					],
 				})
 			: input({
@@ -84,7 +89,7 @@ async function GUIcloneCommand() {
 			},
 		});
 
-		await cloneGithubRepo(repo, path);
+		cloneGithubRepo(repo, path);
 	} catch {
 		logger.error('An unexpected error occured or user canceled the process.');
 	}
