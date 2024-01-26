@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/ProxityStudios/freshland/compare/v2.0.0...v2.1.0) (2024-01-26)
+
+
+### Features
+
+* add epa command ([b866fbd](https://github.com/ProxityStudios/freshland/commit/b866fbd616508cae5874f17965eb48b692cc9adf))
+
 ## [2.0.0](https://github.com/ProxityStudios/freshland/compare/v1.0.4...v2.0.0) (2024-01-26)
 
 
