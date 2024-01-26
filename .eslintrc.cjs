@@ -12,7 +12,6 @@ module.exports = {
 	],
 	env: {
 		node: true,
-		browser: true,
 	},
 	parser: '@typescript-eslint/parser',
 	parserOptions: {
@@ -25,6 +24,8 @@ module.exports = {
 		'import/no-default-export': 'off',
 		'@typescript-eslint/no-unused-vars': 'warn',
 		'@typescript-eslint/no-explicit-any': 'warn',
+		'@typescript-eslint/no-unsafe-assignment': 'warn',
+		'@typescript-eslint/no-unsafe-member-access': 'warn',
 		// Use function hoisting to improve code readability
 		'no-use-before-define': [
 			'error',

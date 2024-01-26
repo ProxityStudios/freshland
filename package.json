@@ -30,6 +30,7 @@
 		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/cli.ts",
 		"build": "run-s fix clean build:tsc",
 		"build:tsc": "tsc --build",
+		"prepublish": "npm run build",
 		"clean": "rimraf dist/",
 		"fix": "eslint . --fix"
 	},

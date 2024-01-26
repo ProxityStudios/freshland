@@ -8,6 +8,8 @@ import {
 	PackageManager,
 	cloneGithubRepo,
 	installDeps,
+	installEPAForJS,
+	installEPAForTS,
 	updatePackageJSON,
 } from './lib/utils';
 import { version, name, description } from '../package.json';
@@ -19,26 +21,49 @@ export const program = new Command()
 	.option('-d, --debug', 'Enable debug mode')
 	// default command
 	.action(GUIcloneCommand);
-
-export const options = program.opts();
-
-if (options.debug) {
-	logger.debug('Debug mode enabled');
-}
-
 program
 	.command('clone')
+	// TODO: implement this
 	// .option('-lr, --latest-release', 'Use latest release')
 	.description('Clone the repo to specified path as much as fresh')
 	.argument(
 		'<repo>',
 		'EG: proxitystudios/typescript-starter OR https://github.com/proxitystudios/typescript-starter'
 	)
-	.argument('<path>', "EG: path/to/clone'")
+	.argument('<path>', 'EG: path/to/clone')
 	.action(NOGUIcloneCommand);
+
+program
+	.command('install-epa')
+	.description(
+		'[BETA] Installs "eslint", "prettier", "airbnb" and configures.'
+	)
+	.argument('<path>', 'path/to/install')
+	.option('--ts, --typescript', 'Use typpescript')
+	.action(installEPACommand);
+
+export const globalOptions = program.opts();
+
+if (globalOptions.debug) {
+	logger.debug('Debug mode enabled');
+}
 
 // Parse the command-line arguments
 program.parse(process.argv);
+
+interface InstallEPACommandOptions {
+	typescript?: true;
+}
+
+async function installEPACommand(pth: string, opts: InstallEPACommandOptions) {
+	const { typescript } = opts;
+
+	if (typescript) {
+		await installEPAForTS(path.resolve(pth));
+	} else {
+		installEPAForJS();
+	}
+}
 
 function NOGUIcloneCommand(repo: string, destination: string) {
 	// options.debug

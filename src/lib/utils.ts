@@ -1,5 +1,6 @@
 import path from 'node:path';
 import shell from 'shelljs';
+import fs from 'node:fs/promises';
 import { logger } from './logger';
 
 export function cloneGithubRepo(repo: string, destination: string) {
@@ -13,7 +14,7 @@ export function cloneGithubRepo(repo: string, destination: string) {
 	if (repo.startsWith('http') || repo.startsWith('git@')) {
 		repoURI = repo;
 	}
-	logger.info('Cloning to', destination);
+	logger.info('Cloning into', destination);
 	if (shell.exec(`git clone ${repoURI} ${destination}`).code !== 0) {
 		logger.error('Cannot clone the repo');
 		shell.exit(1);
@@ -113,4 +114,63 @@ export function installDeps(
 	}
 
 	// TODO: support other package managers
+}
+
+export async function installEPAForTS(pth: string) {
+	logger.info('Installing EPA (for TypeScript)');
+
+	shell.cd(pth);
+
+	logger.info('Installing dependencies');
+	shell.exec('npm install', { async: true });
+	logger.info('Dependencies installed');
+
+	logger.info('Installing packages');
+	shell.exec(
+		'npm install --save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-prettier',
+		{ async: true }
+	);
+
+	shell.exec('npx install-peerdeps --dev eslint-config-airbnb-base', {
+		async: true,
+	});
+
+	shell.exec(
+		'npm install eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev'
+	);
+
+	logger.info('Packages installed');
+
+	const eslintRcTemplate = await fs.readFile(
+		'../../templates/typescript/.eslintrc.js',
+		'utf8'
+	);
+	await fs.writeFile('.eslintrc.js', eslintRcTemplate);
+
+	const prettierRcTemplate = await fs.readFile(
+		'../../templates/typescript/prettier.config.js',
+		'utf8'
+	);
+	await fs.writeFile('prettier.config.js', prettierRcTemplate);
+
+	const packagePath = `${process.cwd()}/package.json`;
+	const packageContent = await fs.readFile(packagePath, 'utf8');
+	const packageJSON: any = JSON.parse(packageContent);
+
+	packageJSON.scripts = {
+		...packageJSON.scripts,
+		fix: 'eslint . --fix',
+	};
+
+	await fs.writeFile(
+		packagePath,
+		JSON.stringify(packageJSON, undefined, 2),
+		'utf8'
+	);
+
+	logger.info('EPA installed successfully');
+}
+
+export function installEPAForJS() {
+	logger.info('Installing EPA (for JavaScript)');
 }
