@@ -10,7 +10,7 @@ permissions:
 name: release-please-beta
 
 jobs:
-  release-please:
+  release-please-beta:
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v4
@@ -21,5 +21,5 @@ jobs:
           token: ${{ secrets.MY_RELEASE_PLEASE_TOKEN }}
           # this is a built-in strategy in release-please, see "Action Inputs"
           # for more options
-          manifest-file: ../../.release-please-manifest.json
+          manifest-file: release-please-config.json
           
