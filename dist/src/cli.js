@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.options = exports.program = void 0;
+exports.globalOptions = exports.program = void 0;
 const prompts_1 = require("@inquirer/prompts");
 const extra_typings_1 = require("@commander-js/extra-typings");
 const node_path_1 = __importDefault(require("node:path"));
@@ -18,19 +18,35 @@ exports.program = new extra_typings_1.Command()
     .option('-d, --debug', 'Enable debug mode')
     // default command
     .action(GUIcloneCommand);
-exports.options = exports.program.opts();
-if (exports.options.debug) {
-    logger_1.logger.debug('Debug mode enabled');
-}
 exports.program
     .command('clone')
+    // TODO: implement this
     // .option('-lr, --latest-release', 'Use latest release')
     .description('Clone the repo to specified path as much as fresh')
     .argument('<repo>', 'EG: proxitystudios/typescript-starter OR https://github.com/proxitystudios/typescript-starter')
-    .argument('<path>', "EG: path/to/clone'")
+    .argument('<path>', 'EG: path/to/clone')
     .action(NOGUIcloneCommand);
+exports.program
+    .command('install-epa')
+    .description('[BETA] Installs "eslint", "prettier", "airbnb" and configures.')
+    .argument('<path>', 'path/to/install')
+    .option('--ts, --typescript', 'Use typpescript')
+    .action(installEPACommand);
+exports.globalOptions = exports.program.opts();
+if (exports.globalOptions.debug) {
+    logger_1.logger.debug('Debug mode enabled');
+}
 // Parse the command-line arguments
 exports.program.parse(process.argv);
+async function installEPACommand(pth, opts) {
+    const { typescript } = opts;
+    if (typescript) {
+        await (0, utils_1.installEPAForTS)(node_path_1.default.resolve(pth));
+    }
+    else {
+        (0, utils_1.installEPAForJS)();
+    }
+}
 function NOGUIcloneCommand(repo, destination) {
     // options.debug
     const pth = node_path_1.default.resolve(destination);

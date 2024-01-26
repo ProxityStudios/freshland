@@ -9,5 +9,7 @@ export declare enum PackageManager {
 }
 type PackageManagerKeys = keyof typeof PackageManager;
 export declare function installDeps(packageManager: PackageManagerKeys, projectName: string, pth: string): void;
+export declare function installEPAForTS(pth: string): Promise<void>;
+export declare function installEPAForJS(): void;
 export {};
 //# sourceMappingURL=utils.d.ts.map

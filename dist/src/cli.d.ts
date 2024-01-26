@@ -3,7 +3,7 @@ import { Command } from '@commander-js/extra-typings';
 export declare const program: Command<[], {
     debug?: true | undefined;
 }>;
-export declare const options: {
+export declare const globalOptions: {
     debug?: true | undefined;
 };
 //# sourceMappingURL=cli.d.ts.map

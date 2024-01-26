@@ -30,9 +30,13 @@
 		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/cli.ts",
 		"build": "run-s fix clean build:tsc",
 		"build:tsc": "tsc --build",
-		"prepublish": "npm run build",
 		"clean": "rimraf dist/",
-		"fix": "eslint . --fix"
+		"fix": "eslint . --fix",
+		"publish:beta": "run-s prepublish  commit-latest-build release-beta find-me-a-name",
+		"release-beta": "npm version prerelease --preid=rc",
+		"find-me-a-name": "npm publish --tag beta",
+		"commit-latest-build": "git add . && git commit -m \"chore: latest-build\"",
+		"prepublish": "run-s build"
 	},
 	"bin": {
 		"freshland": "dist/src/cli.js"

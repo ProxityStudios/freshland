@@ -3,8 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.installDeps = exports.PackageManager = exports.updatePackageJSON = exports.deleteAndInitGit = exports.cloneGithubRepo = void 0;
+exports.installEPAForJS = exports.installEPAForTS = exports.installDeps = exports.PackageManager = exports.updatePackageJSON = exports.deleteAndInitGit = exports.cloneGithubRepo = void 0;
 const shelljs_1 = __importDefault(require("shelljs"));
+const promises_1 = __importDefault(require("node:fs/promises"));
 const logger_1 = require("./logger");
 function cloneGithubRepo(repo, destination) {
     if (!shelljs_1.default.which('git')) {
@@ -15,7 +16,7 @@ function cloneGithubRepo(repo, destination) {
     if (repo.startsWith('http') || repo.startsWith('git@')) {
         repoURI = repo;
     }
-    logger_1.logger.info('Cloning to', destination);
+    logger_1.logger.info('Cloning into', destination);
     if (shelljs_1.default.exec(`git clone ${repoURI} ${destination}`).code !== 0) {
         logger_1.logger.error('Cannot clone the repo');
         shelljs_1.default.exit(1);
@@ -92,3 +93,35 @@ function installDeps(packageManager, projectName, pth) {
     // TODO: support other package managers
 }
 exports.installDeps = installDeps;
+async function installEPAForTS(pth) {
+    logger_1.logger.info('Installing EPA (for TypeScript)');
+    shelljs_1.default.cd(pth);
+    logger_1.logger.info('Installing dependencies');
+    shelljs_1.default.exec('npm install', { async: true });
+    logger_1.logger.info('Dependencies installed');
+    logger_1.logger.info('Installing packages');
+    shelljs_1.default.exec('npm install --save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-prettier', { async: true });
+    shelljs_1.default.exec('npx install-peerdeps --dev eslint-config-airbnb-base', {
+        async: true,
+    });
+    shelljs_1.default.exec('npm install eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev');
+    logger_1.logger.info('Packages installed');
+    const eslintRcTemplate = await promises_1.default.readFile('../../templates/typescript/.eslintrc.js', 'utf8');
+    await promises_1.default.writeFile('.eslintrc.js', eslintRcTemplate);
+    const prettierRcTemplate = await promises_1.default.readFile('../../templates/typescript/prettier.config.js', 'utf8');
+    await promises_1.default.writeFile('prettier.config.js', prettierRcTemplate);
+    const packagePath = `${process.cwd()}/package.json`;
+    const packageContent = await promises_1.default.readFile(packagePath, 'utf8');
+    const packageJSON = JSON.parse(packageContent);
+    packageJSON.scripts = {
+        ...packageJSON.scripts,
+        fix: 'eslint . --fix',
+    };
+    await promises_1.default.writeFile(packagePath, JSON.stringify(packageJSON, undefined, 2), 'utf8');
+    logger_1.logger.info('EPA installed successfully');
+}
+exports.installEPAForTS = installEPAForTS;
+function installEPAForJS() {
+    logger_1.logger.info('Installing EPA (for JavaScript)');
+}
+exports.installEPAForJS = installEPAForJS;
