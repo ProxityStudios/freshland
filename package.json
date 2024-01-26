@@ -32,10 +32,10 @@
 		"build:tsc": "tsc --build",
 		"clean": "rimraf dist/",
 		"fix": "eslint . --fix",
-		"publish:beta": "run-s prepublish  commit-latest-build release-beta find-me-a-name",
-		"release-beta": "npm version prerelease --preid=rc",
-		"find-me-a-name": "npm publish --tag beta",
-		"commit-latest-build": "git add . && git commit -m \"chore: latest-build\"",
+		"publish:beta": "run-s prepublish  commit-latest-build bump-beta-version pb",
+		"bump-beta-version": "npm version prerelease --preid=rc",
+		"pb": "npm publish --tag beta",
+		"commit-latest-build": "git add . && git commit -m \"chore: latest-build\" && git push",
 		"prepublish": "run-s build"
 	},
 	"bin": {
@@ -45,7 +45,6 @@
 	"devDependencies": {
 		"@types/node": "^20.11.0",
 		"@types/shelljs": "^0.8.15",
-		"@types/yargs": "^17.0.32",
 		"@typescript-eslint/eslint-plugin": "^6.18.1",
 		"@typescript-eslint/parser": "^6.18.1",
 		"eslint": "^8.56.0",
@@ -66,12 +65,9 @@
 	"dependencies": {
 		"@commander-js/extra-typings": "^11.1.0",
 		"@inquirer/prompts": "^3.3.0",
-		"axios": "^1.6.6",
 		"commander": "^11.1.0",
-		"dotenv": "^16.3.1",
 		"shelljs": "^0.8.5",
 		"ts-node": "^10.9.2",
-		"tslog": "^4.9.2",
-		"yargs": "^17.7.2"
+		"tslog": "^4.9.2"
 	}
 }
