@@ -5,7 +5,6 @@
         "changelog-path": "CHANGELOG.md",
         "release-type": "node",
         "versioning": "prerelease",
-        "prerelease": true,
         "draft": true
       }
     },
