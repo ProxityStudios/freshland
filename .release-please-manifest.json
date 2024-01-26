@@ -1,7 +1,9 @@
 {
     "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
     "release-type": "node",
-    "versioning": "prerelease",
     "extra-files": ["README.md"],
-    "prerelease": true
+    "prerelease": true,
+    "packages": {
+      ".": "2.0.0"
+    }
   }
