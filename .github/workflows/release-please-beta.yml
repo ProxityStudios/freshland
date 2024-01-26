@@ -21,5 +21,6 @@ jobs:
           token: ${{ secrets.MY_RELEASE_PLEASE_TOKEN }}
           # optional. customize path to release-please-config.json
           config-file: release-please-config.json
+          target-branch: beta
           # optional. customize path to .release-please-manifest.json
           manifest-file: .release-please-manifest.json
