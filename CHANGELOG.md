@@ -2,14 +2,12 @@
 
 ## [2.0.0](https://github.com/ProxityStudios/freshland/compare/v1.0.4...v2.0.0) (2024-01-26)
 
-
 ### Features
 
 * implement starter repos ([d18049a](https://github.com/ProxityStudios/freshland/commit/d18049a141a97403486cfed5a70030ca44c3390d))
 * install deps feature ([a755626](https://github.com/ProxityStudios/freshland/commit/a7556262644c7c9829a9c8f50ff655ed7d043697))
 * now https and ssh supports ([6d03ee6](https://github.com/ProxityStudios/freshland/commit/6d03ee64e1b7cc29d5f0e728e0b17f3c614647f9))
 * version 2 ([e3bdb41](https://github.com/ProxityStudios/freshland/commit/e3bdb41b4ba20cbde94e96206faee056d8c3cea8))
-
 
 ### Bug Fixes
 
@@ -19,7 +17,6 @@
 * push latest build. i forgot always ([941405f](https://github.com/ProxityStudios/freshland/commit/941405f9d58fb077a10fa6c7ac2f0a89f944b8a1))
 * push latest built ([3ef3fc8](https://github.com/ProxityStudios/freshland/commit/3ef3fc8bba6a800b9b932bae1fad1d33ffcf6c16))
 * rename to match the function name ([411ca4e](https://github.com/ProxityStudios/freshland/commit/411ca4e4294860f9e8056d8a6609ac90296f1fd2))
-
 
 ### Miscellaneous Chores
 
