@@ -15,3 +15,5 @@ npx freshland@latest clone proxitystudios/typescript-starter myapp
 ```bash
 npx freshland@latest
 ```
+
+![With GUI](./docs/assets/with-gui.PNG "With GUI")
