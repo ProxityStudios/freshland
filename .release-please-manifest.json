@@ -3,7 +3,5 @@
     "release-type": "node",
     "versioning": "prerelease",
     "extra-files": ["README.md"],
-    "packages": {
-      ".": {}
-    }
+    "prerelease": true
   }
