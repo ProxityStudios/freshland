@@ -2,7 +2,8 @@ import shell from 'shelljs';
 import fs from 'node:fs/promises';
 
 import { logger } from './logger';
-import { rootDir } from '../dir';
+import { rootDir } from './dir';
+import { Check, PackageManager, PackageManagerKeys } from '../types';
 
 export function cloneGithubRepo(repo: string, destination: string) {
 	if (!shell.which('git')) {
@@ -81,14 +82,6 @@ export function updatePackageJSON(projectName: string, pth: string) {
 	}
 }
 
-export enum PackageManager {
-	npm = 'npm',
-	pnpm = 'pnpm',
-	yarn = 'yarn',
-	bun = 'bun',
-}
-type PackageManagerKeys = keyof typeof PackageManager;
-
 export function installDeps(
 	packageManager: PackageManagerKeys,
 	projectName: string,
@@ -118,30 +111,30 @@ export function installDeps(
 }
 
 export async function installEPAForTS(pth: string) {
-	logger.info('Installing EPA (for TypeScript)');
+	const directoryExists = await checkIfExists(pth, Check.DIRECTORY);
+	const packageJSONExists = await checkIfExists(
+		`${pth}/package.json`,
+		Check.FILE
+	);
 
-	const directoryExists = await checkIfDirectoryExists(pth);
-
-	if (directoryExists) {
+	if (directoryExists && packageJSONExists) {
 		shell.cd(pth);
 	} else {
-		logger.error('Directory not exists. Exiting...');
+		logger.error('Directory or "package.json" not exists. Exiting...');
 		shell.exit(1);
 	}
 
+	logger.info('Installing EPA (for TypeScript)');
+
 	// TODO: check if package.json or the package managers configs exists or not
 
-	logger.info('Adding packages');
+	logger.info('[NO INSTALL] Adding packages');
 	shell.exec(
-		'npm install --no-save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-prettier'
+		'npm install --no-save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser'
 	);
 
-	shell.exec(
-		'npm install --no-save eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev'
-	);
-
-	shell.exec('npx install-peerdeps --dev eslint-config-airbnb-base', {});
-	shell.exec('npm i --save', {});
+	shell.exec('npx install-peerdeps --dev eslint-config-airbnb-base');
+	shell.exec('npm i --save');
 
 	logger.info('Packages installed');
 
@@ -156,15 +149,13 @@ export async function installEPAForTS(pth: string) {
 	logger.info('Creating prettier.config.js file');
 	const prettierRcTemplate = await fs.readFile(
 		`${rootDir}/templates/typescript/prettier.config.js`,
-
 		'utf8'
 	);
 	await fs.writeFile('prettier.config.js', prettierRcTemplate);
 
 	logger.info('Pushing "fix" script to package.json');
-	const packagePath = `${process.cwd()}/package.json`;
-	const packageContent = await fs.readFile(packagePath, 'utf8');
-	const packageJSON: any = JSON.parse(packageContent);
+	const packageContent = await fs.readFile('package.json', 'utf8');
+	const packageJSON: { scripts: object } = JSON.parse(packageContent);
 
 	packageJSON.scripts = {
 		...packageJSON.scripts,
@@ -172,7 +163,7 @@ export async function installEPAForTS(pth: string) {
 	};
 
 	await fs.writeFile(
-		packagePath,
+		'package.json',
 		JSON.stringify(packageJSON, undefined, 2),
 		'utf8'
 	);
@@ -181,16 +172,39 @@ export async function installEPAForTS(pth: string) {
 		'[IMPORTANT] To get better experience, install "eslint" and "prettier" extensions'
 	);
 	logger.info('E.P.A installed and configured successfully');
+	logger.info('Now you can run "npm run fix" command');
 }
 
 export function installEPAForJS() {
-	logger.info('Installing EPA (for JavaScript)');
+	logger.info('Installing E.P.A (for JavaScript)');
 }
 
-async function checkIfDirectoryExists(directoryPath: string) {
+async function checkIfExists(pth: string, type: Check) {
 	try {
-		const stats = await fs.stat(directoryPath);
-		return stats.isDirectory();
+		const stats = await fs.stat(pth);
+		switch (type) {
+			case Check.DIRECTORY: {
+				return stats.isDirectory();
+			}
+
+			case Check.FILE: {
+				return stats.isFile();
+			}
+			// TODO: make this working
+			/*
+			case Check.VIDEO: {
+				return stats.isFile();
+			}
+
+			case Check.IMAGE: {
+				return stats.isDirectory();
+			}
+			*/
+
+			default: {
+				return false;
+			}
+		}
 	} catch (error: any) {
 		if (error.code === 'ENOENT') {
 			return false;
