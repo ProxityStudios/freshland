@@ -100,7 +100,7 @@ async function installEPAForTS(pth) {
     logger_1.logger.info('Installing EPA (for TypeScript)');
     // TODO: check if package.json or the package managers configs exists or not
     logger_1.logger.info('[NO INSTALL] Adding packages');
-    shelljs_1.default.exec('npm install --no-save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser');
+    shelljs_1.default.exec('npm install --no-save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript airbnb-typescript/base @typescript-eslint/parser');
     shelljs_1.default.exec('npx install-peerdeps --dev eslint-config-airbnb-base');
     shelljs_1.default.exec('npm i --save');
     logger_1.logger.info('Packages installed');
