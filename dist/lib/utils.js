@@ -23,7 +23,6 @@ function cloneGithubRepo(repo, destination) {
         shelljs_1.default.exit(1);
     }
     logger_1.logger.info('Repo cloned');
-    deleteAndInitGit(destination);
 }
 exports.cloneGithubRepo = cloneGithubRepo;
 function deleteAndInitGit(pth) {
@@ -105,17 +104,13 @@ async function installEPAForTS(pth) {
         shelljs_1.default.exit(1);
     }
     // TODO: check if package.json or the package managers configs exists or not
-    shelljs_1.default.exec('npm install', { async: true });
-    logger_1.logger.info('Dependencies installed');
-    logger_1.logger.info('Installing packages');
-    shelljs_1.default.exec('npm install --save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-prettier', { async: true });
-    shelljs_1.default.exec('npx install-peerdeps --dev eslint-config-airbnb-base', {
-        async: true,
-    });
-    shelljs_1.default.exec('npm install eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev');
+    logger_1.logger.info('Adding packages');
+    shelljs_1.default.exec('npm install --no-save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-prettier');
+    shelljs_1.default.exec('npm install --no-save eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev');
+    shelljs_1.default.exec('npx install-peerdeps --dev eslint-config-airbnb-base', {});
+    shelljs_1.default.exec('npm i --save', {});
     logger_1.logger.info('Packages installed');
     logger_1.logger.info('Creating .eslintrc.js file');
-    logger_1.logger.info(dir_1.rootDir);
     const eslintRcTemplate = await promises_1.default.readFile(`${dir_1.rootDir}/templates/typescript/.eslintrc.js`, 'utf8');
     await promises_1.default.writeFile('.eslintrc.js', eslintRcTemplate);
     logger_1.logger.info('Creating prettier.config.js file');

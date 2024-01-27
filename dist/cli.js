@@ -52,6 +52,7 @@ function NOGUIcloneCommand(repo, destination) {
     const pth = node_path_1.default.resolve(destination);
     try {
         (0, utils_1.cloneGithubRepo)(repo, pth);
+        (0, utils_1.deleteAndInitGit)(pth);
         // FIXME: it uses default package manager (npm)
         (0, utils_1.updatePackageJSON)(destination.split('/').pop(), pth);
         logger_1.logger.warn('You need to install dependencies manually!');
@@ -154,6 +155,7 @@ async function GUIcloneCommand() {
         }
         const pth = node_path_1.default.resolve(destination);
         (0, utils_1.cloneGithubRepo)(repo, pth);
+        (0, utils_1.deleteAndInitGit)(destination);
         if (selectedPackageManager) {
             (0, utils_1.installDeps)(selectedPackageManager, projectName.replaceAll(' ', '-'), pth);
         }
