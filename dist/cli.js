@@ -11,6 +11,7 @@ const node_path_1 = __importDefault(require("node:path"));
 const logger_1 = require("./lib/logger");
 const utils_1 = require("./lib/utils");
 const package_json_1 = require("../package.json");
+const types_1 = require("./types");
 exports.program = new extra_typings_1.Command()
     .name(package_json_1.name)
     .version(package_json_1.version)
@@ -128,26 +129,26 @@ async function GUIcloneCommand() {
                 message: 'Select the package manager of the repo',
                 choices: [
                     {
-                        name: utils_1.PackageManager.npm,
-                        value: utils_1.PackageManager.npm,
-                        description: utils_1.PackageManager.npm,
+                        name: types_1.PackageManager.npm,
+                        value: types_1.PackageManager.npm,
+                        description: types_1.PackageManager.npm,
                     },
                     {
-                        name: utils_1.PackageManager.bun,
-                        value: utils_1.PackageManager.bun,
-                        description: `${utils_1.PackageManager.bun} (currently not supported)`,
+                        name: types_1.PackageManager.bun,
+                        value: types_1.PackageManager.bun,
+                        description: `${types_1.PackageManager.bun} (currently not supported)`,
                         disabled: true,
                     },
                     {
-                        name: utils_1.PackageManager.pnpm,
-                        value: utils_1.PackageManager.pnpm,
-                        description: `${utils_1.PackageManager.pnpm} (currently not supported)`,
+                        name: types_1.PackageManager.pnpm,
+                        value: types_1.PackageManager.pnpm,
+                        description: `${types_1.PackageManager.pnpm} (currently not supported)`,
                         disabled: true,
                     },
                     {
-                        name: utils_1.PackageManager.yarn,
-                        value: utils_1.PackageManager.yarn,
-                        description: `${utils_1.PackageManager.yarn} (currently not supported)`,
+                        name: types_1.PackageManager.yarn,
+                        value: types_1.PackageManager.yarn,
+                        description: `${types_1.PackageManager.yarn} (currently not supported)`,
                         disabled: true,
                     },
                 ],

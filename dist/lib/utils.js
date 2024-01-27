@@ -3,11 +3,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.installEPAForJS = exports.installEPAForTS = exports.installDeps = exports.PackageManager = exports.updatePackageJSON = exports.deleteAndInitGit = exports.cloneGithubRepo = void 0;
+exports.installEPAForJS = exports.installEPAForTS = exports.installDeps = exports.updatePackageJSON = exports.deleteAndInitGit = exports.cloneGithubRepo = void 0;
 const shelljs_1 = __importDefault(require("shelljs"));
 const promises_1 = __importDefault(require("node:fs/promises"));
 const logger_1 = require("./logger");
-const dir_1 = require("../dir");
+const dir_1 = require("./dir");
+const types_1 = require("../types");
 function cloneGithubRepo(repo, destination) {
     if (!shelljs_1.default.which('git')) {
         logger_1.logger.error('Sorry, this script requires "git"');
@@ -65,17 +66,10 @@ function updatePackageJSON(projectName, pth) {
     }
 }
 exports.updatePackageJSON = updatePackageJSON;
-var PackageManager;
-(function (PackageManager) {
-    PackageManager["npm"] = "npm";
-    PackageManager["pnpm"] = "pnpm";
-    PackageManager["yarn"] = "yarn";
-    PackageManager["bun"] = "bun";
-})(PackageManager || (exports.PackageManager = PackageManager = {}));
 function installDeps(packageManager, projectName, pth) {
     shelljs_1.default.cd(pth);
     // TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
-    if (packageManager === PackageManager.npm) {
+    if (packageManager === types_1.PackageManager.npm) {
         updatePackageJSON(projectName, pth);
         if (!shelljs_1.default.which('npm')) {
             logger_1.logger.error('Sorry, you need to install "npm" first');
@@ -94,21 +88,21 @@ function installDeps(packageManager, projectName, pth) {
 }
 exports.installDeps = installDeps;
 async function installEPAForTS(pth) {
-    logger_1.logger.info('Installing EPA (for TypeScript)');
-    const directoryExists = await checkIfDirectoryExists(pth);
-    if (directoryExists) {
+    const directoryExists = await checkIfExists(pth, types_1.Check.DIRECTORY);
+    const packageJSONExists = await checkIfExists(`${pth}/package.json`, types_1.Check.FILE);
+    if (directoryExists && packageJSONExists) {
         shelljs_1.default.cd(pth);
     }
     else {
-        logger_1.logger.error('Directory not exists. Exiting...');
+        logger_1.logger.error('Directory or "package.json" not exists. Exiting...');
         shelljs_1.default.exit(1);
     }
+    logger_1.logger.info('Installing EPA (for TypeScript)');
     // TODO: check if package.json or the package managers configs exists or not
-    logger_1.logger.info('Adding packages');
-    shelljs_1.default.exec('npm install --no-save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-prettier');
-    shelljs_1.default.exec('npm install --no-save eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev');
-    shelljs_1.default.exec('npx install-peerdeps --dev eslint-config-airbnb-base', {});
-    shelljs_1.default.exec('npm i --save', {});
+    logger_1.logger.info('[NO INSTALL] Adding packages');
+    shelljs_1.default.exec('npm install --no-save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser');
+    shelljs_1.default.exec('npx install-peerdeps --dev eslint-config-airbnb-base');
+    shelljs_1.default.exec('npm i --save');
     logger_1.logger.info('Packages installed');
     logger_1.logger.info('Creating .eslintrc.js file');
     const eslintRcTemplate = await promises_1.default.readFile(`${dir_1.rootDir}/templates/typescript/.eslintrc.js`, 'utf8');
@@ -117,26 +111,46 @@ async function installEPAForTS(pth) {
     const prettierRcTemplate = await promises_1.default.readFile(`${dir_1.rootDir}/templates/typescript/prettier.config.js`, 'utf8');
     await promises_1.default.writeFile('prettier.config.js', prettierRcTemplate);
     logger_1.logger.info('Pushing "fix" script to package.json');
-    const packagePath = `${process.cwd()}/package.json`;
-    const packageContent = await promises_1.default.readFile(packagePath, 'utf8');
+    const packageContent = await promises_1.default.readFile('package.json', 'utf8');
     const packageJSON = JSON.parse(packageContent);
     packageJSON.scripts = {
         ...packageJSON.scripts,
         fix: 'eslint . --fix',
     };
-    await promises_1.default.writeFile(packagePath, JSON.stringify(packageJSON, undefined, 2), 'utf8');
+    await promises_1.default.writeFile('package.json', JSON.stringify(packageJSON, undefined, 2), 'utf8');
     logger_1.logger.warn('[IMPORTANT] To get better experience, install "eslint" and "prettier" extensions');
     logger_1.logger.info('E.P.A installed and configured successfully');
+    logger_1.logger.info('Now you can run "npm run fix" command');
 }
 exports.installEPAForTS = installEPAForTS;
 function installEPAForJS() {
-    logger_1.logger.info('Installing EPA (for JavaScript)');
+    logger_1.logger.info('Installing E.P.A (for JavaScript)');
 }
 exports.installEPAForJS = installEPAForJS;
-async function checkIfDirectoryExists(directoryPath) {
+async function checkIfExists(pth, type) {
     try {
-        const stats = await promises_1.default.stat(directoryPath);
-        return stats.isDirectory();
+        const stats = await promises_1.default.stat(pth);
+        switch (type) {
+            case types_1.Check.DIRECTORY: {
+                return stats.isDirectory();
+            }
+            case types_1.Check.FILE: {
+                return stats.isFile();
+            }
+            // TODO: make this working
+            /*
+            case Check.VIDEO: {
+                return stats.isFile();
+            }
+
+            case Check.IMAGE: {
+                return stats.isDirectory();
+            }
+            */
+            default: {
+                return false;
+            }
+        }
     }
     catch (error) {
         if (error.code === 'ENOENT') {
