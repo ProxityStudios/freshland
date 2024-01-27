@@ -121,8 +121,14 @@ function installDeps(packageManager, projectName, pth) {
 exports.installDeps = installDeps;
 async function installEPAForTS(pth) {
     logger_1.logger.info('Installing EPA (for TypeScript)');
-    shelljs_1.default.cd(pth);
-    logger_1.logger.info('Installing dependencies');
+    const directoryExists = await checkIfDirectoryExists(pth);
+    if (directoryExists) {
+        shelljs_1.default.cd(pth);
+    }
+    else {
+        logger_1.logger.error('Directory not exists. Exiting...');
+        shelljs_1.default.exit(1);
+    }
     shelljs_1.default.exec('npm install', { async: true });
     logger_1.logger.info('Dependencies installed');
     logger_1.logger.info('Installing packages');
@@ -155,3 +161,16 @@ function installEPAForJS() {
     logger_1.logger.info('Installing EPA (for JavaScript)');
 }
 exports.installEPAForJS = installEPAForJS;
+async function checkIfDirectoryExists(directoryPath) {
+    try {
+        const stats = await promises_1.default.stat(directoryPath);
+        return stats.isDirectory();
+    }
+    catch (error) {
+        if (error.code === 'ENOENT') {
+            return false;
+        }
+        // TODO:
+        return false;
+    }
+}
