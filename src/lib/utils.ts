@@ -150,6 +150,8 @@ export async function installEPAForTS(pth: string) {
 	logger.info('Packages installed');
 
 	logger.info('Creating .eslintrc.js file');
+
+	logger.info(rootDir);
 	const eslintRcTemplate = await fs.readFile(
 		`${rootDir}/templates/typescript/.eslintrc.js`,
 		'utf8'
