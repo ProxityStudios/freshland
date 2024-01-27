@@ -11,10 +11,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 20
 
@@ -27,6 +27,14 @@ jobs:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           NPM_TOKEN: ${{secrets.NPM_TOKEN}}
 
+      - name: Build
+        run: npm run build
+      - name: Commit report
+        run: |
+          git config --global user.name 'Alexinhans'
+          git config --global user.email 'Alexinhans@users.noreply.github.com'
+          git commit -am "Automated push"
+          git push
       - name: Publish to npm with beta tag
         run: npm publish --tag beta
         env:

@@ -32,8 +32,7 @@
 		"tsc": "tsc --build",
 		"clean": "rimraf dist/",
 		"fix": "eslint . --fix",
-		"commit-latest-build": "git add . && git commit -m \"chore: latest-build\" && git push",
-		"prepublishOnly": "run-s build commit-latest-build"
+		"prepublishOnly": "run-s build"
 	},
 	"bin": {
 		"freshland": "dist/src/cli.js"
