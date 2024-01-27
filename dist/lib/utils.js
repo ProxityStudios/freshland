@@ -132,10 +132,13 @@ async function installEPAForTS(pth) {
     });
     shelljs_1.default.exec('npm install eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev');
     logger_1.logger.info('Packages installed');
+    logger_1.logger.info('Creating .eslintrc.js file');
     const eslintRcTemplate = await promises_1.default.readFile(`${rootDir}/templates/typescript/.eslintrc.js`, 'utf8');
     await promises_1.default.writeFile('.eslintrc.js', eslintRcTemplate);
+    logger_1.logger.info('Creating prettier.config.js file');
     const prettierRcTemplate = await promises_1.default.readFile(`${rootDir}/templates/typescript/prettier.config.js`, 'utf8');
     await promises_1.default.writeFile('prettier.config.js', prettierRcTemplate);
+    logger_1.logger.info('Adding "fix" script to package.json');
     const packagePath = `${process.cwd()}/package.json`;
     const packageContent = await promises_1.default.readFile(packagePath, 'utf8');
     const packageJSON = JSON.parse(packageContent);
@@ -144,6 +147,7 @@ async function installEPAForTS(pth) {
         fix: 'eslint . --fix',
     };
     await promises_1.default.writeFile(packagePath, JSON.stringify(packageJSON, undefined, 2), 'utf8');
+    logger_1.logger.info('[IMPORTANT] To get better experience, install "eslint" and "prettier" extension');
     logger_1.logger.info('EPA installed successfully');
 }
 exports.installEPAForTS = installEPAForTS;
