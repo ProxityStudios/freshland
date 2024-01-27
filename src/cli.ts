@@ -5,7 +5,6 @@ import { Command } from '@commander-js/extra-typings';
 import path from 'node:path';
 import { logger } from './lib/logger';
 import {
-	PackageManager,
 	cloneGithubRepo,
 	deleteAndInitGit,
 	installDeps,
@@ -14,6 +13,7 @@ import {
 	updatePackageJSON,
 } from './lib/utils';
 import { version, name, description } from '../package.json';
+import { PackageManager } from './types';
 
 export const program = new Command()
 	.name(name)
