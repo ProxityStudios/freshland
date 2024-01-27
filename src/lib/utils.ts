@@ -1,7 +1,11 @@
-import path from 'node:path';
 import shell from 'shelljs';
 import fs from 'node:fs/promises';
+
+import * as path from 'node:path';
 import { logger } from './logger';
+
+// Assuming this script is in the root directory of your project
+const rootDir = path.resolve(process.cwd());
 
 export function cloneGithubRepo(repo: string, destination: string) {
 	if (!shell.which('git')) {
@@ -142,13 +146,14 @@ export async function installEPAForTS(pth: string) {
 	logger.info('Packages installed');
 
 	const eslintRcTemplate = await fs.readFile(
-		'../../templates/typescript/.eslintrc.js',
+		`${rootDir}/templates/typescript/.eslintrc.js`,
 		'utf8'
 	);
 	await fs.writeFile('.eslintrc.js', eslintRcTemplate);
 
 	const prettierRcTemplate = await fs.readFile(
-		'../../templates/typescript/prettier.config.js',
+		`${rootDir}/templates/typescript/prettier.config.js`,
+
 		'utf8'
 	);
 	await fs.writeFile('prettier.config.js', prettierRcTemplate);
