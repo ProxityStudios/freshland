@@ -130,10 +130,9 @@ export async function installEPAForTS(pth: string) {
 
 	logger.info('[NO INSTALL] Adding packages');
 	shell.exec(
-		'npm install --no-save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript airbnb-typescript/base @typescript-eslint/parser'
+		'npm install --no-save-dev eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser'
 	);
 
-	shell.exec('npx install-peerdeps --dev eslint-config-airbnb-base');
 	shell.exec('npm i --save');
 
 	logger.info('Packages installed');
