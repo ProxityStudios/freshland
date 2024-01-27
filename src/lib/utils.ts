@@ -15,14 +15,14 @@ export function cloneGithubRepo(repo: string, destination: string) {
 	if (repo.startsWith('http') || repo.startsWith('git@')) {
 		repoURI = repo;
 	}
+
 	logger.info('Cloning into', destination);
 	if (shell.exec(`git clone ${repoURI} ${destination}`).code !== 0) {
 		logger.error('Cannot clone the repo');
 		shell.exit(1);
 	}
-	logger.info('Repo cloned');
 
-	deleteAndInitGit(destination);
+	logger.info('Repo cloned');
 }
 
 export function deleteAndInitGit(pth: string) {
@@ -130,28 +130,23 @@ export async function installEPAForTS(pth: string) {
 	}
 
 	// TODO: check if package.json or the package managers configs exists or not
-	shell.exec('npm install', { async: true });
-	logger.info('Dependencies installed');
 
-	logger.info('Installing packages');
+	logger.info('Adding packages');
 	shell.exec(
-		'npm install --save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-prettier',
-		{ async: true }
+		'npm install --no-save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-prettier'
 	);
 
-	shell.exec('npx install-peerdeps --dev eslint-config-airbnb-base', {
-		async: true,
-	});
-
 	shell.exec(
-		'npm install eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev'
+		'npm install --no-save eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev'
 	);
+
+	shell.exec('npx install-peerdeps --dev eslint-config-airbnb-base', {});
+	shell.exec('npm i --save', {});
 
 	logger.info('Packages installed');
 
 	logger.info('Creating .eslintrc.js file');
 
-	logger.info(rootDir);
 	const eslintRcTemplate = await fs.readFile(
 		`${rootDir}/templates/typescript/.eslintrc.js`,
 		'utf8'

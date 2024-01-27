@@ -7,6 +7,7 @@ import { logger } from './lib/logger';
 import {
 	PackageManager,
 	cloneGithubRepo,
+	deleteAndInitGit,
 	installDeps,
 	installEPAForJS,
 	installEPAForTS,
@@ -71,6 +72,8 @@ function NOGUIcloneCommand(repo: string, destination: string) {
 
 	try {
 		cloneGithubRepo(repo, pth);
+		deleteAndInitGit(pth);
+
 		// FIXME: it uses default package manager (npm)
 		updatePackageJSON(destination.split('/').pop()!, pth);
 
@@ -180,6 +183,7 @@ async function GUIcloneCommand() {
 
 		const pth = path.resolve(destination);
 		cloneGithubRepo(repo, pth);
+		deleteAndInitGit(destination);
 
 		if (selectedPackageManager) {
 			installDeps(
