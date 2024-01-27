@@ -115,6 +115,7 @@ async function installEPAForTS(pth) {
     shelljs_1.default.exec('npm install eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev');
     logger_1.logger.info('Packages installed');
     logger_1.logger.info('Creating .eslintrc.js file');
+    logger_1.logger.info(dir_1.rootDir);
     const eslintRcTemplate = await promises_1.default.readFile(`${dir_1.rootDir}/templates/typescript/.eslintrc.js`, 'utf8');
     await promises_1.default.writeFile('.eslintrc.js', eslintRcTemplate);
     logger_1.logger.info('Creating prettier.config.js file');
