@@ -124,13 +124,13 @@ export async function installEPAForTS(pth: string) {
 		shell.exit(1);
 	}
 
-	logger.info('Installing EPA (for TypeScript)');
+	logger.info('Installing E.P.A (for TypeScript)');
 
 	// TODO: check if package.json or the package managers configs exists or not
 
-	logger.info('[NO INSTALL] Adding packages');
+	logger.info('Installing packages');
 	shell.exec(
-		'npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser'
+		'npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser'
 	);
 
 	shell.exec('npm i --save');
