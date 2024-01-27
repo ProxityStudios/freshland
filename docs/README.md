@@ -16,4 +16,4 @@ npx freshland@latest clone proxitystudios/typescript-starter myapp
 npx freshland@latest
 ```
 
-![With GUI](./docs/assets/with-gui.PNG "With GUI")
+![With GUI](./assets/with-gui.PNG "With GUI")
