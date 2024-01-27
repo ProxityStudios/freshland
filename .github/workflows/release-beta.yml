@@ -1,9 +1,9 @@
-name: Release
+name: Release Beta
 
 on:
   push:
     branches:
-      - main
+      - beta
       
 permissions:
    contents: write
@@ -42,8 +42,8 @@ jobs:
           git commit -am "Automated push"
           git push
 
-      - name: Publish to npm with beta tag
-        run: npm publish --tag beta
+      - name: Publish to npm
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
 
