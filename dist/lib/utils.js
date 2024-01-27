@@ -1,27 +1,4 @@
 "use strict";
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -29,10 +6,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.installEPAForJS = exports.installEPAForTS = exports.installDeps = exports.PackageManager = exports.updatePackageJSON = exports.deleteAndInitGit = exports.cloneGithubRepo = void 0;
 const shelljs_1 = __importDefault(require("shelljs"));
 const promises_1 = __importDefault(require("node:fs/promises"));
-const path = __importStar(require("node:path"));
 const logger_1 = require("./logger");
-// Assuming this script is in the root directory of your project
-const rootDir = path.resolve(process.cwd());
+const dir_1 = require("../dir");
 function cloneGithubRepo(repo, destination) {
     if (!shelljs_1.default.which('git')) {
         logger_1.logger.error('Sorry, this script requires "git"');
@@ -129,6 +104,7 @@ async function installEPAForTS(pth) {
         logger_1.logger.error('Directory not exists. Exiting...');
         shelljs_1.default.exit(1);
     }
+    // TODO: check if package.json or the package managers configs exists or not
     shelljs_1.default.exec('npm install', { async: true });
     logger_1.logger.info('Dependencies installed');
     logger_1.logger.info('Installing packages');
@@ -139,12 +115,12 @@ async function installEPAForTS(pth) {
     shelljs_1.default.exec('npm install eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev');
     logger_1.logger.info('Packages installed');
     logger_1.logger.info('Creating .eslintrc.js file');
-    const eslintRcTemplate = await promises_1.default.readFile(`${rootDir}/templates/typescript/.eslintrc.js`, 'utf8');
+    const eslintRcTemplate = await promises_1.default.readFile(`${dir_1.rootDir}/templates/typescript/.eslintrc.js`, 'utf8');
     await promises_1.default.writeFile('.eslintrc.js', eslintRcTemplate);
     logger_1.logger.info('Creating prettier.config.js file');
-    const prettierRcTemplate = await promises_1.default.readFile(`${rootDir}/templates/typescript/prettier.config.js`, 'utf8');
+    const prettierRcTemplate = await promises_1.default.readFile(`${dir_1.rootDir}/templates/typescript/prettier.config.js`, 'utf8');
     await promises_1.default.writeFile('prettier.config.js', prettierRcTemplate);
-    logger_1.logger.info('Adding "fix" script to package.json');
+    logger_1.logger.info('Pushing "fix" script to package.json');
     const packagePath = `${process.cwd()}/package.json`;
     const packageContent = await promises_1.default.readFile(packagePath, 'utf8');
     const packageJSON = JSON.parse(packageContent);
@@ -153,8 +129,8 @@ async function installEPAForTS(pth) {
         fix: 'eslint . --fix',
     };
     await promises_1.default.writeFile(packagePath, JSON.stringify(packageJSON, undefined, 2), 'utf8');
-    logger_1.logger.info('[IMPORTANT] To get better experience, install "eslint" and "prettier" extension');
-    logger_1.logger.info('EPA installed successfully');
+    logger_1.logger.warn('[IMPORTANT] To get better experience, install "eslint" and "prettier" extensions');
+    logger_1.logger.info('E.P.A installed and configured successfully');
 }
 exports.installEPAForTS = installEPAForTS;
 function installEPAForJS() {
