@@ -1,3 +1,10 @@
+# [2.1.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v2.1.0-beta.1...v2.1.0-beta.2) (2024-01-27)
+
+
+### Bug Fixes
+
+* use root dir ([4080ab5](https://github.com/ProxityStudios/freshland/commit/4080ab55de3682e5bbb34911291ac4c4ae18861a))
+
 # Changelog
 
 ## [2.0.0](https://github.com/ProxityStudios/freshland/compare/v1.0.4...v2.0.0) (2024-01-26)
