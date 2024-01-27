@@ -25,6 +25,7 @@ jobs:
         run: npx semantic-release
         env: 
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NPM_TOKEN: ${{secrets.NPM_TOKEN}}
 
       - name: Publish to npm with beta tag
         run: npm publish --tag beta
