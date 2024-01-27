@@ -33,7 +33,7 @@
 		"clean": "rimraf dist/",
 		"fix": "eslint . --fix",
 		"commit-latest-build": "git add . && git commit -m \"chore: latest-build\" && git push",
-		"prepublish": "run-s build commit-latest-build"
+		"prepublishOnly": "run-s build commit-latest-build"
 	},
 	"bin": {
 		"freshland": "dist/src/cli.js"
