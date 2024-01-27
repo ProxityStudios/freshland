@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - beta
+      
+permissions:
+   contents: write
+   pull-requests: write
 
 jobs:
   release:
