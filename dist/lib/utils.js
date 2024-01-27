@@ -97,10 +97,10 @@ async function installEPAForTS(pth) {
         logger_1.logger.error('Directory or "package.json" not exists. Exiting...');
         shelljs_1.default.exit(1);
     }
-    logger_1.logger.info('Installing EPA (for TypeScript)');
+    logger_1.logger.info('Installing E.P.A (for TypeScript)');
     // TODO: check if package.json or the package managers configs exists or not
-    logger_1.logger.info('[NO INSTALL] Adding packages');
-    shelljs_1.default.exec('npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser');
+    logger_1.logger.info('Installing packages');
+    shelljs_1.default.exec('npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser');
     shelljs_1.default.exec('npm i --save');
     logger_1.logger.info('Packages installed');
     logger_1.logger.info('Creating .eslintrc.js file');
