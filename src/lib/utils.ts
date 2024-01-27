@@ -145,12 +145,14 @@ export async function installEPAForTS(pth: string) {
 
 	logger.info('Packages installed');
 
+	logger.info('Creating .eslintrc.js file');
 	const eslintRcTemplate = await fs.readFile(
 		`${rootDir}/templates/typescript/.eslintrc.js`,
 		'utf8'
 	);
 	await fs.writeFile('.eslintrc.js', eslintRcTemplate);
 
+	logger.info('Creating prettier.config.js file');
 	const prettierRcTemplate = await fs.readFile(
 		`${rootDir}/templates/typescript/prettier.config.js`,
 
@@ -158,6 +160,7 @@ export async function installEPAForTS(pth: string) {
 	);
 	await fs.writeFile('prettier.config.js', prettierRcTemplate);
 
+	logger.info('Adding "fix" script to package.json');
 	const packagePath = `${process.cwd()}/package.json`;
 	const packageContent = await fs.readFile(packagePath, 'utf8');
 	const packageJSON: any = JSON.parse(packageContent);
@@ -173,6 +176,9 @@ export async function installEPAForTS(pth: string) {
 		'utf8'
 	);
 
+	logger.info(
+		'[IMPORTANT] To get better experience, install "eslint" and "prettier" extension'
+	);
 	logger.info('EPA installed successfully');
 }
 
