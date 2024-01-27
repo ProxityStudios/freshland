@@ -3,6 +3,7 @@
    "compilerOptions": {
       /* Paths */
       "outDir": "./dist",
+      "rootDir": "./src",
       "typeRoots": ["./node_modules/@types"],
       /* Project */
       "target": "ESNext", // TypeScript is not used for building, allow all modern features

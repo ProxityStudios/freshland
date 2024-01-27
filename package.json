@@ -35,9 +35,9 @@
 		"prepublishOnly": "run-s build"
 	},
 	"bin": {
-		"freshland": "dist/src/cli.js"
+		"freshland": "dist/cli.js"
 	},
-	"exports": "./dist/src/cli.js",
+	"exports": "./dist/cli.js",
 	"devDependencies": {
 		"@types/node": "^20.11.0",
 		"@types/shelljs": "^0.8.15",
