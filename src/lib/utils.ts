@@ -1,11 +1,8 @@
 import shell from 'shelljs';
 import fs from 'node:fs/promises';
 
-import * as path from 'node:path';
 import { logger } from './logger';
-
-// Assuming this script is in the root directory of your project
-const rootDir = path.resolve(process.cwd());
+import { rootDir } from '../dir';
 
 export function cloneGithubRepo(repo: string, destination: string) {
 	if (!shell.which('git')) {
@@ -132,6 +129,7 @@ export async function installEPAForTS(pth: string) {
 		shell.exit(1);
 	}
 
+	// TODO: check if package.json or the package managers configs exists or not
 	shell.exec('npm install', { async: true });
 	logger.info('Dependencies installed');
 
@@ -166,7 +164,7 @@ export async function installEPAForTS(pth: string) {
 	);
 	await fs.writeFile('prettier.config.js', prettierRcTemplate);
 
-	logger.info('Adding "fix" script to package.json');
+	logger.info('Pushing "fix" script to package.json');
 	const packagePath = `${process.cwd()}/package.json`;
 	const packageContent = await fs.readFile(packagePath, 'utf8');
 	const packageJSON: any = JSON.parse(packageContent);
@@ -182,10 +180,10 @@ export async function installEPAForTS(pth: string) {
 		'utf8'
 	);
 
-	logger.info(
-		'[IMPORTANT] To get better experience, install "eslint" and "prettier" extension'
+	logger.warn(
+		'[IMPORTANT] To get better experience, install "eslint" and "prettier" extensions'
 	);
-	logger.info('EPA installed successfully');
+	logger.info('E.P.A installed and configured successfully');
 }
 
 export function installEPAForJS() {
