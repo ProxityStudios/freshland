@@ -1,3 +1,4 @@
 import path from 'node:path';
 
-export const rootDir = path.resolve(process.cwd());
+// eslint-disable-next-line unicorn/prefer-module
+export const rootDir = path.resolve(__dirname);
