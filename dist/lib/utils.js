@@ -41,7 +41,7 @@ function deleteAndInitGit(pth) {
         logger_1.logger.error('"git add" command failed');
         shelljs_1.default.exit(1);
     }
-    if (shelljs_1.default.exec(`git commit -am "Auto-commit by Freshland"`).code !== 0) {
+    if (shelljs_1.default.exec('git commit -am "Auto-commit by Freshland"').code !== 0) {
         logger_1.logger.error('"git commit" command failed');
         shelljs_1.default.exit(1);
     }
@@ -54,14 +54,14 @@ function updatePackageJSON(projectName, pth) {
         logger_1.logger.info('Updating "package.json"');
         shelljs_1.default.ls('package.json').forEach((file) => {
             shelljs_1.default.sed('-i', /"name":\s*"(.*?)"/gi, `"name": "${projectName}"`, file);
-            shelljs_1.default.sed('-i', /"version":\s*"(.*?)"/gi, `"version": "1.0.0"`, file);
+            shelljs_1.default.sed('-i', /"version":\s*"(.*?)"/gi, '"version": "1.0.0"', file);
         });
     }
     if (shelljs_1.default.test('-e', './package-lock.json')) {
         logger_1.logger.info('Updating "package-lock.json"');
         shelljs_1.default.ls('package-lock.json').forEach((file) => {
             shelljs_1.default.sed('-i', /"name":\s*"(.*?)"/i, `"name": "${projectName}"`, file);
-            shelljs_1.default.sed('-i', /"version":\s*"(.*?)"/i, `"version": "1.0.0"`, file);
+            shelljs_1.default.sed('-i', /"version":\s*"(.*?)"/i, '"version": "1.0.0"', file);
         });
     }
 }
@@ -99,7 +99,7 @@ async function installEPAForTS(pth) {
     }
     logger_1.logger.info('Installing E.P.A (for TypeScript)');
     // TODO: check if package.json or the package managers configs exists or not
-    logger_1.logger.info('Installing packages');
+    logger_1.logger.info('Installing packages...');
     shelljs_1.default.exec('npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser');
     shelljs_1.default.exec('npm i --save');
     logger_1.logger.info('Packages installed');
@@ -109,6 +109,8 @@ async function installEPAForTS(pth) {
     logger_1.logger.info('Creating prettier.config.js file');
     const prettierRcTemplate = await promises_1.default.readFile(`${dir_1.rootDir}/templates/typescript/prettier.config.js`, 'utf8');
     await promises_1.default.writeFile('prettier.config.js', prettierRcTemplate);
+    const eslintIgnoreTemplate = await promises_1.default.readFile(`${dir_1.rootDir}/templates/typescript/.eslintignore`, 'utf8');
+    await promises_1.default.writeFile('.eslintignore', eslintIgnoreTemplate);
     logger_1.logger.info('Pushing "fix" script to package.json');
     const packageContent = await promises_1.default.readFile('package.json', 'utf8');
     const packageJSON = JSON.parse(packageContent);
