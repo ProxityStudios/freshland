@@ -10,4 +10,7 @@ export declare enum PackageManager {
     YARN = "yarn",
     BUN = "bun"
 }
+export interface InitEPACommandOptions {
+    typescript?: true;
+}
 //# sourceMappingURL=types.d.ts.map
