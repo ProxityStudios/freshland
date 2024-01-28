@@ -29,5 +29,3 @@ npx freshland@latest init-epa <path/to/install> --ts
 | Flags              | Description    |
 | ------------------ | -------------- |
 | --typescript, --ts | Use typescript |
-
-![With GUI](./docs/assets/with-gui.PNG 'With GUI')

@@ -13,7 +13,7 @@ import {
 	updatePackageJSON,
 } from './lib/utils';
 import { version, name, description } from '../package.json';
-import { PackageManager } from './types';
+import { InitEPACommandOptions, PackageManager } from './types';
 
 export const program = new Command()
 	.name(name)
@@ -52,11 +52,7 @@ if (globalOptions.debug) {
 // Parse the command-line arguments
 program.parse(process.argv);
 
-interface InstallEPACommandOptions {
-	typescript?: true;
-}
-
-async function initEPACommand(pth: string, opts: InstallEPACommandOptions) {
+async function initEPACommand(pth: string, opts: InitEPACommandOptions) {
 	const { typescript } = opts;
 
 	if (typescript) {

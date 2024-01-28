@@ -11,3 +11,7 @@ export enum PackageManager {
 	YARN = 'yarn',
 	BUN = 'bun',
 }
+
+export interface InitEPACommandOptions {
+	typescript?: true;
+}

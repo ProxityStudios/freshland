@@ -1,8 +1,7 @@
 module.exports = {
 	branches: [
 		'main', // string
-		{ name: 'beta', prerelease: true }, // object with name property
-		// You can add more branches as needed
+		{ name: 'beta', prerelease: true },
 	],
 	plugins: [
 		'@semantic-release/commit-analyzer',
@@ -10,7 +9,7 @@ module.exports = {
 		[
 			'@semantic-release/changelog',
 			{
-				changelogFile: 'docs/CHANGELOG.md',
+				changelogFile: './docs/CHANGELOG.md',
 			},
 		],
 		'@semantic-release/npm',
