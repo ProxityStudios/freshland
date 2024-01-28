@@ -152,6 +152,12 @@ export async function installEPAForTS(pth: string) {
 	);
 	await fs.writeFile('prettier.config.js', prettierRcTemplate);
 
+	const eslintIgnoreTemplate = await fs.readFile(
+		`${rootDir}/templates/typescript/.eslintignore`,
+		'utf8'
+	);
+	await fs.writeFile('.eslintignore', eslintIgnoreTemplate);
+
 	logger.info('Pushing "fix" script to package.json');
 	const packageContent = await fs.readFile('package.json', 'utf8');
 	const packageJSON: { scripts: object } = JSON.parse(packageContent);
