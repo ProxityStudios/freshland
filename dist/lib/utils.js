@@ -48,31 +48,30 @@ function deleteAndInitGit(pth) {
     logger_1.logger.info('Git initialized');
 }
 exports.deleteAndInitGit = deleteAndInitGit;
-function updatePackageJSON(projectName, pth) {
+function updatePackageJSON(packageName, packageVersion, pth) {
     shelljs_1.default.cd(pth);
     if (shelljs_1.default.test('-e', './package.json')) {
         logger_1.logger.info('Updating "package.json"');
         shelljs_1.default.ls('package.json').forEach((file) => {
-            shelljs_1.default.sed('-i', /"name":\s*"(.*?)"/gi, `"name": "${projectName}"`, file);
-            shelljs_1.default.sed('-i', /"version":\s*"(.*?)"/gi, '"version": "1.0.0"', file);
+            shelljs_1.default.sed('-i', /"name":\s*"(.*?)"/gi, `"name": "${packageName}"`, file);
+            shelljs_1.default.sed('-i', /"version":\s*"(.*?)"/gi, `"version": "${packageVersion}"`, file);
         });
     }
     if (shelljs_1.default.test('-e', './package-lock.json')) {
         logger_1.logger.info('Updating "package-lock.json"');
         shelljs_1.default.ls('package-lock.json').forEach((file) => {
-            shelljs_1.default.sed('-i', /"name":\s*"(.*?)"/i, `"name": "${projectName}"`, file);
-            shelljs_1.default.sed('-i', /"version":\s*"(.*?)"/i, '"version": "1.0.0"', file);
+            shelljs_1.default.sed('-i', /"name":\s*"(.*?)"/i, `"name": "${packageName}"`, file);
+            shelljs_1.default.sed('-i', /"version":\s*"(.*?)"/i, `"version": "${packageVersion}"`, file);
         });
     }
 }
 exports.updatePackageJSON = updatePackageJSON;
-function installDeps(packageManager, projectName, pth) {
+function installDeps(packageManager, pth) {
     shelljs_1.default.cd(pth);
     // TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
     switch (packageManager) {
         // TODO: support other package managers
         case types_1.PackageManager.NPM: {
-            updatePackageJSON(projectName, pth);
             if (!shelljs_1.default.which('npm')) {
                 logger_1.logger.error('Sorry, you need to install "npm" to install dependencies');
                 return;
@@ -88,7 +87,6 @@ function installDeps(packageManager, projectName, pth) {
             break;
         }
         case types_1.PackageManager.YARN: {
-            updatePackageJSON(projectName, pth);
             if (!shelljs_1.default.which('yarn')) {
                 logger_1.logger.error('Sorry, you need to install "yarn" to install dependencies');
                 return;
@@ -104,7 +102,6 @@ function installDeps(packageManager, projectName, pth) {
             break;
         }
         case types_1.PackageManager.PNPM: {
-            updatePackageJSON(projectName, pth);
             if (!shelljs_1.default.which('pnpm')) {
                 logger_1.logger.error('Sorry, you need to install "pnpm" to install dependencies');
                 return;
@@ -120,7 +117,6 @@ function installDeps(packageManager, projectName, pth) {
             break;
         }
         case types_1.PackageManager.BUN: {
-            updatePackageJSON(projectName, pth);
             if (!shelljs_1.default.which('bun')) {
                 logger_1.logger.error('Sorry, you need to install "bun" to install dependencies');
                 return;
@@ -178,7 +174,7 @@ async function initEPAForTS(pth) {
     logger_1.logger.info('Now you can run "npm run fix" command');
 }
 exports.initEPAForTS = initEPAForTS;
-function initEPAForJS() {
+function initEPAForJS(pth) {
     logger_1.logger.info('Installing E.P.A (for JavaScript)');
 }
 exports.initEPAForJS = initEPAForJS;
