@@ -11,9 +11,10 @@ module.exports = {
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: './tsconfig.json',
-  },
+	parserOptions: {
+		project: true,
+		tsconfigRootDir: __dirname,
+	},
   rules: {
     'no-prototype-builtins': 'off',
 		'import/prefer-default-export': 'off',
@@ -43,4 +44,14 @@ module.exports = {
   env: {
     node: true,
   },
+  overrides: [
+    {
+      files: ['*.js'],
+      extends: ['plugin:@typescript-eslint/disable-type-checked'],
+      rules: {
+        '@typescript-eslint/internal/no-poorly-typed-ts-props': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'off',
+      },
+    },
+  ]
 };
