@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.installEPAForJS = exports.installEPAForTS = exports.installDeps = exports.updatePackageJSON = exports.deleteAndInitGit = exports.cloneGithubRepo = void 0;
+exports.initEPAForJS = exports.initEPAForTS = exports.installDeps = exports.updatePackageJSON = exports.deleteAndInitGit = exports.cloneGithubRepo = void 0;
 const shelljs_1 = __importDefault(require("shelljs"));
 const promises_1 = __importDefault(require("node:fs/promises"));
 const logger_1 = require("./logger");
@@ -141,7 +141,7 @@ function installDeps(packageManager, projectName, pth) {
     }
 }
 exports.installDeps = installDeps;
-async function installEPAForTS(pth) {
+async function initEPAForTS(pth) {
     const directoryExists = await checkIfExists(pth, types_1.Check.DIRECTORY);
     const packageJSONExists = await checkIfExists(`${pth}/package.json`, types_1.Check.FILE);
     if (directoryExists && packageJSONExists) {
@@ -177,11 +177,11 @@ async function installEPAForTS(pth) {
     logger_1.logger.info('E.P.A installed and configured successfully');
     logger_1.logger.info('Now you can run "npm run fix" command');
 }
-exports.installEPAForTS = installEPAForTS;
-function installEPAForJS() {
+exports.initEPAForTS = initEPAForTS;
+function initEPAForJS() {
     logger_1.logger.info('Installing E.P.A (for JavaScript)');
 }
-exports.installEPAForJS = installEPAForJS;
+exports.initEPAForJS = initEPAForJS;
 async function checkIfExists(pth, type) {
     try {
         const stats = await promises_1.default.stat(pth);

@@ -28,24 +28,24 @@ exports.program
     .argument('<path>', 'EG: path/to/clone')
     .action(NOGUIcloneCommand);
 exports.program
-    .command('install-epa')
-    .description('[BETA] Installs "eslint", "prettier", "airbnb" and configures.')
+    .command('init-epa')
+    .description('[BETA] Installs "eslint", "prettier", "airbnb" and configures it automaticlly.')
     .argument('<path>', 'path/to/install')
     .option('--ts, --typescript', 'Use typpescript')
-    .action(installEPACommand);
+    .action(initEPACommand);
 exports.globalOptions = exports.program.opts();
 if (exports.globalOptions.debug) {
     logger_1.logger.debug('Debug mode enabled');
 }
 // Parse the command-line arguments
 exports.program.parse(process.argv);
-async function installEPACommand(pth, opts) {
+async function initEPACommand(pth, opts) {
     const { typescript } = opts;
     if (typescript) {
-        await (0, utils_1.installEPAForTS)(node_path_1.default.resolve(pth));
+        await (0, utils_1.initEPAForTS)(node_path_1.default.resolve(pth));
     }
     else {
-        (0, utils_1.installEPAForJS)();
+        (0, utils_1.initEPAForJS)();
     }
 }
 function NOGUIcloneCommand(repo, destination) {
@@ -123,6 +123,13 @@ async function GUIcloneCommand() {
             message: 'Do you want to install dependencies?',
             default: true,
         });
+        /*
+        const installEPA = await confirm({
+            message:
+                'Do you want to install "eslint", "prettier" & "airbnb" and configure automaticlly?',
+            default: true,
+        });
+        */
         let selectedPackageManager;
         if (installDependencies) {
             selectedPackageManager = await (0, prompts_1.select)({
