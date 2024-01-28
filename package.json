@@ -43,6 +43,7 @@
 	"devDependencies": {
 		"@semantic-release/changelog": "6.0.3",
 		"@semantic-release/commit-analyzer": "11.1.0",
+		"@semantic-release/git": "10.0.1",
 		"@semantic-release/github": "9.2.6",
 		"@semantic-release/npm": "11.0.2",
 		"@semantic-release/release-notes-generator": "12.1.0",
@@ -64,9 +65,9 @@
 		"prettier": "^3.2.2",
 		"rimraf": "^5.0.5",
 		"semantic-release": "23.0.0",
-		"typescript": "^5.3.3",
 		"ts-node": "^10.9.2",
-		"tslog": "^4.9.2"
+		"tslog": "^4.9.2",
+		"typescript": "^5.3.3"
 	},
 	"dependencies": {
 		"@commander-js/extra-typings": "^11.1.0",
