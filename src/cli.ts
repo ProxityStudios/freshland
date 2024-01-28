@@ -8,8 +8,8 @@ import {
 	cloneGithubRepo,
 	deleteAndInitGit,
 	installDeps,
-	installEPAForJS,
-	installEPAForTS,
+	initEPAForJS,
+	initEPAForTS,
 	updatePackageJSON,
 } from './lib/utils';
 import { version, name, description } from '../package.json';
@@ -35,13 +35,13 @@ program
 	.action(NOGUIcloneCommand);
 
 program
-	.command('install-epa')
+	.command('init-epa')
 	.description(
-		'[BETA] Installs "eslint", "prettier", "airbnb" and configures.'
+		'[BETA] Installs "eslint", "prettier", "airbnb" and configures it automaticlly.'
 	)
 	.argument('<path>', 'path/to/install')
 	.option('--ts, --typescript', 'Use typpescript')
-	.action(installEPACommand);
+	.action(initEPACommand);
 
 export const globalOptions = program.opts();
 
@@ -56,13 +56,13 @@ interface InstallEPACommandOptions {
 	typescript?: true;
 }
 
-async function installEPACommand(pth: string, opts: InstallEPACommandOptions) {
+async function initEPACommand(pth: string, opts: InstallEPACommandOptions) {
 	const { typescript } = opts;
 
 	if (typescript) {
-		await installEPAForTS(path.resolve(pth));
+		await initEPAForTS(path.resolve(pth));
 	} else {
-		installEPAForJS();
+		initEPAForJS();
 	}
 }
 
@@ -148,6 +148,14 @@ async function GUIcloneCommand() {
 			message: 'Do you want to install dependencies?',
 			default: true,
 		});
+
+		/*
+		const installEPA = await confirm({
+			message:
+				'Do you want to install "eslint", "prettier" & "airbnb" and configure automaticlly?',
+			default: true,
+		});
+		*/
 
 		let selectedPackageManager;
 		if (installDependencies) {

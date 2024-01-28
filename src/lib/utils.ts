@@ -177,7 +177,7 @@ export function installDeps(
 	}
 }
 
-export async function installEPAForTS(pth: string) {
+export async function initEPAForTS(pth: string) {
 	const directoryExists = await checkIfExists(pth, Check.DIRECTORY);
 	const packageJSONExists = await checkIfExists(
 		`${pth}/package.json`,
@@ -247,7 +247,7 @@ export async function installEPAForTS(pth: string) {
 	logger.info('Now you can run "npm run fix" command');
 }
 
-export function installEPAForJS() {
+export function initEPAForJS() {
 	logger.info('Installing E.P.A (for JavaScript)');
 }
 
