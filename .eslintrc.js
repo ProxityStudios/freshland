@@ -1,22 +1,25 @@
 module.exports = {
-	plugins: ['@typescript-eslint', 'eslint-comments', 'promise', 'unicorn'],
 	extends: [
+		'eslint:recommended',
 		'airbnb-base',
 		'airbnb-typescript/base',
-		'plugin:@typescript-eslint/recommended',
 		'plugin:@typescript-eslint/recommended-requiring-type-checking',
+		'plugin:import/typescript',
 		'plugin:eslint-comments/recommended',
 		'plugin:promise/recommended',
 		'plugin:unicorn/recommended',
 		'plugin:prettier/recommended',
 	],
+	parser: '@typescript-eslint/parser',
+	parserOptions: {
+		project: true,
+		tsconfigRootDir: __dirname,
+	},
+	plugins: ['@typescript-eslint', 'eslint-comments', 'promise', 'unicorn'],
 	env: {
 		node: true,
 	},
-	parser: '@typescript-eslint/parser',
-	parserOptions: {
-		project: './tsconfig.json',
-	},
+	root: true,
 	rules: {
 		// Too restrictive, writing ugly code to defend against a very unlikely scenario: https://eslint.org/docs/rules/no-prototype-builtins
 		'no-prototype-builtins': 'off',
@@ -47,9 +50,8 @@ module.exports = {
 	overrides: [
 		{
 			files: ['*.js'],
+			extends: ['plugin:@typescript-eslint/disable-type-checked'],
 			rules: {
-				// Allow CJS until ESM support improves
-				'@typescript-eslint/no-var-requires': 'off',
 				'unicorn/prefer-module': 'off',
 			},
 		},

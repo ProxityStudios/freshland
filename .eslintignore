@@ -1,6 +1,4 @@
 /dist
 /node_modules
-.eslintrc.cjs
-release.config.js
 /test
 /templates

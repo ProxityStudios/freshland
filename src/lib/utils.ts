@@ -44,7 +44,7 @@ export function deleteAndInitGit(pth: string) {
 		shell.exit(1);
 	}
 
-	if (shell.exec(`git commit -am "Auto-commit by Freshland"`).code !== 0) {
+	if (shell.exec('git commit -am "Auto-commit by Freshland"').code !== 0) {
 		logger.error('"git commit" command failed');
 		shell.exit(1);
 	}
@@ -64,7 +64,7 @@ export function updatePackageJSON(projectName: string, pth: string) {
 				`"name": "${projectName}"`,
 				file
 			);
-			shell.sed('-i', /"version":\s*"(.*?)"/gi, `"version": "1.0.0"`, file);
+			shell.sed('-i', /"version":\s*"(.*?)"/gi, '"version": "1.0.0"', file);
 		});
 	}
 
@@ -77,7 +77,7 @@ export function updatePackageJSON(projectName: string, pth: string) {
 				`"name": "${projectName}"`,
 				file
 			);
-			shell.sed('-i', /"version":\s*"(.*?)"/i, `"version": "1.0.0"`, file);
+			shell.sed('-i', /"version":\s*"(.*?)"/i, '"version": "1.0.0"', file);
 		});
 	}
 }
@@ -128,7 +128,7 @@ export async function installEPAForTS(pth: string) {
 
 	// TODO: check if package.json or the package managers configs exists or not
 
-	logger.info('Installing packages');
+	logger.info('Installing packages...');
 	shell.exec(
 		'npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser'
 	);
