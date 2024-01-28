@@ -11,6 +11,7 @@ const node_path_1 = __importDefault(require("node:path"));
 const logger_1 = require("./lib/logger");
 const utils_1 = require("./lib/utils");
 const package_json_1 = require("../package.json");
+const types_1 = require("./types");
 exports.program = new extra_typings_1.Command()
     .name(package_json_1.name)
     .version(package_json_1.version)
@@ -27,24 +28,24 @@ exports.program
     .argument('<path>', 'EG: path/to/clone')
     .action(NOGUIcloneCommand);
 exports.program
-    .command('install-epa')
-    .description('[BETA] Installs "eslint", "prettier", "airbnb" and configures.')
+    .command('init-epa')
+    .description('[BETA] Installs "eslint", "prettier", "airbnb" and configures it automaticlly.')
     .argument('<path>', 'path/to/install')
     .option('--ts, --typescript', 'Use typpescript')
-    .action(installEPACommand);
+    .action(initEPACommand);
 exports.globalOptions = exports.program.opts();
 if (exports.globalOptions.debug) {
     logger_1.logger.debug('Debug mode enabled');
 }
 // Parse the command-line arguments
 exports.program.parse(process.argv);
-async function installEPACommand(pth, opts) {
+async function initEPACommand(pth, opts) {
     const { typescript } = opts;
     if (typescript) {
-        await (0, utils_1.installEPAForTS)(node_path_1.default.resolve(pth));
+        await (0, utils_1.initEPAForTS)(node_path_1.default.resolve(pth));
     }
     else {
-        (0, utils_1.installEPAForJS)();
+        (0, utils_1.initEPAForJS)();
     }
 }
 function NOGUIcloneCommand(repo, destination) {
@@ -52,6 +53,7 @@ function NOGUIcloneCommand(repo, destination) {
     const pth = node_path_1.default.resolve(destination);
     try {
         (0, utils_1.cloneGithubRepo)(repo, pth);
+        (0, utils_1.deleteAndInitGit)(pth);
         // FIXME: it uses default package manager (npm)
         (0, utils_1.updatePackageJSON)(destination.split('/').pop(), pth);
         logger_1.logger.warn('You need to install dependencies manually!');
@@ -121,39 +123,44 @@ async function GUIcloneCommand() {
             message: 'Do you want to install dependencies?',
             default: true,
         });
+        /*
+        const installEPA = await confirm({
+            message:
+                'Do you want to install "eslint", "prettier" & "airbnb" and configure automaticlly?',
+            default: true,
+        });
+        */
         let selectedPackageManager;
         if (installDependencies) {
             selectedPackageManager = await (0, prompts_1.select)({
                 message: 'Select the package manager of the repo',
                 choices: [
                     {
-                        name: utils_1.PackageManager.npm,
-                        value: utils_1.PackageManager.npm,
-                        description: utils_1.PackageManager.npm,
+                        name: types_1.PackageManager.NPM,
+                        value: types_1.PackageManager.NPM,
+                        description: `Install dependencies using ${types_1.PackageManager.NPM}`,
                     },
                     {
-                        name: utils_1.PackageManager.bun,
-                        value: utils_1.PackageManager.bun,
-                        description: `${utils_1.PackageManager.bun} (currently not supported)`,
-                        disabled: true,
+                        name: types_1.PackageManager.BUN,
+                        value: types_1.PackageManager.BUN,
+                        description: `Install dependencies using ${types_1.PackageManager.BUN}`,
                     },
                     {
-                        name: utils_1.PackageManager.pnpm,
-                        value: utils_1.PackageManager.pnpm,
-                        description: `${utils_1.PackageManager.pnpm} (currently not supported)`,
-                        disabled: true,
+                        name: types_1.PackageManager.PNPM,
+                        value: types_1.PackageManager.PNPM,
+                        description: `Install dependencies using ${types_1.PackageManager.PNPM}`,
                     },
                     {
-                        name: utils_1.PackageManager.yarn,
-                        value: utils_1.PackageManager.yarn,
-                        description: `${utils_1.PackageManager.yarn} (currently not supported)`,
-                        disabled: true,
+                        name: types_1.PackageManager.YARN,
+                        value: types_1.PackageManager.YARN,
+                        description: `Install dependencies using ${types_1.PackageManager.YARN}`,
                     },
                 ],
             });
         }
         const pth = node_path_1.default.resolve(destination);
         (0, utils_1.cloneGithubRepo)(repo, pth);
+        (0, utils_1.deleteAndInitGit)(destination);
         if (selectedPackageManager) {
             (0, utils_1.installDeps)(selectedPackageManager, projectName.replaceAll(' ', '-'), pth);
         }

@@ -5,14 +5,15 @@ import { Command } from '@commander-js/extra-typings';
 import path from 'node:path';
 import { logger } from './lib/logger';
 import {
-	PackageManager,
 	cloneGithubRepo,
+	deleteAndInitGit,
 	installDeps,
-	installEPAForJS,
-	installEPAForTS,
+	initEPAForJS,
+	initEPAForTS,
 	updatePackageJSON,
 } from './lib/utils';
 import { version, name, description } from '../package.json';
+import { InitEPACommandOptions, PackageManager } from './types';
 
 export const program = new Command()
 	.name(name)
@@ -34,13 +35,13 @@ program
 	.action(NOGUIcloneCommand);
 
 program
-	.command('install-epa')
+	.command('init-epa')
 	.description(
-		'[BETA] Installs "eslint", "prettier", "airbnb" and configures.'
+		'[BETA] Installs "eslint", "prettier", "airbnb" and configures it automaticlly.'
 	)
 	.argument('<path>', 'path/to/install')
 	.option('--ts, --typescript', 'Use typpescript')
-	.action(installEPACommand);
+	.action(initEPACommand);
 
 export const globalOptions = program.opts();
 
@@ -51,17 +52,13 @@ if (globalOptions.debug) {
 // Parse the command-line arguments
 program.parse(process.argv);
 
-interface InstallEPACommandOptions {
-	typescript?: true;
-}
-
-async function installEPACommand(pth: string, opts: InstallEPACommandOptions) {
+async function initEPACommand(pth: string, opts: InitEPACommandOptions) {
 	const { typescript } = opts;
 
 	if (typescript) {
-		await installEPAForTS(path.resolve(pth));
+		await initEPAForTS(path.resolve(pth));
 	} else {
-		installEPAForJS();
+		initEPAForJS();
 	}
 }
 
@@ -71,6 +68,8 @@ function NOGUIcloneCommand(repo: string, destination: string) {
 
 	try {
 		cloneGithubRepo(repo, pth);
+		deleteAndInitGit(pth);
+
 		// FIXME: it uses default package manager (npm)
 		updatePackageJSON(destination.split('/').pop()!, pth);
 
@@ -146,33 +145,38 @@ async function GUIcloneCommand() {
 			default: true,
 		});
 
+		/*
+		const installEPA = await confirm({
+			message:
+				'Do you want to install "eslint", "prettier" & "airbnb" and configure automaticlly?',
+			default: true,
+		});
+		*/
+
 		let selectedPackageManager;
 		if (installDependencies) {
 			selectedPackageManager = await select({
 				message: 'Select the package manager of the repo',
 				choices: [
 					{
-						name: PackageManager.npm,
-						value: PackageManager.npm,
-						description: PackageManager.npm,
+						name: PackageManager.NPM,
+						value: PackageManager.NPM,
+						description: `Install dependencies using ${PackageManager.NPM}`,
 					},
 					{
-						name: PackageManager.bun,
-						value: PackageManager.bun,
-						description: `${PackageManager.bun} (currently not supported)`,
-						disabled: true,
+						name: PackageManager.BUN,
+						value: PackageManager.BUN,
+						description: `Install dependencies using ${PackageManager.BUN}`,
 					},
 					{
-						name: PackageManager.pnpm,
-						value: PackageManager.pnpm,
-						description: `${PackageManager.pnpm} (currently not supported)`,
-						disabled: true,
+						name: PackageManager.PNPM,
+						value: PackageManager.PNPM,
+						description: `Install dependencies using ${PackageManager.PNPM}`,
 					},
 					{
-						name: PackageManager.yarn,
-						value: PackageManager.yarn,
-						description: `${PackageManager.yarn} (currently not supported)`,
-						disabled: true,
+						name: PackageManager.YARN,
+						value: PackageManager.YARN,
+						description: `Install dependencies using ${PackageManager.YARN}`,
 					},
 				],
 			});
@@ -180,6 +184,7 @@ async function GUIcloneCommand() {
 
 		const pth = path.resolve(destination);
 		cloneGithubRepo(repo, pth);
+		deleteAndInitGit(destination);
 
 		if (selectedPackageManager) {
 			installDeps(

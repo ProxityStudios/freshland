@@ -1,13 +1,13 @@
 {
 	"name": "freshland",
 	"description": "A tool to clone github repos without git history",
-	"version": "2.0.2-rc.1",
+	"version": "2.0.0",
 	"author": "ProxityStudios",
 	"license": "MIT",
 	"homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
 	"readme": "./README.md",
 	"engines": {
-		"node": ">=12.0.0"
+		"node": ">=16.0.0"
 	},
 	"bugs": {
 		"url": "https://github.com/ProxityStudios/freshland/issues"
@@ -24,25 +24,26 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/ProxityStudios/freshland.git"
+		"url": "git+https://github.com/ProxityStudios/freshland.git"
 	},
 	"scripts": {
 		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/cli.ts",
-		"build": "run-s fix clean build:tsc",
-		"build:tsc": "tsc --build",
+		"build": "run-s fix clean tsc",
+		"tsc": "tsc --build",
 		"clean": "rimraf dist/",
 		"fix": "eslint . --fix",
-		"publish:beta": "run-s prepublish  commit-latest-build bump-beta-version pb",
-		"bump-beta-version": "npm version prerelease --preid=rc",
-		"pb": "npm publish --tag beta",
-		"commit-latest-build": "git add . && git commit -m \"chore: latest-build\" && git push",
-		"prepublish": "run-s build"
+		"prepublishOnly": "run-s build"
 	},
 	"bin": {
-		"freshland": "dist/src/cli.js"
+		"freshland": "dist/cli.js"
 	},
-	"exports": "./dist/src/cli.js",
+	"exports": "./dist/cli.js",
 	"devDependencies": {
+		"@semantic-release/changelog": "6.0.3",
+		"@semantic-release/commit-analyzer": "11.1.0",
+		"@semantic-release/github": "9.2.6",
+		"@semantic-release/npm": "11.0.2",
+		"@semantic-release/release-notes-generator": "12.1.0",
 		"@types/node": "^20.11.0",
 		"@types/shelljs": "^0.8.15",
 		"@typescript-eslint/eslint-plugin": "^6.18.1",
@@ -60,6 +61,7 @@
 		"npm-run-all": "^4.1.5",
 		"prettier": "^3.2.2",
 		"rimraf": "^5.0.5",
+		"semantic-release": "23.0.0",
 		"typescript": "^5.3.3"
 	},
 	"dependencies": {

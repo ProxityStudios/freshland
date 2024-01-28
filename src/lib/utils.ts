@@ -1,7 +1,9 @@
-import path from 'node:path';
 import shell from 'shelljs';
 import fs from 'node:fs/promises';
+
 import { logger } from './logger';
+import { rootDir } from './dir';
+import { Check, PackageManager } from '../types';
 
 export function cloneGithubRepo(repo: string, destination: string) {
 	if (!shell.which('git')) {
@@ -14,14 +16,14 @@ export function cloneGithubRepo(repo: string, destination: string) {
 	if (repo.startsWith('http') || repo.startsWith('git@')) {
 		repoURI = repo;
 	}
+
 	logger.info('Cloning into', destination);
 	if (shell.exec(`git clone ${repoURI} ${destination}`).code !== 0) {
 		logger.error('Cannot clone the repo');
 		shell.exit(1);
 	}
-	logger.info('Repo cloned');
 
-	deleteAndInitGit(destination);
+	logger.info('Repo cloned');
 }
 
 export function deleteAndInitGit(pth: string) {
@@ -42,7 +44,7 @@ export function deleteAndInitGit(pth: string) {
 		shell.exit(1);
 	}
 
-	if (shell.exec(`git commit -am "Auto-commit by Freshland"`).code !== 0) {
+	if (shell.exec('git commit -am "Auto-commit by Freshland"').code !== 0) {
 		logger.error('"git commit" command failed');
 		shell.exit(1);
 	}
@@ -62,7 +64,7 @@ export function updatePackageJSON(projectName: string, pth: string) {
 				`"name": "${projectName}"`,
 				file
 			);
-			shell.sed('-i', /"version":\s*"(.*?)"/gi, `"version": "1.0.0"`, file);
+			shell.sed('-i', /"version":\s*"(.*?)"/gi, '"version": "1.0.0"', file);
 		});
 	}
 
@@ -75,87 +77,157 @@ export function updatePackageJSON(projectName: string, pth: string) {
 				`"name": "${projectName}"`,
 				file
 			);
-			shell.sed('-i', /"version":\s*"(.*?)"/i, `"version": "1.0.0"`, file);
+			shell.sed('-i', /"version":\s*"(.*?)"/i, '"version": "1.0.0"', file);
 		});
 	}
 }
 
-export enum PackageManager {
-	npm = 'npm',
-	pnpm = 'pnpm',
-	yarn = 'yarn',
-	bun = 'bun',
-}
-type PackageManagerKeys = keyof typeof PackageManager;
-
 export function installDeps(
-	packageManager: PackageManagerKeys,
+	packageManager: PackageManager,
 	projectName: string,
 	pth: string
 ) {
 	shell.cd(pth);
 	// TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
 
-	if (packageManager === PackageManager.npm) {
-		updatePackageJSON(projectName, pth);
+	switch (packageManager) {
+		// TODO: support other package managers
 
-		if (!shell.which('npm')) {
-			logger.error('Sorry, you need to install "npm" first');
-			return;
+		case PackageManager.NPM: {
+			updatePackageJSON(projectName, pth);
+
+			if (!shell.which('npm')) {
+				logger.error(
+					'Sorry, you need to install "npm" to install dependencies'
+				);
+				return;
+			}
+
+			logger.info('Installing dependencies...');
+			if (shell.exec('npm install').code === 0) {
+				logger.info('Dependencies installed');
+			} else {
+				logger.error('"npm install" command failed');
+				logger.warn('You need to install dependencies manually!');
+			}
+			break;
 		}
 
-		logger.info('Installing dependencies...');
-		if (shell.exec('npm install').code === 0) {
-			logger.info('Dependencies installed');
-		} else {
-			logger.error('"npm install" command failed');
-			logger.warn('You need to install dependencies manually!');
+		case PackageManager.YARN: {
+			updatePackageJSON(projectName, pth);
+
+			if (!shell.which('yarn')) {
+				logger.error(
+					'Sorry, you need to install "yarn" to install dependencies'
+				);
+				return;
+			}
+
+			logger.info('Installing dependencies...');
+			if (shell.exec('yarn install').code === 0) {
+				logger.info('Dependencies installed');
+			} else {
+				logger.error('"yarn install" command failed');
+				logger.warn('You need to install dependencies manually!');
+			}
+			break;
+		}
+
+		case PackageManager.PNPM: {
+			updatePackageJSON(projectName, pth);
+
+			if (!shell.which('pnpm')) {
+				logger.error(
+					'Sorry, you need to install "pnpm" to install dependencies'
+				);
+				return;
+			}
+
+			logger.info('Installing dependencies...');
+			if (shell.exec('pnpm install').code === 0) {
+				logger.info('Dependencies installed');
+			} else {
+				logger.error('"pnpm install" command failed');
+				logger.warn('You need to install dependencies manually!');
+			}
+			break;
+		}
+		case PackageManager.BUN: {
+			updatePackageJSON(projectName, pth);
+
+			if (!shell.which('bun')) {
+				logger.error(
+					'Sorry, you need to install "bun" to install dependencies'
+				);
+				return;
+			}
+
+			logger.info('Installing dependencies...');
+			if (shell.exec('bun install').code === 0) {
+				logger.info('Dependencies installed');
+			} else {
+				logger.error('"bun install" command failed');
+				logger.warn('You need to install dependencies manually!');
+			}
+			break;
+		}
+		default: {
+			break;
 		}
 	}
-
-	// TODO: support other package managers
 }
 
-export async function installEPAForTS(pth: string) {
-	logger.info('Installing EPA (for TypeScript)');
-
-	shell.cd(pth);
-
-	logger.info('Installing dependencies');
-	shell.exec('npm install', { async: true });
-	logger.info('Dependencies installed');
-
-	logger.info('Installing packages');
-	shell.exec(
-		'npm install --save-dev eslint eslint-config-prettier @typescript-eslint/eslint-plugin prettier eslint-config-prettier',
-		{ async: true }
+export async function initEPAForTS(pth: string) {
+	const directoryExists = await checkIfExists(pth, Check.DIRECTORY);
+	const packageJSONExists = await checkIfExists(
+		`${pth}/package.json`,
+		Check.FILE
 	);
 
-	shell.exec('npx install-peerdeps --dev eslint-config-airbnb-base', {
-		async: true,
-	});
+	if (directoryExists && packageJSONExists) {
+		shell.cd(pth);
+	} else {
+		logger.error('Directory or "package.json" not exists. Exiting...');
+		shell.exit(1);
+	}
 
+	logger.info('Installing E.P.A (for TypeScript)');
+
+	// TODO: check if package.json or the package managers configs exists or not
+
+	logger.info('Installing packages...');
 	shell.exec(
-		'npm install eslint-config-airbnb-typescript @typescript-eslint/eslint-plugin@^6.0.0 @typescript-eslint/parser@^6.0.0 --save-dev'
+		'npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser'
 	);
+
+	shell.exec('npm i --save');
 
 	logger.info('Packages installed');
 
+	logger.info('Creating .eslintrc.js file');
+
 	const eslintRcTemplate = await fs.readFile(
-		'../../templates/typescript/.eslintrc.js',
+		`${rootDir}/templates/typescript/.eslintrc.js`,
 		'utf8'
 	);
 	await fs.writeFile('.eslintrc.js', eslintRcTemplate);
 
+	logger.info('Creating prettier.config.js file');
 	const prettierRcTemplate = await fs.readFile(
-		'../../templates/typescript/prettier.config.js',
+		`${rootDir}/templates/typescript/prettier.config.js`,
 		'utf8'
 	);
 	await fs.writeFile('prettier.config.js', prettierRcTemplate);
 
-	const packagePath = `${process.cwd()}/package.json`;
-	const packageContent = await fs.readFile(packagePath, 'utf8');
-	const packageJSON: any = JSON.parse(packageContent);
+	const eslintIgnoreTemplate = await fs.readFile(
+		`${rootDir}/templates/typescript/.eslintignore`,
+		'utf8'
+	);
+	await fs.writeFile('.eslintignore', eslintIgnoreTemplate);
+
+	logger.info('Pushing "fix" script to package.json');
+	const packageContent = await fs.readFile('package.json', 'utf8');
+	const packageJSON: { scripts: object } = JSON.parse(packageContent);
 
 	packageJSON.scripts = {
 		...packageJSON.scripts,
@@ -163,14 +235,53 @@ export async function installEPAForTS(pth: string) {
 	};
 
 	await fs.writeFile(
-		packagePath,
+		'package.json',
 		JSON.stringify(packageJSON, undefined, 2),
 		'utf8'
 	);
 
-	logger.info('EPA installed successfully');
+	logger.warn(
+		'[IMPORTANT] To get better experience, install "eslint" and "prettier" extensions'
+	);
+	logger.info('E.P.A installed and configured successfully');
+	logger.info('Now you can run "npm run fix" command');
 }
 
-export function installEPAForJS() {
-	logger.info('Installing EPA (for JavaScript)');
+export function initEPAForJS() {
+	logger.info('Installing E.P.A (for JavaScript)');
+}
+
+async function checkIfExists(pth: string, type: Check) {
+	try {
+		const stats = await fs.stat(pth);
+		switch (type) {
+			case Check.DIRECTORY: {
+				return stats.isDirectory();
+			}
+
+			case Check.FILE: {
+				return stats.isFile();
+			}
+			// TODO: make this working
+			/*
+			case Check.VIDEO: {
+				return stats.isFile();
+			}
+
+			case Check.IMAGE: {
+				return stats.isDirectory();
+			}
+			*/
+
+			default: {
+				return false;
+			}
+		}
+	} catch (error: any) {
+		if (error.code === 'ENOENT') {
+			return false;
+		}
+		// TODO:
+		return false;
+	}
 }
