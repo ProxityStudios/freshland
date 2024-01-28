@@ -1,7 +1,7 @@
 {
-	"name": "freshland",
+	"name": "test",
 	"description": "A tool to clone github repos without git history",
-	"version": "2.0.0",
+	"version": "1.0.0",
 	"author": "ProxityStudios",
 	"license": "MIT",
 	"homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
@@ -20,7 +20,9 @@
 		"cloner",
 		"js",
 		"javascript",
-		"git"
+		"git",
+		"bash-script",
+		"bash"
 	],
 	"repository": {
 		"type": "git",
