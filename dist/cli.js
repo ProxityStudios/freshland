@@ -41,12 +41,8 @@ if (exports.globalOptions.debug) {
 exports.program.parse(process.argv);
 async function initEPACommand(pth, opts) {
     const { typescript } = opts;
-    if (typescript) {
-        await (0, utils_1.initEPAForTS)(node_path_1.default.resolve(pth));
-    }
-    else {
-        (0, utils_1.initEPAForJS)();
-    }
+    const p = node_path_1.default.resolve(pth);
+    await (typescript ? (0, utils_1.initEPAForTS)(p) : (0, utils_1.initEPAForJS)(p));
 }
 function NOGUIcloneCommand(repo, destination) {
     // options.debug
@@ -55,7 +51,7 @@ function NOGUIcloneCommand(repo, destination) {
         (0, utils_1.cloneGithubRepo)(repo, pth);
         (0, utils_1.deleteAndInitGit)(pth);
         // FIXME: it uses default package manager (npm)
-        (0, utils_1.updatePackageJSON)(destination.split('/').pop(), pth);
+        (0, utils_1.updatePackageJSON)(destination.split('/').pop(), '1.0.0', pth);
         logger_1.logger.warn('You need to install dependencies manually!');
         logger_1.logger.info('Done, you are ready to code!');
     }
@@ -110,15 +106,36 @@ async function GUIcloneCommand() {
                 return true;
             },
         });
-        const projectName = await (0, prompts_1.input)({
-            message: 'What should we call this repo?',
-            validate: (i) => {
-                if (i.trim() === '') {
-                    return 'Repo name cannot be empty.';
-                }
-                return true;
-            },
+        const pth = node_path_1.default.resolve(destination);
+        const updatePackageNameAndVersion = await (0, prompts_1.confirm)({
+            message: 'Do you want to change the package name and version?',
+            default: false,
         });
+        let packageName;
+        let packageVersion;
+        if (updatePackageNameAndVersion) {
+            packageName = await (0, prompts_1.input)({
+                message: 'What should we call this repo?',
+                default: destination.split('/').pop(),
+                validate: (i) => {
+                    i.replaceAll(' ', '-');
+                    return true;
+                },
+            });
+            packageVersion = await (0, prompts_1.input)({
+                message: 'What version should we use?',
+                default: '1.0.0',
+                validate: (i) => {
+                    if (i.trim() === '') {
+                        return 'Version cannot be empty.';
+                    }
+                    if (!/^[\d.]*$/.test(i)) {
+                        return 'Version should include only numbers and dots. (1.0.0)';
+                    }
+                    return true;
+                },
+            });
+        }
         const installDependencies = await (0, prompts_1.confirm)({
             message: 'Do you want to install dependencies?',
             default: true,
@@ -158,11 +175,13 @@ async function GUIcloneCommand() {
                 ],
             });
         }
-        const pth = node_path_1.default.resolve(destination);
         (0, utils_1.cloneGithubRepo)(repo, pth);
         (0, utils_1.deleteAndInitGit)(destination);
+        if (updatePackageNameAndVersion) {
+            (0, utils_1.updatePackageJSON)(packageName, packageVersion, pth);
+        }
         if (selectedPackageManager) {
-            (0, utils_1.installDeps)(selectedPackageManager, projectName.replaceAll(' ', '-'), pth);
+            (0, utils_1.installDeps)(selectedPackageManager, pth);
         }
         else {
             logger_1.logger.warn('You need to install dependencies manually!');

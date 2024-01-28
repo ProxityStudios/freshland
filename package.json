@@ -1,7 +1,7 @@
 {
 	"name": "freshland",
 	"description": "A tool to clone github repos without git history",
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"author": "ProxityStudios",
 	"license": "MIT",
 	"homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
@@ -20,7 +20,9 @@
 		"cloner",
 		"js",
 		"javascript",
-		"git"
+		"git",
+		"bash-script",
+		"bash"
 	],
 	"repository": {
 		"type": "git",
@@ -41,6 +43,7 @@
 	"devDependencies": {
 		"@semantic-release/changelog": "6.0.3",
 		"@semantic-release/commit-analyzer": "11.1.0",
+		"@semantic-release/git": "10.0.1",
 		"@semantic-release/github": "9.2.6",
 		"@semantic-release/npm": "11.0.2",
 		"@semantic-release/release-notes-generator": "12.1.0",
@@ -62,14 +65,14 @@
 		"prettier": "^3.2.2",
 		"rimraf": "^5.0.5",
 		"semantic-release": "23.0.0",
-		"typescript": "^5.3.3",
 		"ts-node": "^10.9.2",
-		"tslog": "^4.9.2"
+		"typescript": "^5.3.3"
 	},
 	"dependencies": {
 		"@commander-js/extra-typings": "^11.1.0",
 		"@inquirer/prompts": "^3.3.0",
 		"commander": "^11.1.0",
-		"shelljs": "^0.8.5"
+		"shelljs": "^0.8.5",
+		"tslog": "4.9.2"
 	}
 }

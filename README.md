@@ -20,7 +20,7 @@ npx freshland@latest
 
 ![With GUI](./docs/assets/with-gui.PNG 'With GUI')
 
-### [BETA] Init E.P.A and configure it automatically
+### [BETA] Init E.P.A and automatically configure it
 
 This script installs `eslint`, `prettier` & `airbnb` and automatically configures it. Yeah its that simple.
 
