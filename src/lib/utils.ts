@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 
 import { logger } from './logger';
 import { rootDir } from './dir';
-import { Check, PackageManager, PackageManagerKeys } from '../types';
+import { Check, PackageManager } from '../types';
 
 export function cloneGithubRepo(repo: string, destination: string) {
 	if (!shell.which('git')) {
@@ -83,31 +83,98 @@ export function updatePackageJSON(projectName: string, pth: string) {
 }
 
 export function installDeps(
-	packageManager: PackageManagerKeys,
+	packageManager: PackageManager,
 	projectName: string,
 	pth: string
 ) {
 	shell.cd(pth);
 	// TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
 
-	if (packageManager === PackageManager.npm) {
-		updatePackageJSON(projectName, pth);
+	switch (packageManager) {
+		// TODO: support other package managers
 
-		if (!shell.which('npm')) {
-			logger.error('Sorry, you need to install "npm" first');
-			return;
+		case PackageManager.NPM: {
+			updatePackageJSON(projectName, pth);
+
+			if (!shell.which('npm')) {
+				logger.error(
+					'Sorry, you need to install "npm" to install dependencies'
+				);
+				return;
+			}
+
+			logger.info('Installing dependencies...');
+			if (shell.exec('npm install').code === 0) {
+				logger.info('Dependencies installed');
+			} else {
+				logger.error('"npm install" command failed');
+				logger.warn('You need to install dependencies manually!');
+			}
+			break;
 		}
 
-		logger.info('Installing dependencies...');
-		if (shell.exec('npm install').code === 0) {
-			logger.info('Dependencies installed');
-		} else {
-			logger.error('"npm install" command failed');
-			logger.warn('You need to install dependencies manually!');
+		case PackageManager.YARN: {
+			updatePackageJSON(projectName, pth);
+
+			if (!shell.which('yarn')) {
+				logger.error(
+					'Sorry, you need to install "yarn" to install dependencies'
+				);
+				return;
+			}
+
+			logger.info('Installing dependencies...');
+			if (shell.exec('yarn install').code === 0) {
+				logger.info('Dependencies installed');
+			} else {
+				logger.error('"yarn install" command failed');
+				logger.warn('You need to install dependencies manually!');
+			}
+			break;
+		}
+
+		case PackageManager.PNPM: {
+			updatePackageJSON(projectName, pth);
+
+			if (!shell.which('pnpm')) {
+				logger.error(
+					'Sorry, you need to install "pnpm" to install dependencies'
+				);
+				return;
+			}
+
+			logger.info('Installing dependencies...');
+			if (shell.exec('pnpm install').code === 0) {
+				logger.info('Dependencies installed');
+			} else {
+				logger.error('"pnpm install" command failed');
+				logger.warn('You need to install dependencies manually!');
+			}
+			break;
+		}
+		case PackageManager.BUN: {
+			updatePackageJSON(projectName, pth);
+
+			if (!shell.which('bun')) {
+				logger.error(
+					'Sorry, you need to install "bun" to install dependencies'
+				);
+				return;
+			}
+
+			logger.info('Installing dependencies...');
+			if (shell.exec('bun install').code === 0) {
+				logger.info('Dependencies installed');
+			} else {
+				logger.error('"bun install" command failed');
+				logger.warn('You need to install dependencies manually!');
+			}
+			break;
+		}
+		default: {
+			break;
 		}
 	}
-
-	// TODO: support other package managers
 }
 
 export async function installEPAForTS(pth: string) {
