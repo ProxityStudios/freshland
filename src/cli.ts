@@ -54,12 +54,8 @@ program.parse(process.argv);
 
 async function initEPACommand(pth: string, opts: InitEPACommandOptions) {
 	const { typescript } = opts;
-
-	if (typescript) {
-		await initEPAForTS(path.resolve(pth));
-	} else {
-		initEPAForJS();
-	}
+	const p = path.resolve(pth);
+	await (typescript ? initEPAForTS(p) : initEPAForJS(p));
 }
 
 function NOGUIcloneCommand(repo: string, destination: string) {
@@ -71,7 +67,7 @@ function NOGUIcloneCommand(repo: string, destination: string) {
 		deleteAndInitGit(pth);
 
 		// FIXME: it uses default package manager (npm)
-		updatePackageJSON(destination.split('/').pop()!, pth);
+		updatePackageJSON(destination.split('/').pop()!, '1.0.0', pth);
 
 		logger.warn('You need to install dependencies manually!');
 		logger.info('Done, you are ready to code!');
@@ -130,16 +126,40 @@ async function GUIcloneCommand() {
 			},
 		});
 
-		const projectName = await input({
-			message: 'What should we call this repo?',
-			validate: (i) => {
-				if (i.trim() === '') {
-					return 'Repo name cannot be empty.';
-				}
-				return true;
-			},
+		const pth = path.resolve(destination);
+
+		const updatePackageNameAndVersion = await confirm({
+			message: 'Do you want to change the package name and version?',
+			default: false,
 		});
 
+		let packageName: string;
+		let packageVersion: string;
+		if (updatePackageNameAndVersion) {
+			packageName = await input({
+				message: 'What should we call this repo?',
+				default: destination.split('/').pop()!,
+				validate: (i) => {
+					i.replaceAll(' ', '-');
+					return true;
+				},
+			});
+			packageVersion = await input({
+				message: 'What version should we use?',
+				default: '1.0.0',
+				validate: (i) => {
+					if (i.trim() === '') {
+						return 'Version cannot be empty.';
+					}
+
+					if (!/^[\d.]*$/.test(i)) {
+						return 'Version should include only numbers and dots. (1.0.0)';
+					}
+
+					return true;
+				},
+			});
+		}
 		const installDependencies = await confirm({
 			message: 'Do you want to install dependencies?',
 			default: true,
@@ -182,16 +202,15 @@ async function GUIcloneCommand() {
 			});
 		}
 
-		const pth = path.resolve(destination);
 		cloneGithubRepo(repo, pth);
 		deleteAndInitGit(destination);
 
+		if (updatePackageNameAndVersion) {
+			updatePackageJSON(packageName!, packageVersion!, pth);
+		}
+
 		if (selectedPackageManager) {
-			installDeps(
-				selectedPackageManager,
-				projectName.replaceAll(' ', '-'),
-				pth
-			);
+			installDeps(selectedPackageManager, pth);
 		} else {
 			logger.warn('You need to install dependencies manually!');
 		}
