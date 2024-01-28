@@ -52,11 +52,7 @@ export function deleteAndInitGit(pth: string) {
 	logger.info('Git initialized');
 }
 
-export function updatePackageJSON(
-	packageName: string,
-	packageVersion: string,
-	pth: string
-) {
+export function updatePackageJSON(projectName: string, pth: string) {
 	shell.cd(pth);
 
 	if (shell.test('-e', './package.json')) {
@@ -65,15 +61,10 @@ export function updatePackageJSON(
 			shell.sed(
 				'-i',
 				/"name":\s*"(.*?)"/gi,
-				`"name": "${packageName}"`,
+				`"name": "${projectName}"`,
 				file
 			);
-			shell.sed(
-				'-i',
-				/"version":\s*"(.*?)"/gi,
-				`"version": "${packageVersion}"`,
-				file
-			);
+			shell.sed('-i', /"version":\s*"(.*?)"/gi, '"version": "1.0.0"', file);
 		});
 	}
 
@@ -83,20 +74,19 @@ export function updatePackageJSON(
 			shell.sed(
 				'-i',
 				/"name":\s*"(.*?)"/i,
-				`"name": "${packageName}"`,
+				`"name": "${projectName}"`,
 				file
 			);
-			shell.sed(
-				'-i',
-				/"version":\s*"(.*?)"/i,
-				`"version": "${packageVersion}"`,
-				file
-			);
+			shell.sed('-i', /"version":\s*"(.*?)"/i, '"version": "1.0.0"', file);
 		});
 	}
 }
 
-export function installDeps(packageManager: PackageManager, pth: string) {
+export function installDeps(
+	packageManager: PackageManager,
+	projectName: string,
+	pth: string
+) {
 	shell.cd(pth);
 	// TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
 
@@ -104,6 +94,8 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 		// TODO: support other package managers
 
 		case PackageManager.NPM: {
+			updatePackageJSON(projectName, pth);
+
 			if (!shell.which('npm')) {
 				logger.error(
 					'Sorry, you need to install "npm" to install dependencies'
@@ -122,6 +114,8 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 		}
 
 		case PackageManager.YARN: {
+			updatePackageJSON(projectName, pth);
+
 			if (!shell.which('yarn')) {
 				logger.error(
 					'Sorry, you need to install "yarn" to install dependencies'
@@ -140,6 +134,8 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 		}
 
 		case PackageManager.PNPM: {
+			updatePackageJSON(projectName, pth);
+
 			if (!shell.which('pnpm')) {
 				logger.error(
 					'Sorry, you need to install "pnpm" to install dependencies'
@@ -157,6 +153,8 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 			break;
 		}
 		case PackageManager.BUN: {
+			updatePackageJSON(projectName, pth);
+
 			if (!shell.which('bun')) {
 				logger.error(
 					'Sorry, you need to install "bun" to install dependencies'
@@ -249,7 +247,7 @@ export async function initEPAForTS(pth: string) {
 	logger.info('Now you can run "npm run fix" command');
 }
 
-export function initEPAForJS(pth: string) {
+export function initEPAForJS() {
 	logger.info('Installing E.P.A (for JavaScript)');
 }
 
