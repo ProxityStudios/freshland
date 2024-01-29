@@ -33,7 +33,6 @@
 		"tsc": "tsc --build",
 		"clean": "rimraf dist/",
 		"fix": "eslint . --fix",
-		"postbuild":"sudo cp package.json /dist && cp npm-shrinkwrap.json /dist",
 		"prepublishOnly": "run-s build",
 		"postversion": "cp package.json /dist && cp npm-shrinkwrap.json /dist"
 	},
