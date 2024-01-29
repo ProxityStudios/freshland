@@ -1,3 +1,32 @@
+# [2.3.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.2...v2.3.0-beta.3) (2024-01-29)
+
+
+### Bug Fixes
+
+* delete dist ([891eff3](https://github.com/ProxityStudios/freshland/commit/891eff315a767cc101ae27ae66130b55eb0c2015))
+* Delete dist ([ae5acfa](https://github.com/ProxityStudios/freshland/commit/ae5acfaf57d3db3760dafe7f5af1cb3d48e0e249))
+* release.config.js ([821c5fe](https://github.com/ProxityStudios/freshland/commit/821c5fea4065648e59035bac4a414593a6346971))
+* test ([30b9178](https://github.com/ProxityStudios/freshland/commit/30b91784d12a40f521ccb87b66986734f65b023e))
+* testing ([1d5921b](https://github.com/ProxityStudios/freshland/commit/1d5921b3173ce599cd94451fe896f34a033fc6b8))
+* testing ([90e8b5f](https://github.com/ProxityStudios/freshland/commit/90e8b5f185c9187c5c12157eb04ad4539dfd66c9))
+* trigger action ([9e8c3fb](https://github.com/ProxityStudios/freshland/commit/9e8c3fb348a024eef7a3ad294a14209271a63290))
+* trigger action ([01ca79d](https://github.com/ProxityStudios/freshland/commit/01ca79d2b24a36a89b6be701799c6bd243137d32))
+* trigger build ([1310259](https://github.com/ProxityStudios/freshland/commit/13102598619ac659564d4bee5ed8dab49e147e57))
+* trigger build ([89ad5d1](https://github.com/ProxityStudios/freshland/commit/89ad5d1d43dff9c09a462a1603ee52d3ec7cba29))
+* Update package.json ([cc19244](https://github.com/ProxityStudios/freshland/commit/cc19244eca670adf961155891f7817378f240604))
+* Update package.json ([0f3b160](https://github.com/ProxityStudios/freshland/commit/0f3b1607474f8f51bc1ec37b940851d9d1885c15))
+* Update package.json ([8b47d04](https://github.com/ProxityStudios/freshland/commit/8b47d04f0f868c011abf36def9f9a5e946e8a9f8))
+* Update package.json ([09375d1](https://github.com/ProxityStudios/freshland/commit/09375d11bec9721ff96bf6034bdc8aa1ceb3c370))
+* Update README.md ([144d5a7](https://github.com/ProxityStudios/freshland/commit/144d5a785bfbd919844eec397d28225a918d2617))
+* Update release-beta.yml ([951b2c0](https://github.com/ProxityStudios/freshland/commit/951b2c09a3229443c8e38ee858f8a9d6ac08ee71))
+* Update release.config.js ([564addf](https://github.com/ProxityStudios/freshland/commit/564addf175be7106303671f407ae198bffa5922a))
+* Update release.config.js ([24292f9](https://github.com/ProxityStudios/freshland/commit/24292f909d664c283082afbedd9b4c88fd2a803e))
+* Update release.config.js ([80d2d9c](https://github.com/ProxityStudios/freshland/commit/80d2d9c0e773cdf3e9fef92324e4b3b0ea21eda5))
+* Update release.config.js ([3a2abeb](https://github.com/ProxityStudios/freshland/commit/3a2abeb44e8a76122ee17fde0129faa633d94f67))
+* Update release.config.js ([db5d588](https://github.com/ProxityStudios/freshland/commit/db5d588fa80d8655b6a6a62105e2252354367171))
+* Update release.yml ([6ddda94](https://github.com/ProxityStudios/freshland/commit/6ddda9452c9cbb060bafdc0dccdd99235f9e4049))
+* you have to provide --upd flag ([e1907f9](https://github.com/ProxityStudios/freshland/commit/e1907f9694cb05af95f397a74f2a5e29800cca43))
+
 # [2.3.0-beta.6](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.5...v2.3.0-beta.6) (2024-01-29)
 
 
