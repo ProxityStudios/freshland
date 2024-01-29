@@ -1,3 +1,16 @@
+# [2.3.0-beta.1](https://github.com/ProxityStudios/freshland/compare/v2.2.0...v2.3.0-beta.1) (2024-01-29)
+
+
+### Bug Fixes
+
+* [#27](https://github.com/ProxityStudios/freshland/issues/27) ([7470a53](https://github.com/ProxityStudios/freshland/commit/7470a53058fdb4a845b09522ef5a84c26385f8e2))
+* new build ([7c7bb6b](https://github.com/ProxityStudios/freshland/commit/7c7bb6baa14ad68d73e3292ea57a23e9bc65dfc8))
+
+
+### Features
+
+* clone command supports more options ([35b8dde](https://github.com/ProxityStudios/freshland/commit/35b8ddebf35f17a451d04c2cbeafadb2bc6292c6))
+
 # [2.2.0](https://github.com/ProxityStudios/freshland/compare/v2.1.0...v2.2.0) (2024-01-28)
 
 
