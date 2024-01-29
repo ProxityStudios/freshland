@@ -27,17 +27,6 @@ jobs:
          - name: Install dependencies
            run: npm ci
 
-         - name: Build
-           run: npm run build
-
-         - name: Commit report
-           continue-on-error: true
-           run: |
-              git config --global user.name 'Alexinhans'
-              git config --global user.email 'Alexinhans@users.noreply.github.com'
-              git commit -am "Automated push"
-              git push
-
          - name: Semantic Release
            run: npx semantic-release
            env:
