@@ -21,17 +21,17 @@ exports.program = new extra_typings_1.Command()
 exports.program
     .command('clone')
     .description('Clone a repo to specified path')
-    .argument('<repo>', 'EG: proxitystudios/typescript-starter OR https://github.com/proxitystudios/typescript-starter')
-    .argument('<path>', 'EG: path/to/clone')
+    .argument('<repo>', 'proxitystudios/typescript-starter / https://github.com/proxitystudios/typescript-starter')
+    .argument('<path>', 'path/to/clone')
     .option('--upd, --update-package', 'Update package name and version')
     .option('--n, --name <name>', 'Change the package name')
     .option('--v, --version <version>', 'Change the package version')
-    .option('--i, --install-deps <packageManager>', 'Install dependencies automatically')
+    .option('--i, --install-deps <packageManager>', 'Install dependencies automatically (supports npm, yarn, pnpm & bun)')
     .option('--kg, --keep-git', 'Do not delete ".git" folder')
     .action(NOGUIcloneCommand);
 exports.program
     .command('init-epa')
-    .description('[BETA] Installs eslint, prettier & airbnb and automaticlly configures it.')
+    .description('[BETA] Installs Eslint, Prettier & Airbnb and automatically configures it.')
     .argument('<path>', 'path/to/install')
     .option('--ts, --typescript', 'Use typpescript')
     .action(initEPACommand);
@@ -152,7 +152,7 @@ async function GUIcloneCommand() {
         }
         const installDependencies = await (0, prompts_1.confirm)({
             message: 'Do you want to install dependencies?',
-            default: true,
+            default: false,
         });
         let selectedPackageManager;
         if (installDependencies) {
