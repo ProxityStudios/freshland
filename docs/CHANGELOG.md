@@ -1,3 +1,10 @@
+# [2.3.0-beta.6](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.5...v2.3.0-beta.6) (2024-01-29)
+
+
+### Features
+
+* Update README.md ([08930d7](https://github.com/ProxityStudios/freshland/commit/08930d7a4edff8ac0cc62f80c19ead52dbd11a6d))
+
 # [2.3.0-beta.5](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.4...v2.3.0-beta.5) (2024-01-29)
 
 
