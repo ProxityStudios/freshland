@@ -5,13 +5,25 @@ export enum Check {
 	DIRECTORY,
 }
 
-export enum PackageManager {
-	NPM = 'npm',
-	PNPM = 'pnpm',
-	YARN = 'yarn',
-	BUN = 'bun',
+export enum PackageManagerEnum {
+	npm = 'npm',
+	pnpm = 'pnpm',
+	yarn = 'yarn',
+	bun = 'bun',
 }
+
+export type PackageManager =
+	| keyof typeof PackageManagerEnum
+	| PackageManagerEnum;
 
 export interface InitEPACommandOptions {
 	typescript?: true;
+}
+
+export interface NOGUIcloneCommandOptions {
+	keepGit?: true;
+	name?: string;
+	version?: string;
+	installDeps?: string;
+	updatePackage?: true;
 }
