@@ -15,6 +15,7 @@ results/
 tmp/
 /test
 todo
+dist
 # Coverage reports
 coverage/
 

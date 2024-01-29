@@ -52,9 +52,6 @@ module.exports = {
 		{
 			files: ['*.js'],
 			extends: ['plugin:@typescript-eslint/disable-type-checked'],
-			rules: {
-				'unicorn/prefer-module': 'off',
-			},
 		},
 	],
 };
