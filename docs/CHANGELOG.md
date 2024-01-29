@@ -1,3 +1,18 @@
+# [2.3.0-beta.4](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.3...v2.3.0-beta.4) (2024-01-29)
+
+
+### Bug Fixes
+
+* delete dist ([891eff3](https://github.com/ProxityStudios/freshland/commit/891eff315a767cc101ae27ae66130b55eb0c2015))
+* release.config.js ([821c5fe](https://github.com/ProxityStudios/freshland/commit/821c5fea4065648e59035bac4a414593a6346971))
+* test ([30b9178](https://github.com/ProxityStudios/freshland/commit/30b91784d12a40f521ccb87b66986734f65b023e))
+* testing ([1d5921b](https://github.com/ProxityStudios/freshland/commit/1d5921b3173ce599cd94451fe896f34a033fc6b8))
+* testing ([90e8b5f](https://github.com/ProxityStudios/freshland/commit/90e8b5f185c9187c5c12157eb04ad4539dfd66c9))
+* trigger action ([9e8c3fb](https://github.com/ProxityStudios/freshland/commit/9e8c3fb348a024eef7a3ad294a14209271a63290))
+* trigger action ([01ca79d](https://github.com/ProxityStudios/freshland/commit/01ca79d2b24a36a89b6be701799c6bd243137d32))
+* trigger build ([1310259](https://github.com/ProxityStudios/freshland/commit/13102598619ac659564d4bee5ed8dab49e147e57))
+* trigger build ([89ad5d1](https://github.com/ProxityStudios/freshland/commit/89ad5d1d43dff9c09a462a1603ee52d3ec7cba29))
+
 # [2.3.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.2...v2.3.0-beta.3) (2024-01-29)
 
 ### Bug Fixes
