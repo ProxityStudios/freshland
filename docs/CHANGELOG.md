@@ -1,3 +1,10 @@
+# [2.3.0-beta.4](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.3...v2.3.0-beta.4) (2024-01-29)
+
+
+### Bug Fixes
+
+* Update package.json ([7d813b2](https://github.com/ProxityStudios/freshland/commit/7d813b235e5f4ebc213b44c868ba30e682650dfa))
+
 # [2.3.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.2...v2.3.0-beta.3) (2024-01-29)
 
 
