@@ -76,11 +76,11 @@ function NOGUIcloneCommand(repo, destination, opts) {
 async function GUIcloneCommand() {
     let repo;
     try {
-        const usingTemplate = await (0, prompts_1.confirm)({
+        const usingStarter = await (0, prompts_1.confirm)({
             message: 'Do you want to use a starter?',
             default: false,
         });
-        repo = await (usingTemplate
+        repo = await (usingStarter
             ? (0, prompts_1.select)({
                 message: 'Select a starter',
                 choices: [
@@ -154,13 +154,37 @@ async function GUIcloneCommand() {
             message: 'Do you want to install dependencies?',
             default: false,
         });
+        let initEPA;
+        if (!usingStarter) {
+            initEPA = await (0, prompts_1.confirm)({
+                message: 'Do you want to init E.P.A and automatically configure it?',
+                default: false,
+            });
+        }
+        let repoCodeLanguage;
+        if (initEPA) {
+            repoCodeLanguage = await (0, prompts_1.select)({
+                message: 'Select the code language of the repo',
+                choices: [
+                    {
+                        name: 'This repo uses JavaScript',
+                        value: 'javascript',
+                        disabled: true,
+                    },
+                    {
+                        name: 'This repo uses TypeScript',
+                        value: 'javascript',
+                    },
+                ],
+            });
+        }
         let selectedPackageManager;
         if (installDependencies) {
             selectedPackageManager = await (0, prompts_1.select)({
                 message: 'Select the package manager of the repo',
                 choices: [
                     {
-                        name: types_1.PackageManagerEnum.npm,
+                        name: 'Use "npm" package manager',
                         value: types_1.PackageManagerEnum.npm,
                         description: `Install dependencies using ${types_1.PackageManagerEnum.npm}`,
                     },
@@ -187,7 +211,15 @@ async function GUIcloneCommand() {
         if (updatePackageNameAndVersion) {
             (0, utils_1.updatePackageJSON)(packageName, packageVersion, pth);
         }
-        if (selectedPackageManager) {
+        if (initEPA) {
+            if (repoCodeLanguage === 'javascript') {
+                await (0, utils_1.initEPAForJS)(pth);
+            }
+            if (repoCodeLanguage === 'typescript') {
+                await (0, utils_1.initEPAForTS)(pth);
+            }
+        }
+        else if (selectedPackageManager) {
             (0, utils_1.installDeps)(selectedPackageManager, pth);
         }
         else {

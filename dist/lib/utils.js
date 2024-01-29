@@ -173,7 +173,7 @@ async function initEPAForTS(pth) {
     logger_1.logger.info('Now you can run "npm run fix" command');
 }
 exports.initEPAForTS = initEPAForTS;
-function initEPAForJS(pth) {
+async function initEPAForJS(pth) {
     logger_1.logger.info('Installing E.P.A (for JavaScript)');
 }
 exports.initEPAForJS = initEPAForJS;
