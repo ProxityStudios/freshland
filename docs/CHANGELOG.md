@@ -1,16 +1,14 @@
 # [2.3.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.2...v2.3.0-beta.3) (2024-01-29)
 
-
 ### Bug Fixes
 
-* you have to provide --upd flag ([e1907f9](https://github.com/ProxityStudios/freshland/commit/e1907f9694cb05af95f397a74f2a5e29800cca43))
+-  you have to provide --upd flag ([e1907f9](https://github.com/ProxityStudios/freshland/commit/e1907f9694cb05af95f397a74f2a5e29800cca43))
 
 # [2.3.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.1...v2.3.0-beta.2) (2024-01-29)
 
-
 ### Features
 
-* add option to init epa for gui ([dec857e](https://github.com/ProxityStudios/freshland/commit/dec857e765478faffa7f52e9c1edf0f36e00eae5))
+-  add option to init epa for gui ([dec857e](https://github.com/ProxityStudios/freshland/commit/dec857e765478faffa7f52e9c1edf0f36e00eae5))
 
 # [2.3.0-beta.1](https://github.com/ProxityStudios/freshland/compare/v2.2.0...v2.3.0-beta.1) (2024-01-29)
 
