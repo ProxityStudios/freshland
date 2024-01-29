@@ -126,12 +126,12 @@ async function GUIcloneCommand() {
 	let repo: string;
 
 	try {
-		const usingTemplate = await confirm({
+		const usingStarter = await confirm({
 			message: 'Do you want to use a starter?',
 			default: false,
 		});
 
-		repo = await (usingTemplate
+		repo = await (usingStarter
 			? select({
 					message: 'Select a starter',
 					choices: [
@@ -210,18 +210,38 @@ async function GUIcloneCommand() {
 				},
 			});
 		}
+
 		const installDependencies = await confirm({
 			message: 'Do you want to install dependencies?',
 			default: false,
 		});
 
-		/*
-		const initEPA = await confirm({
-			message:
-				'Do you want to init E.P.A and automatically configure it?',
-			default: false,
-		});
-		*/
+		let initEPA;
+		if (!usingStarter) {
+			initEPA = await confirm({
+				message:
+					'Do you want to init E.P.A and automatically configure it?',
+				default: false,
+			});
+		}
+
+		let repoCodeLanguage: 'javascript' | 'typescript';
+		if (initEPA) {
+			repoCodeLanguage = await select({
+				message: 'Select the code language of the repo',
+				choices: [
+					{
+						name: 'This repo uses JavaScript',
+						value: 'javascript',
+						disabled: true,
+					},
+					{
+						name: 'This repo uses TypeScript',
+						value: 'javascript',
+					},
+				],
+			});
+		}
 
 		let selectedPackageManager;
 		if (installDependencies) {
@@ -229,7 +249,7 @@ async function GUIcloneCommand() {
 				message: 'Select the package manager of the repo',
 				choices: [
 					{
-						name: PackageManagerEnum.npm,
+						name: 'Use "npm" package manager',
 						value: PackageManagerEnum.npm,
 						description: `Install dependencies using ${PackageManagerEnum.npm}`,
 					},
@@ -259,7 +279,14 @@ async function GUIcloneCommand() {
 			updatePackageJSON(packageName!, packageVersion!, pth);
 		}
 
-		if (selectedPackageManager) {
+		if (initEPA) {
+			if (repoCodeLanguage! === 'javascript') {
+				await initEPAForJS(pth);
+			}
+			if (repoCodeLanguage! === 'typescript') {
+				await initEPAForTS(pth);
+			}
+		} else if (selectedPackageManager) {
 			installDeps(selectedPackageManager, pth);
 		} else {
 			logger.warn('You need to install dependencies manually!');

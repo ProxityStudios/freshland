@@ -251,7 +251,8 @@ export async function initEPAForTS(pth: string) {
 	logger.info('Now you can run "npm run fix" command');
 }
 
-export function initEPAForJS(pth: string) {
+// eslint-disable-next-line @typescript-eslint/require-await
+export async function initEPAForJS(pth: string) {
 	logger.info('Installing E.P.A (for JavaScript)');
 }
 
