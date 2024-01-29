@@ -32,8 +32,7 @@
 		"build": "run-s fix clean tsc",
 		"tsc": "tsc --build",
 		"clean": "rimraf dist/",
-		"fix": "eslint . --fix",
-		"prepublishOnly": "run-s build"
+		"fix": "eslint . --fix"
 	},
 	"bin": {
 		"freshland": "./cli.js"
