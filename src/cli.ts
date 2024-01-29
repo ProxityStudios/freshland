@@ -100,7 +100,11 @@ function NOGUIcloneCommand(
 
 		// FIXME: it uses default package manager (npm)
 		// TODO: only update provided options
-		if (updatePackage || packageName || packageVersion) {
+		if (!updatePackage && (packageName || packageVersion)) {
+			logger.warn(
+				'You need to provide --update-package flag to change package name and version'
+			);
+		} else {
 			updatePackageJSON(
 				packageName
 					? packageName.replaceAll(' ', '-')
@@ -136,18 +140,18 @@ async function GUIcloneCommand() {
 					message: 'Select a starter',
 					choices: [
 						{
-							name: 'typescript-starter',
+							name: 'Use TypeScript Starter',
 							value: 'proxitystudios/typescript-starter',
 							description: 'Use TypeScript Starter that includes E.P.A',
 						},
 						{
-							name: 'express-api-starter-ts',
+							name: 'Use Express API Starter Written With TypeScripts',
 							value: 'proxitystudios/express-api-starter-ts',
 							description:
 								'Use Express API Starter written with TypeScript that includes E.P.A',
 						},
 						{
-							name: 'discord-bot-starter-ts',
+							name: 'Use Discord Bot Starter Written With TypeScripts',
 							value: 'proxitystudios/discord-bot-starter-ts',
 							description:
 								'Use Discord Bot Starter written with TypeScript that includes E.P.A',
@@ -156,10 +160,24 @@ async function GUIcloneCommand() {
 				})
 			: input({
 					message: 'What repo do you want to clone?',
-					validate: (i) => {
-						if (i.trim() === '') {
+					validate: (sourceRepo) => {
+						if (sourceRepo.trim() === '') {
 							return 'Repo cannot be empty.';
 						}
+						if (
+							sourceRepo
+								.toLocaleLowerCase()
+								.includes('proxitystudios/typescript-starter') ||
+							sourceRepo
+								.toLocaleLowerCase()
+								.includes('proxitystudios/express-api-starter-ts') ||
+							sourceRepo
+								.toLocaleLowerCase()
+								.includes('proxitystudios/discord-bot-starter-ts')
+						) {
+							return 'Repo is in starter section';
+						}
+
 						return true;
 					},
 				}));

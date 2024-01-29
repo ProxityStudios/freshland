@@ -22,7 +22,7 @@
 		"esModuleInterop": true, // Improve importing from CJS modules, recommended by TS: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html#support-for-import-d-from-cjs-from-commonjs-modules-with---esmoduleinterop
 		"skipLibCheck": true, // Significant perf increase by skipping checking .d.ts files, particularly those in node_modules. Recommended by TS.
 		"resolveJsonModule": true, // Allow importing .json files
-		
+
 		"removeComments": true,
 		"strict": true, // Of course!
 	},

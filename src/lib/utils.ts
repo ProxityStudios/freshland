@@ -75,6 +75,8 @@ export function updatePackageJSON(
 				file
 			);
 		});
+	} else {
+		logger.warn('File not found: package.json');
 	}
 
 	if (shell.test('-e', './package-lock.json')) {
@@ -93,6 +95,8 @@ export function updatePackageJSON(
 				file
 			);
 		});
+	} else {
+		logger.warn('File not found: package-lock.json');
 	}
 }
 
@@ -101,8 +105,7 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 	// TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
 
 	switch (packageManager) {
-		// TODO: support other package managers
-
+		// TODO: support other package managers as well
 		case PackageManagerEnum.npm: {
 			if (!shell.which('npm')) {
 				logger.error(
