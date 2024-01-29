@@ -34,7 +34,7 @@
 		"clean": "rimraf dist/",
 		"fix": "eslint . --fix",
 		"prepublishOnly": "run-s build",
-		"postversion": "cp -r package.json ./dist && cp -r npm-shrinkwrap.json ./dist"
+		"preversion": "cp -r package.json ./dist && cp -r npm-shrinkwrap.json ./dist"
 	},
 	"bin": {
 		"freshland": "dist/cli.js"
