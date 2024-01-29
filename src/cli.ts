@@ -99,6 +99,7 @@ function NOGUIcloneCommand(
 		}
 
 		// FIXME: it uses default package manager (npm)
+		// TODO: only update provided options
 		if (updatePackage || packageName || packageVersion) {
 			updatePackageJSON(
 				packageName

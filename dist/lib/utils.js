@@ -68,10 +68,8 @@ function updatePackageJSON(packageName, packageVersion, pth) {
 exports.updatePackageJSON = updatePackageJSON;
 function installDeps(packageManager, pth) {
     shelljs_1.default.cd(pth);
-    // TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
     switch (packageManager) {
-        // TODO: support other package managers
-        case types_1.PackageManager.NPM: {
+        case types_1.PackageManagerEnum.npm: {
             if (!shelljs_1.default.which('npm')) {
                 logger_1.logger.error('Sorry, you need to install "npm" to install dependencies');
                 return;
@@ -86,7 +84,7 @@ function installDeps(packageManager, pth) {
             }
             break;
         }
-        case types_1.PackageManager.YARN: {
+        case types_1.PackageManagerEnum.yarn: {
             if (!shelljs_1.default.which('yarn')) {
                 logger_1.logger.error('Sorry, you need to install "yarn" to install dependencies');
                 return;
@@ -101,7 +99,7 @@ function installDeps(packageManager, pth) {
             }
             break;
         }
-        case types_1.PackageManager.PNPM: {
+        case types_1.PackageManagerEnum.pnpm: {
             if (!shelljs_1.default.which('pnpm')) {
                 logger_1.logger.error('Sorry, you need to install "pnpm" to install dependencies');
                 return;
@@ -116,7 +114,7 @@ function installDeps(packageManager, pth) {
             }
             break;
         }
-        case types_1.PackageManager.BUN: {
+        case types_1.PackageManagerEnum.bun: {
             if (!shelljs_1.default.which('bun')) {
                 logger_1.logger.error('Sorry, you need to install "bun" to install dependencies');
                 return;
@@ -132,6 +130,8 @@ function installDeps(packageManager, pth) {
             break;
         }
         default: {
+            logger_1.logger.error('Invalid package manager');
+            logger_1.logger.error('You need to install dependencies manually!');
             break;
         }
     }
@@ -148,7 +148,6 @@ async function initEPAForTS(pth) {
         shelljs_1.default.exit(1);
     }
     logger_1.logger.info('Installing E.P.A (for TypeScript)');
-    // TODO: check if package.json or the package managers configs exists or not
     logger_1.logger.info('Installing packages...');
     shelljs_1.default.exec('npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser');
     shelljs_1.default.exec('npm i --save');
@@ -188,16 +187,6 @@ async function checkIfExists(pth, type) {
             case types_1.Check.FILE: {
                 return stats.isFile();
             }
-            // TODO: make this working
-            /*
-            case Check.VIDEO: {
-                return stats.isFile();
-            }
-
-            case Check.IMAGE: {
-                return stats.isDirectory();
-            }
-            */
             default: {
                 return false;
             }
@@ -207,7 +196,6 @@ async function checkIfExists(pth, type) {
         if (error.code === 'ENOENT') {
             return false;
         }
-        // TODO:
         return false;
     }
 }

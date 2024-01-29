@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PackageManager = exports.Check = void 0;
+exports.PackageManagerEnum = exports.Check = void 0;
 var Check;
 (function (Check) {
     Check[Check["FILE"] = 0] = "FILE";
@@ -8,10 +8,10 @@ var Check;
     Check[Check["IMAGE"] = 2] = "IMAGE";
     Check[Check["DIRECTORY"] = 3] = "DIRECTORY";
 })(Check || (exports.Check = Check = {}));
-var PackageManager;
-(function (PackageManager) {
-    PackageManager["NPM"] = "npm";
-    PackageManager["PNPM"] = "pnpm";
-    PackageManager["YARN"] = "yarn";
-    PackageManager["BUN"] = "bun";
-})(PackageManager || (exports.PackageManager = PackageManager = {}));
+var PackageManagerEnum;
+(function (PackageManagerEnum) {
+    PackageManagerEnum["npm"] = "npm";
+    PackageManagerEnum["pnpm"] = "pnpm";
+    PackageManagerEnum["yarn"] = "yarn";
+    PackageManagerEnum["bun"] = "bun";
+})(PackageManagerEnum || (exports.PackageManagerEnum = PackageManagerEnum = {}));
