@@ -92,17 +92,19 @@ async function GUIcloneCommand() {
 						{
 							name: 'typescript-starter',
 							value: 'proxitystudios/typescript-starter',
-							description: 'typescript-starter',
+							description: 'Use TypeScript Starter that includes E.P.A',
 						},
 						{
 							name: 'express-api-starter-ts',
 							value: 'proxitystudios/express-api-starter-ts',
-							description: 'express-api-starter-ts',
+							description:
+								'Use Express API Starter written with TypeScript that includes E.P.A',
 						},
 						{
 							name: 'discord-bot-starter-ts',
 							value: 'proxitystudios/discord-bot-starter-ts',
-							description: 'discord-bot-starter-ts',
+							description:
+								'Use Discord Bot Starter written with TypeScript that includes E.P.A',
 						},
 					],
 				})
@@ -138,22 +140,24 @@ async function GUIcloneCommand() {
 		if (updatePackageNameAndVersion) {
 			packageName = await input({
 				message: 'What should we call this repo?',
-				default: destination.split('/').pop()!,
-				validate: (i) => {
-					i.replaceAll(' ', '-');
-					return true;
+				default:
+					destination === '.'
+						? pth.split(/[/\\]/).pop()!
+						: destination.replaceAll(' ', '-').split(/[/\\]/).pop()!,
+				transformer: (v) => {
+					return v.replaceAll(' ', '-');
 				},
 			});
 			packageVersion = await input({
 				message: 'What version should we use?',
 				default: '1.0.0',
 				validate: (i) => {
-					if (i.trim() === '') {
-						return 'Version cannot be empty.';
-					}
-
 					if (!/^[\d.]*$/.test(i)) {
 						return 'Version should include only numbers and dots. (1.0.0)';
+					}
+
+					if (i.split('.').length < 2) {
+						return 'Version should include at least a dot. (1.0)';
 					}
 
 					return true;
@@ -166,10 +170,10 @@ async function GUIcloneCommand() {
 		});
 
 		/*
-		const installEPA = await confirm({
+		const initEPA = await confirm({
 			message:
-				'Do you want to install "eslint", "prettier" & "airbnb" and configure automaticlly?',
-			default: true,
+				'Do you want to init E.P.A and automaticlly configure it?',
+			default: false,
 		});
 		*/
 
