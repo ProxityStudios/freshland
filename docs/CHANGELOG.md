@@ -1,3 +1,12 @@
+# [2.3.0-beta.5](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.4...v2.3.0-beta.5) (2024-01-29)
+
+
+### Bug Fixes
+
+* Delete dist ([ae5acfa](https://github.com/ProxityStudios/freshland/commit/ae5acfaf57d3db3760dafe7f5af1cb3d48e0e249))
+* Update release.config.js ([3a2abeb](https://github.com/ProxityStudios/freshland/commit/3a2abeb44e8a76122ee17fde0129faa633d94f67))
+* Update release.config.js ([db5d588](https://github.com/ProxityStudios/freshland/commit/db5d588fa80d8655b6a6a62105e2252354367171))
+
 # [2.3.0-beta.4](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.3...v2.3.0-beta.4) (2024-01-29)
 
 
