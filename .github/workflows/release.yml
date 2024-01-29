@@ -4,6 +4,7 @@ on:
    push:
       branches:
          - main
+         - beta
 
 permissions:
    contents: write # to be able to publish a GitHub release
@@ -29,14 +30,6 @@ jobs:
 
          - name: Build
            run: npm run build
-
-         - name: Commit report
-           continue-on-error: true
-           run: |
-              git config --global user.name 'Alexinhans'
-              git config --global user.email 'Alexinhans@users.noreply.github.com'
-              git commit -am "Automated push"
-              git push
 
          - name: Semantic Release
            run: npx semantic-release
