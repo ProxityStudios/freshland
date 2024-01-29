@@ -13,11 +13,17 @@ import {
 	updatePackageJSON,
 } from './lib/utils';
 import { version, name, description } from '../package.json';
-import { InitEPACommandOptions, PackageManager } from './types';
+import {
+	InitEPACommandOptions,
+	NOGUIcloneCommandOptions,
+	PackageManagerEnum,
+} from './types';
 
+// IF ITS HAS TWO DASH ITS COMMAND FLAG
+// IF ITS HAS ONE DASH ITS GLOBAL FLAG
 export const program = new Command()
 	.name(name)
-	.version(version)
+	.version(version, '-v, --vers', 'Output the current version')
 	.description(description)
 	.option('-d, --debug', 'Enable debug mode')
 	// default command
@@ -26,18 +32,26 @@ program
 	.command('clone')
 	// TODO: implement this
 	// .option('-lr, --latest-release', 'Use latest release')
-	.description('Clone the repo to specified path as much as fresh')
+	.description('Clone a repo to specified path')
 	.argument(
 		'<repo>',
 		'EG: proxitystudios/typescript-starter OR https://github.com/proxitystudios/typescript-starter'
 	)
 	.argument('<path>', 'EG: path/to/clone')
+	.option('--upd, --update-package', 'Update package name and version')
+	.option('--n, --name <name>', 'Change the package name')
+	.option('--v, --version <version>', 'Change the package version')
+	.option(
+		'--i, --install-deps <packageManager>',
+		'Install dependencies automatically'
+	)
+	.option('--kg, --keep-git', 'Do not delete ".git" folder')
 	.action(NOGUIcloneCommand);
 
 program
 	.command('init-epa')
 	.description(
-		'[BETA] Installs "eslint", "prettier", "airbnb" and configures it automaticlly.'
+		'[BETA] Installs eslint, prettier & airbnb and automaticlly configures it.'
 	)
 	.argument('<path>', 'path/to/install')
 	.option('--ts, --typescript', 'Use typpescript')
@@ -58,18 +72,49 @@ async function initEPACommand(pth: string, opts: InitEPACommandOptions) {
 	await (typescript ? initEPAForTS(p) : initEPAForJS(p));
 }
 
-function NOGUIcloneCommand(repo: string, destination: string) {
+function NOGUIcloneCommand(
+	repo: string,
+	destination: string,
+	opts: NOGUIcloneCommandOptions
+) {
 	// options.debug
 	const pth = path.resolve(destination);
+	const {
+		keepGit,
+		name: packageName,
+		version: packageVersion,
+		installDeps: iDeps,
+		updatePackage,
+	} = opts;
 
 	try {
 		cloneGithubRepo(repo, pth);
-		deleteAndInitGit(pth);
+
+		if (keepGit) {
+			logger.warn(
+				'Git deletion skipped. (remove --kg or --keep-git flag to delete)'
+			);
+		} else {
+			deleteAndInitGit(pth);
+		}
 
 		// FIXME: it uses default package manager (npm)
-		updatePackageJSON(destination.split('/').pop()!, '1.0.0', pth);
+		if (updatePackage || packageName || packageVersion) {
+			updatePackageJSON(
+				packageName
+					? packageName.replaceAll(' ', '-')
+					: destination.split('/').pop()!,
+				packageVersion ?? '1.0.0',
+				pth
+			);
+		}
 
-		logger.warn('You need to install dependencies manually!');
+		if (iDeps) {
+			installDeps(iDeps as PackageManagerEnum, pth);
+		} else {
+			logger.warn('You need to install dependencies manually!');
+		}
+
 		logger.info('Done, you are ready to code!');
 	} catch {
 		logger.error('An unexpected error occured or user canceled the process.');
@@ -183,24 +228,24 @@ async function GUIcloneCommand() {
 				message: 'Select the package manager of the repo',
 				choices: [
 					{
-						name: PackageManager.NPM,
-						value: PackageManager.NPM,
-						description: `Install dependencies using ${PackageManager.NPM}`,
+						name: PackageManagerEnum.npm,
+						value: PackageManagerEnum.npm,
+						description: `Install dependencies using ${PackageManagerEnum.npm}`,
 					},
 					{
-						name: PackageManager.BUN,
-						value: PackageManager.BUN,
-						description: `Install dependencies using ${PackageManager.BUN}`,
+						name: PackageManagerEnum.bun,
+						value: PackageManagerEnum.bun,
+						description: `Install dependencies using ${PackageManagerEnum.bun}`,
 					},
 					{
-						name: PackageManager.PNPM,
-						value: PackageManager.PNPM,
-						description: `Install dependencies using ${PackageManager.PNPM}`,
+						name: PackageManagerEnum.pnpm,
+						value: PackageManagerEnum.pnpm,
+						description: `Install dependencies using ${PackageManagerEnum.pnpm}`,
 					},
 					{
-						name: PackageManager.YARN,
-						value: PackageManager.YARN,
-						description: `Install dependencies using ${PackageManager.YARN}`,
+						name: PackageManagerEnum.yarn,
+						value: PackageManagerEnum.yarn,
+						description: `Install dependencies using ${PackageManagerEnum.yarn}`,
 					},
 				],
 			});

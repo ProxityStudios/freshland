@@ -3,7 +3,7 @@ import fs from 'node:fs/promises';
 
 import { logger } from './logger';
 import { rootDir } from './dir';
-import { Check, PackageManager } from '../types';
+import { Check, PackageManager, PackageManagerEnum } from '../types';
 
 export function cloneGithubRepo(repo: string, destination: string) {
 	if (!shell.which('git')) {
@@ -103,7 +103,7 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 	switch (packageManager) {
 		// TODO: support other package managers
 
-		case PackageManager.NPM: {
+		case PackageManagerEnum.npm: {
 			if (!shell.which('npm')) {
 				logger.error(
 					'Sorry, you need to install "npm" to install dependencies'
@@ -121,7 +121,7 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 			break;
 		}
 
-		case PackageManager.YARN: {
+		case PackageManagerEnum.yarn: {
 			if (!shell.which('yarn')) {
 				logger.error(
 					'Sorry, you need to install "yarn" to install dependencies'
@@ -139,7 +139,7 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 			break;
 		}
 
-		case PackageManager.PNPM: {
+		case PackageManagerEnum.pnpm: {
 			if (!shell.which('pnpm')) {
 				logger.error(
 					'Sorry, you need to install "pnpm" to install dependencies'
@@ -156,7 +156,7 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 			}
 			break;
 		}
-		case PackageManager.BUN: {
+		case PackageManagerEnum.bun: {
 			if (!shell.which('bun')) {
 				logger.error(
 					'Sorry, you need to install "bun" to install dependencies'
@@ -174,6 +174,8 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 			break;
 		}
 		default: {
+			logger.error('Invalid package manager');
+			logger.error('You need to install dependencies manually!');
 			break;
 		}
 	}
