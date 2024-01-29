@@ -1,3 +1,17 @@
+# [2.3.0](https://github.com/ProxityStudios/freshland/compare/v2.2.0...v2.3.0) (2024-01-29)
+
+
+### Bug Fixes
+
+* [#27](https://github.com/ProxityStudios/freshland/issues/27) ([e64330a](https://github.com/ProxityStudios/freshland/commit/e64330a196fa6c7193c69b8f6d1a755ecb1d2e83))
+* new build ([6c3b8d6](https://github.com/ProxityStudios/freshland/commit/6c3b8d639605431f4a946ec00269cd7b2208f2a9))
+
+
+### Features
+
+* add option to init epa for gui ([18d9781](https://github.com/ProxityStudios/freshland/commit/18d9781718b60ae0035806fdcc7ed6bec4460953))
+* clone command supports more options ([25c13f8](https://github.com/ProxityStudios/freshland/commit/25c13f86cb4046ef2f4e88b5fbd0b8671868d271))
+
 # [2.3.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.1...v2.3.0-beta.2) (2024-01-29)
 
 
