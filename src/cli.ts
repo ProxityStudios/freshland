@@ -35,15 +35,15 @@ program
 	.description('Clone a repo to specified path')
 	.argument(
 		'<repo>',
-		'EG: proxitystudios/typescript-starter OR https://github.com/proxitystudios/typescript-starter'
+		'proxitystudios/typescript-starter / https://github.com/proxitystudios/typescript-starter'
 	)
-	.argument('<path>', 'EG: path/to/clone')
+	.argument('<path>', 'path/to/clone')
 	.option('--upd, --update-package', 'Update package name and version')
 	.option('--n, --name <name>', 'Change the package name')
 	.option('--v, --version <version>', 'Change the package version')
 	.option(
 		'--i, --install-deps <packageManager>',
-		'Install dependencies automatically'
+		'Install dependencies automatically (supports npm, yarn, pnpm & bun)'
 	)
 	.option('--kg, --keep-git', 'Do not delete ".git" folder')
 	.action(NOGUIcloneCommand);
@@ -51,7 +51,7 @@ program
 program
 	.command('init-epa')
 	.description(
-		'[BETA] Installs eslint, prettier & airbnb and automaticlly configures it.'
+		'[BETA] Installs Eslint, Prettier & Airbnb and automatically configures it.'
 	)
 	.argument('<path>', 'path/to/install')
 	.option('--ts, --typescript', 'Use typpescript')
@@ -212,13 +212,13 @@ async function GUIcloneCommand() {
 		}
 		const installDependencies = await confirm({
 			message: 'Do you want to install dependencies?',
-			default: true,
+			default: false,
 		});
 
 		/*
 		const initEPA = await confirm({
 			message:
-				'Do you want to init E.P.A and automaticlly configure it?',
+				'Do you want to init E.P.A and automatically configure it?',
 			default: false,
 		});
 		*/
