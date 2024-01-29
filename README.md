@@ -1,6 +1,6 @@
 [![Join our Discord](https://img.shields.io/discord/843939288349409331?label=Join%20Discord&logo=discord&logoColor=white)](https://discord.gg/wrhwwJQwas)
 
-# Freshland 
+# Freshland  
 
 Freshland is a CLI tool that lets you clone GitHub repositories without the git history. _We're here to make things simpler and simpler for you. We promise._
 
