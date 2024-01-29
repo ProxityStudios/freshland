@@ -19,7 +19,7 @@ module.exports = {
 			'@semantic-release/git',
 			{
 				assets: [
-					'dist/**/*.{js}',
+					'dist',
 					'docs',
 					'templates',
 					'package.json',
