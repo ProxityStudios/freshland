@@ -12,7 +12,7 @@ module.exports = {
 		[
 			'@semantic-release/npm',
 			{
-				pkgRoot: '.',
+				pkgRoot: './dist',
 			},
 		],
 		[
