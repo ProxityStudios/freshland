@@ -5,7 +5,6 @@
 	"author": "ProxityStudios",
 	"license": "MIT",
 	"homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
-	"readme": "./README.md",
 	"engines": {
 		"node": ">=16.0.0"
 	},
