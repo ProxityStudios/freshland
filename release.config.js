@@ -21,6 +21,7 @@ module.exports = {
 				assets: [
 					'dist/**/*.{js}',
 					'docs',
+					'templates',
 					'package.json',
 					'npm-shrinkwrap.json',
 				],
