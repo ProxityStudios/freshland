@@ -24,7 +24,7 @@ npx freshland@latest clone <source-repo> <target-dir>
 For example, to clone the `typescript-starter` repository from `ProxityStudios` into a directory named `myapp`, run:
 
 ```bash
-npx freshland@latest clone ProxityStudios/typescript-starter myapp
+npx freshland@latest clone ProxityStudios/typescript-starter myapp --install-deps npm --update-package
 ```
 
 **<>** Required | **[]** Optional
@@ -32,7 +32,7 @@ npx freshland@latest clone ProxityStudios/typescript-starter myapp
 | Flag                        | Referance          | Accepted Values              | Default Value      | Description                        |
 | --------------------------- | ------------------ | ---------------------------- | ------------------ | ---------------------------------- |
 | `--upd`, `--update-package` |                    |                              | `false`            | Update package name and version    |
-| `--n`, `--name`             | `<name>`           | `any-string eg: my-app`      | `cloned-repo-name` | Change the package name            |
+| `--n`, `--name`             | `<name>`           | `any-string eg: my-app`      | `cloned-repo-name` | Change the package name.            |
 | `--v`, `--version`          | `<version>`        | `any-version eg: 1.0.0`      | `1.0.0`            | Change the package version         |
 | `--i`, `--install-deps`     | `<packageManager>` | `npm`, `pnpm`, `bun`, `yarn` | `do-not-install`   | Install dependencies automatically |
 | `--kg`, `--keep-git`        |                    |                              | `false`            | Do not delete ".git" folder        |
