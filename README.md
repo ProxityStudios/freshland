@@ -38,7 +38,6 @@ You will see a prompt like this:
 
 E.P.A stands for **E**SLint, **P**rettier, and **A**irbnb. These are popular tools for code formatting and quality. Freshland can install and configure them for you with a single command. Yeah, it's that simple.
 
-
 #### TypeScript
 
 If you're using TypeScript, you need to provide the `--ts` flag:
@@ -62,4 +61,5 @@ npx freshland@latest init-epa <path/to/install>
 | `--typescript`, `--ts` | Use TypeScript |
 
 # Support and Feedback
+
 If you have any questions, issues, or feedback related to Freshland, we're here to help! Join our [Discord server](https://discord.gg/wrhwwJQwas) for support, discussions, and updates.
