@@ -56,7 +56,7 @@ function NOGUIcloneCommand(repo, destination, opts) {
         else {
             (0, utils_1.deleteAndInitGit)(pth);
         }
-        if (!updatePackage && (packageName || packageVersion)) {
+        if (!updatePackage && (packageName ?? packageVersion)) {
             logger_1.logger.warn('You need to provide --update-package flag to change package name and version');
         }
         else {
@@ -225,7 +225,7 @@ async function GUIcloneCommand() {
         if (updatePackageNameAndVersion) {
             (0, utils_1.updatePackageJSON)(packageName, packageVersion, pth);
         }
-        if (initEPA) {
+        if (initEPA && repoCodeLanguage) {
             if (repoCodeLanguage === 'javascript') {
                 await (0, utils_1.initEPAForJS)(pth);
             }

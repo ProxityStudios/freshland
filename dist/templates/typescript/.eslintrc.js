@@ -7,6 +7,7 @@ module.exports = {
 		'airbnb-typescript/base',
 		'plugin:@typescript-eslint/recommended-type-checked',
 		'plugin:@typescript-eslint/stylistic-type-checked',
+		'plugin:import/recommended',
 		'plugin:import/typescript',
 		'plugin:prettier/recommended',
 	],
@@ -14,6 +15,11 @@ module.exports = {
 	parserOptions: {
 		project: true,
 		tsconfigRootDir: __dirname,
+	},
+	settings: {
+		'import/parsers': {
+			'@typescript-eslint/parser': ['.ts', '.tsx'],
+		},
 	},
 	rules: {
 		'no-prototype-builtins': 'off',
