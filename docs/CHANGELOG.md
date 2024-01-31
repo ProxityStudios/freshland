@@ -1,3 +1,20 @@
+# 1.0.0 (2024-01-31)
+
+
+### Bug Fixes
+
+* remove invalid changelogs ([f2cdf8d](https://github.com/ProxityStudios/freshland/commit/f2cdf8d4623eb98d473140c5a7128a8ecb6f6a30))
+* remove invalid changelogs ([37dbf77](https://github.com/ProxityStudios/freshland/commit/37dbf77be8f478dd0ba0bba67f2c047c2ea78eaa))
+* typo fixes ([08e4d88](https://github.com/ProxityStudios/freshland/commit/08e4d88ec491b49aba87ca60efe63d6bca0820e1))
+* up ([7cdb106](https://github.com/ProxityStudios/freshland/commit/7cdb106c18a7086889e8a16fa6a033f63f37dc6e))
+* update ([fb30182](https://github.com/ProxityStudios/freshland/commit/fb301827726e0cdea31db4352eb907851fcdc05e))
+* update to run workflow ([e1ea360](https://github.com/ProxityStudios/freshland/commit/e1ea360b0edb64240d37a117bf02c4c4ea417c26))
+
+
+### Reverts
+
+* this ([2a8ff1a](https://github.com/ProxityStudios/freshland/commit/2a8ff1a40584e276f02f12e49ffd462f36705a45))
+
 # [1.0.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2024-01-31)
 
 
