@@ -60,7 +60,7 @@ program
 export const globalOptions = program.opts();
 
 if (globalOptions.debug) {
-	logger.debug('Debug mode enabled');
+	logger.debug('Debug mode enabled (--debug)');
 }
 
 // Parse the command-line arguments
