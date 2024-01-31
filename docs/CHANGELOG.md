@@ -1,17 +1,14 @@
 # [2.5.0-beta.8](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.7...v2.5.0-beta.8) (2024-01-31)
 
-
 ### Bug Fixes
 
 * unresolved plugin ([80919ea](https://github.com/ProxityStudios/freshland/commit/80919ea3c43182ea54b0dd60e2d777c3e614756c))
 
 # [2.5.0-beta.7](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.6...v2.5.0-beta.7) (2024-01-31)
 
-
 ### Bug Fixes
 
 * something ([b51711f](https://github.com/ProxityStudios/freshland/commit/b51711fe50c9047da5c96e6fb06a53463d669bec))
-
 
 ### Reverts
 
@@ -19,13 +16,11 @@
 
 # [2.5.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.2...v2.5.0-beta.3) (2024-01-31)
 
-
 ### Bug Fixes
 
 * remove unused files ([68636af](https://github.com/ProxityStudios/freshland/commit/68636afe02304b517e785974016f641d953b6582))
 
 # [2.5.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.1...v2.5.0-beta.2) (2024-01-31)
-
 
 ### Bug Fixes
 
@@ -33,10 +28,9 @@
 
 # [2.5.0-beta.1](https://github.com/ProxityStudios/freshland/compare/v2.4.1...v2.5.0-beta.1) (2024-01-31)
 
-
 ### Features
 
-*  add js suppport to E.P.A ([6810e27](https://github.com/ProxityStudios/freshland/commit/6810e2743c88dd17c54fe937d1a1b6ade72e7990))
+* add js suppport to E.P.A ([6810e27](https://github.com/ProxityStudios/freshland/commit/6810e2743c88dd17c54fe937d1a1b6ade72e7990))
 
 # [2.3.0](https://github.com/ProxityStudios/freshland/compare/v2.2.0...v2.3.01) (2024-01-31)
 
