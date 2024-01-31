@@ -12,22 +12,16 @@ module.exports = {
 		[
 			'@semantic-release/npm',
 			{
-				pkgRoot: './dist',
+				pkgRoot: './package',
 			},
 		],
 		[
 			'@semantic-release/git',
 			{
-				assets: [
-					'dist',
-					'docs',
-					'templates',
-					'package.json',
-					'npm-shrinkwrap.json',
-				],
+				assets: ['package/'],
 				message:
 					// eslint-disable-next-line no-template-curly-in-string
-					'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
+					'chore(release): ${nextRelease.version} \n\n${nextRelease.notes}',
 			},
 		],
 		'@semantic-release/github',

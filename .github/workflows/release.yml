@@ -31,8 +31,8 @@ jobs:
          - name: Build
            run: npm run build
          
-         - name: Copy Package.json to Dist
-           run: cp package.json dist/ && cp npm-shrinkwrap.json dist/ && cp README.md dist/ && cp LICENSE dist/ && cp .npmrc dist/ && cp -r templates/ dist/ && chmod -R 777 dist/
+         - name: Copy Files
+           run: cp -r dist/ package/ && cp package.json package/ && cp npm-shrinkwrap.json package/ && cp README.md package/ && cp LICENSE package/ && cp .npmrc package/ && cp -r templates/ package/ && chmod -R 777 package/ && chmod -R 777 dist/
 
          - name: Semantic Release
            run: npx semantic-release
