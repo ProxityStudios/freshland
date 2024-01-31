@@ -91,9 +91,7 @@ function NOGUIcloneCommand(
 		cloneGithubRepo(repo, pth);
 
 		if (keepGit) {
-			logger.warn(
-				'Git deletion skipped. (remove --kg or --keep-git flag to delete)'
-			);
+			logger.warn('Git deletion skipped. (omit --kg or --keep-git flag)');
 		} else {
 			deleteAndInitGit(pth);
 		}
