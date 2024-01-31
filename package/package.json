@@ -1,7 +1,7 @@
 {
 	"name": "freshland",
 	"description": "A tool to clone github repos without git history",
-	"version": "2.5.0-beta.4",
+	"version": "2.5.0-beta.5",
 	"author": "ProxityStudios",
 	"license": "MIT",
 	"homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
@@ -31,8 +31,9 @@
 		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/cli.ts",
 		"build": "run-s fix clean tsc",
 		"tsc": "tsc --build",
-		"clean": "rimraf dist/",
-		"fix": "eslint . --fix"
+		"clean": "rimraf dist/ package/",
+		"fix": "eslint . --fix",
+		"postpublish": "rimraf dist/ package/"
 	},
 	"bin": {
 		"freshland": "dist/cli.js"
