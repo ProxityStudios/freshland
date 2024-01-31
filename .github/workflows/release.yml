@@ -1,4 +1,4 @@
-name: Release
+name: Release and publish to NPM
 
 on:
    push:
@@ -32,7 +32,7 @@ jobs:
            run: npm run build
          
          - name: Copy Package.json to Dist
-           run: cp package.json dist/ && cp npm-shrinkwrap.json dist/ && chmod -R 777 dist/
+           run: cp package.json dist/ && cp npm-shrinkwrap.json dist/  && cp -r templates/ dist/ && chmod -R 777 dist/
 
          - name: Semantic Release
            run: npx semantic-release
