@@ -1,21 +1,21 @@
 /** @type {import("eslint").ESLint.ConfigData} */
 module.exports = {
 	env: {
-	  browser: false,
-	  es2021: true,
+		browser: false,
+		node: true,
 	},
 	root: true,
 	extends: [
-		"eslint:recommended",
-		"airbnb-base", 
-		"plugin:import/recommended",
-		"prettier"
+		'eslint:recommended',
+		'airbnb-base',
+		'plugin:import/recommended',
+		'prettier',
 	],
 	parserOptions: {
-	  ecmaVersion: 12,
-	  sourceType: "module",
+		ecmaVersion: 12,
+		sourceType: 'module',
 	},
-	plugins: ["plugin:prettier/recommended"],
+	plugins: ['prettier'],
 	rules: {
 		'no-prototype-builtins': 'off',
 		'import/prefer-default-export': 'off',
@@ -26,7 +26,4 @@ module.exports = {
 		],
 		'prettier/prettier': 'error',
 	},
-	env: {
-		node: true,
-	},
-  };
+};
