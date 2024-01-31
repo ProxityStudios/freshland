@@ -1,3 +1,10 @@
+# [2.5.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.2...v2.5.0-beta.3) (2024-01-31)
+
+
+### Bug Fixes
+
+* remove unused files ([68636af](https://github.com/ProxityStudios/freshland/commit/68636afe02304b517e785974016f641d953b6582))
+
 # [2.5.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.1...v2.5.0-beta.2) (2024-01-31)
 
 
