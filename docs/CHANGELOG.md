@@ -1,3 +1,10 @@
+# [2.3.0-beta.5](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.4...v2.3.0-beta.5) (2024-01-31)
+
+
+### Bug Fixes
+
+* rebuild ([5017e02](https://github.com/ProxityStudios/freshland/commit/5017e02a6f0cab97faffd484abcab814232e794b))
+
 # [2.3.0-beta.4](https://github.com/ProxityStudios/freshland/compare/v2.3.0-beta.3...v2.3.0-beta.4) (2024-01-31)
 
 
