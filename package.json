@@ -29,12 +29,12 @@
 	},
 	"scripts": {
 		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/cli.ts",
-		"build": "run-s fix clean tsc minify",
+		"build": "run-s fix clean tsc",
 		"tsc": "tsc --build",
 		"clean": "rimraf dist/ package/",
 		"fix": "eslint . --fix",
 		"postpublish": "rimraf dist/ package/",
-		"minify": "terser --compress --mangle --source-map --output dist/min"
+		"minify": "terser --compress --mangle --source-map --output minified"
 	},
 	"bin": {
 		"freshland": "dist/cli.js"
