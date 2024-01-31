@@ -1,3 +1,10 @@
+## [3.0.1-beta.1](https://github.com/ProxityStudios/freshland/compare/v3.0.0...v3.0.1-beta.1) (2024-01-31)
+
+
+### Bug Fixes
+
+* testinga the action ([69e1cf2](https://github.com/ProxityStudios/freshland/commit/69e1cf22f65d78539a624c882f9fab84c03dd5bb))
+
 # [1.0.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2024-01-31)
 
 
