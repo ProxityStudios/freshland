@@ -1,6 +1,6 @@
 {
 	"name": "freshland",
-	"description": "A tool to clone github repos without git history",
+	"description": "Freshland is a CLI tool that lets you clone GitHub repositories without the git history.",
 	"version": "3.0.0",
 	"author": "ProxityStudios",
 	"license": "MIT",
