@@ -178,15 +178,14 @@ async function GUIcloneCommand() {
         let repoCodeLanguage;
         if (initEPA) {
             repoCodeLanguage = await (0, prompts_1.select)({
-                message: 'Select the code language of the repo',
+                message: 'Select the code language of the repository',
                 choices: [
                     {
-                        name: 'This repo uses JavaScript',
+                        name: 'This repository uses JavaScript',
                         value: 'javascript',
-                        disabled: true,
                     },
                     {
-                        name: 'This repo uses TypeScript',
+                        name: 'This repository uses TypeScript',
                         value: 'javascript',
                     },
                 ],

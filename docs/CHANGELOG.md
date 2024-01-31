@@ -1,3 +1,10 @@
+# [2.5.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.1...v2.5.0-beta.2) (2024-01-31)
+
+
+### Bug Fixes
+
+* allow JS for E.P.A ([6c0315c](https://github.com/ProxityStudios/freshland/commit/6c0315c7d27781e9cb61f4a76c1c52715f55a289))
+
 # [2.5.0-beta.1](https://github.com/ProxityStudios/freshland/compare/v2.4.1...v2.5.0-beta.1) (2024-01-31)
 
 
