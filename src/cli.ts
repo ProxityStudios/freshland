@@ -35,7 +35,7 @@ program
 	.description('Clone a repo to specified path')
 	.argument(
 		'<repo>',
-		'ProxityStudios/typescript-starter / https://github.com/proxitystudios/typescript-starter'
+		'ProxityStudios/typescript-starter OR https://github.com/proxitystudios/typescript-starter'
 	)
 	.argument('<path>', 'path/to/clone')
 	.option('--upd, --update-package', 'Update package name and version')

@@ -1,39 +1,18 @@
-# 1.0.0 (2024-01-31)
+
+## [3.0.1-beta.2](https://github.com/ProxityStudios/freshland/compare/v3.0.1-beta.1...v3.0.1-beta.2) (2024-01-31)
+
+### Bug Fixes
+
+* update text ([5632885](https://github.com/ProxityStudios/freshland/commit/5632885e59ebbad09c6f30c9c29f71d9b8f0d001))
+
+## [3.0.1-beta.1](https://github.com/ProxityStudios/freshland/compare/v3.0.0...v3.0.1-beta.1) (2024-01-31)
 
 
 ### Bug Fixes
 
-* remove invalid changelogs ([f2cdf8d](https://github.com/ProxityStudios/freshland/commit/f2cdf8d4623eb98d473140c5a7128a8ecb6f6a30))
-* remove invalid changelogs ([37dbf77](https://github.com/ProxityStudios/freshland/commit/37dbf77be8f478dd0ba0bba67f2c047c2ea78eaa))
-* typo fixes ([08e4d88](https://github.com/ProxityStudios/freshland/commit/08e4d88ec491b49aba87ca60efe63d6bca0820e1))
-* up ([7cdb106](https://github.com/ProxityStudios/freshland/commit/7cdb106c18a7086889e8a16fa6a033f63f37dc6e))
-* update ([fb30182](https://github.com/ProxityStudios/freshland/commit/fb301827726e0cdea31db4352eb907851fcdc05e))
-* update to run workflow ([e1ea360](https://github.com/ProxityStudios/freshland/commit/e1ea360b0edb64240d37a117bf02c4c4ea417c26))
+* testinga the action ([69e1cf2](https://github.com/ProxityStudios/freshland/commit/69e1cf22f65d78539a624c882f9fab84c03dd5bb))
 
-
-### Reverts
-
-* this ([2a8ff1a](https://github.com/ProxityStudios/freshland/commit/2a8ff1a40584e276f02f12e49ffd462f36705a45))
-
-# [1.0.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2024-01-31)
-
-
-### Bug Fixes
-
-* up ([f0a449a](https://github.com/ProxityStudios/freshland/commit/f0a449a2c84f4758c8132aca4438b027d233ce0d))
-
-# 1.0.0-beta.1 (2024-01-31)
-
-
-### Bug Fixes
-
-* remove invalid changelogs ([4c43241](https://github.com/ProxityStudios/freshland/commit/4c432419a20bea29b4470080e151cfb35c5bf490))
-* remove invalid changelogs ([4d06f94](https://github.com/ProxityStudios/freshland/commit/4d06f940da6fd5482b396f9f0112fac977d667cc))
-* typo fixes ([a9f7eff](https://github.com/ProxityStudios/freshland/commit/a9f7effd1e53a79dd92afa0800be56790800eb08))
-* update ([f95d838](https://github.com/ProxityStudios/freshland/commit/f95d838e17024a9dd6178ddd9173b3f5a47e653f))
-* update to run workflow ([b39a765](https://github.com/ProxityStudios/freshland/commit/b39a765c910019634fdb170722ba1b4417809710))
-
-# [2.3.0](https://github.com/ProxityStudios/freshland/compare/v2.2.0...v2.3.01) (2024-01-31)
+# [2.3.0](https://github.com/ProxityStudios/freshland/compare/v2.2.0...v2.3.0) (2024-01-31)
 
 ### Bug Fixes
 
