@@ -1,3 +1,10 @@
+# [1.0.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2024-01-31)
+
+
+### Bug Fixes
+
+* up ([f0a449a](https://github.com/ProxityStudios/freshland/commit/f0a449a2c84f4758c8132aca4438b027d233ce0d))
+
 # 1.0.0-beta.1 (2024-01-31)
 
 
