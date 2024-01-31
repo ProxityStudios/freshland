@@ -145,13 +145,13 @@ async function GUIcloneCommand() {
 							description: 'Use TypeScript Starter that includes E.P.A',
 						},
 						{
-							name: 'Use Express API Starter Written With TypeScripts',
+							name: 'Use Express API Starter Written With TypeScript',
 							value: 'proxitystudios/express-api-starter-ts',
 							description:
 								'Use Express API Starter written with TypeScript that includes E.P.A',
 						},
 						{
-							name: 'Use Discord Bot Starter Written With TypeScripts',
+							name: 'Use Discord Bot Starter Written With TypeScript',
 							value: 'proxitystudios/discord-bot-starter-ts',
 							description:
 								'Use Discord Bot Starter written with TypeScript that includes E.P.A',
