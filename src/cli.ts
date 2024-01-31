@@ -35,7 +35,7 @@ program
 	.description('Clone a repo to specified path')
 	.argument(
 		'<repo>',
-		'proxitystudios/typescript-starter / https://github.com/proxitystudios/typescript-starter'
+		'ProxityStudios/typescript-starter / https://github.com/proxitystudios/typescript-starter'
 	)
 	.argument('<path>', 'path/to/clone')
 	.option('--upd, --update-package', 'Update package name and version')
@@ -51,10 +51,10 @@ program
 program
 	.command('init-epa')
 	.description(
-		'[BETA] Installs Eslint, Prettier & Airbnb and automatically configures it.'
+		'Installs Eslint, Prettier & Airbnb and automatically configures it.'
 	)
 	.argument('<path>', 'path/to/install')
-	.option('--ts, --typescript', 'Use typpescript')
+	.option('--ts, --typescript', 'Use typescript')
 	.action(initEPACommand);
 
 export const globalOptions = program.opts();
