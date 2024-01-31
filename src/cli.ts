@@ -100,7 +100,7 @@ function NOGUIcloneCommand(
 
 		// FIXME: it uses default package manager (npm)
 		// TODO: only update provided options
-		if (!updatePackage && (packageName || packageVersion)) {
+		if (!updatePackage && (packageName ?? packageVersion)) {
 			logger.warn(
 				'You need to provide --update-package flag to change package name and version'
 			);
@@ -243,7 +243,7 @@ async function GUIcloneCommand() {
 			});
 		}
 
-		let repoCodeLanguage: 'javascript' | 'typescript';
+		let repoCodeLanguage: 'javascript' | 'typescript' | undefined;
 		if (initEPA) {
 			repoCodeLanguage = await select({
 				message: 'Select the code language of the repo',
@@ -297,11 +297,11 @@ async function GUIcloneCommand() {
 			updatePackageJSON(packageName!, packageVersion!, pth);
 		}
 
-		if (initEPA) {
-			if (repoCodeLanguage! === 'javascript') {
+		if (initEPA && repoCodeLanguage) {
+			if (repoCodeLanguage === 'javascript') {
 				await initEPAForJS(pth);
 			}
-			if (repoCodeLanguage! === 'typescript') {
+			if (repoCodeLanguage === 'typescript') {
 				await initEPAForTS(pth);
 			}
 		} else if (selectedPackageManager) {

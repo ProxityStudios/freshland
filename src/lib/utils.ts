@@ -204,7 +204,7 @@ export async function initEPAForTS(pth: string) {
 
 	logger.info('Installing packages...');
 	shell.exec(
-		'npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser'
+		'npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import eslint-plugin-import-resolver-typescript @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser'
 	);
 
 	shell.exec('npm i --save');
@@ -254,9 +254,74 @@ export async function initEPAForTS(pth: string) {
 	logger.info('Now you can run "npm run fix" command');
 }
 
-// eslint-disable-next-line @typescript-eslint/require-await
 export async function initEPAForJS(pth: string) {
+	const directoryExists = await checkIfExists(pth, Check.DIRECTORY);
+	const packageJSONExists = await checkIfExists(
+		`${pth}/package.json`,
+		Check.FILE
+	);
+
+	if (directoryExists && packageJSONExists) {
+		shell.cd(pth);
+	} else {
+		logger.error('Directory or "package.json" not exists. Exiting...');
+		shell.exit(1);
+	}
+
 	logger.info('Installing E.P.A (for JavaScript)');
+
+	// TODO: check if package.json or the package managers configs exists or not
+
+	logger.info('Installing packages...');
+	shell.exec(
+		'npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import prettier'
+	);
+
+	shell.exec('npm i --save');
+
+	logger.info('Packages installed');
+
+	logger.info('Creating .eslintrc.js file');
+
+	const eslintRcTemplate = await fs.readFile(
+		`${rootDir}/templates/javascript/.eslintrc.js`,
+		'utf8'
+	);
+	await fs.writeFile('.eslintrc.js', eslintRcTemplate);
+
+	logger.info('Creating prettier.config.js file');
+	const prettierRcTemplate = await fs.readFile(
+		`${rootDir}/templates/javascript/prettier.config.js`,
+		'utf8'
+	);
+	await fs.writeFile('prettier.config.js', prettierRcTemplate);
+
+	const eslintIgnoreTemplate = await fs.readFile(
+		`${rootDir}/templates/javascript/.eslintignore`,
+		'utf8'
+	);
+	await fs.writeFile('.eslintignore', eslintIgnoreTemplate);
+
+	logger.info('Pushing "fix" script to package.json');
+	const packageContent = await fs.readFile('package.json', 'utf8');
+	const packageJSON: { scripts: object } = JSON.parse(packageContent);
+
+	packageJSON.scripts = {
+		...packageJSON.scripts,
+		fix: 'eslint . --fix',
+	};
+
+	await fs.writeFile(
+		'package.json',
+		JSON.stringify(packageJSON, undefined, 2),
+		'utf8'
+	);
+
+	logger.warn(
+		'[IMPORTANT] To get better experience, install "eslint" and "prettier" extensions'
+	);
+	logger.info('E.P.A installed and configured successfully');
+	logger.info('Now you can run "npm run fix" command');
 }
 
 async function checkIfExists(pth: string, type: Check) {
