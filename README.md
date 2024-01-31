@@ -21,7 +21,7 @@ To clone a repository with a single-line command, use the following syntax:
 npx freshland@latest clone <source-repo> <target-dir>
 ```
 
-For example, to clone the `typescript-starter` repository from `ProxityStudios` into a directory named `myapp`, run:
+For example, to clone `typescript-starter` repository from `ProxityStudios` into a directory named `myapp`, run:
 
 ```bash
 npx freshland@latest clone ProxityStudios/typescript-starter myapp --install-deps npm --update-package
