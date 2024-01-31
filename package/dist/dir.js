@@ -1,1 +1,0 @@
-"use strict";var __importDefault=this&&this.__importDefault||function(a){return a&&a.__esModule?a:{default:a}};Object.defineProperty(exports,"__esModule",{value:!0}),exports.rootDir=void 0;const node_path_1=__importDefault(require("node:path"));exports.rootDir=node_path_1.default.resolve(__dirname,"..","..");
