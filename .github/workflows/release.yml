@@ -31,9 +31,6 @@ jobs:
          - name: Build
            run: npm run build
 
-         - name: Minify
-           run: npm run minify
-         
          - name: Copy Files
            run: mkdir package/ && mkdir package/dist && cp -r dist/minified/. package/dist && cp package.json npm-shrinkwrap.json README.md LICENSE .npmrc package/ && cp -r templates package/ && chmod u+w package/ 
 
