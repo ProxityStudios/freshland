@@ -1,6 +1,6 @@
 [![Join our Discord](https://img.shields.io/discord/843939288349409331?label=Join%20Discord&logo=discord&logoColor=white)](https://discord.gg/wrhwwJQwas)
 
-# Freshland         
+# Freshland  
 
 Freshland is a CLI tool that lets you clone GitHub repositories without the git history. _We're here to make things simpler and simpler for you. We promise._
 
@@ -32,7 +32,7 @@ npx freshland@latest clone ProxityStudios/typescript-starter myapp --install-dep
 | Flag                        | Referance          | Accepted Values              | Default Value      | Description                        |
 | --------------------------- | ------------------ | ---------------------------- | ------------------ | ---------------------------------- |
 | `--upd`, `--update-package` |                    |                              | `false`            | Update package name and version    |
-| `--n`, `--name`             | `<name>`           | `any-string eg: my-app`      | `cloned-repo-name` | Change the package name.           |
+| `--n`, `--name`             | `<name>`           | `any-string eg: my-app`      | `cloned-repo-name` | Change the package name.            |
 | `--v`, `--version`          | `<version>`        | `any-version eg: 1.0.0`      | `1.0.0`            | Change the package version         |
 | `--i`, `--install-deps`     | `<packageManager>` | `npm`, `pnpm`, `bun`, `yarn` | `do-not-install`   | Install dependencies automatically |
 | `--kg`, `--keep-git`        |                    |                              | `false`            | Do not delete ".git" folder        |
