@@ -1,3 +1,12 @@
+# [2.5.0-beta.1](https://github.com/ProxityStudios/freshland/compare/v1.0.0-beta.1...v2.5.0-beta.1) (2024-01-31)
+
+
+### Bug Fixes
+
+* remove invalid changelogs ([4d06f94](https://github.com/ProxityStudios/freshland/commit/4d06f940da6fd5482b396f9f0112fac977d667cc))
+* update ([f95d838](https://github.com/ProxityStudios/freshland/commit/f95d838e17024a9dd6178ddd9173b3f5a47e653f))
+* update to run workflow ([b39a765](https://github.com/ProxityStudios/freshland/commit/b39a765c910019634fdb170722ba1b4417809710))
+
 # [2.3.0](https://github.com/ProxityStudios/freshland/compare/v2.2.0...v2.3.01) (2024-01-31)
 
 ### Bug Fixes
