@@ -35,9 +35,9 @@
 		"fix": "eslint . --fix"
 	},
 	"bin": {
-		"freshland": "cli.js"
+		"freshland": "dist/cli.js"
 	},
-	"exports": "./cli.js",
+	"exports": "./dist/cli.js",
 	"devDependencies": {
 		"@semantic-release/changelog": "6.0.3",
 		"@semantic-release/commit-analyzer": "11.1.0",
