@@ -1,3 +1,10 @@
+# [3.1.0-beta.1](https://github.com/ProxityStudios/freshland/compare/v3.0.1-beta.1...v3.1.0-beta.1) (2024-01-31)
+
+
+### Features
+
+* bump ver ([8190925](https://github.com/ProxityStudios/freshland/commit/819092549c8661058a867bc22f49dd478a234752))
+
 ## [3.0.1-beta.1](https://github.com/ProxityStudios/freshland/compare/v3.0.0...v3.0.1-beta.1) (2024-01-31)
 
 
