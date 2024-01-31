@@ -15,7 +15,7 @@ results/
 tmp/
 /test
 todo
-dist
+dist/
 # Coverage reports
 coverage/
 
