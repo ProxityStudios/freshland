@@ -1,3 +1,15 @@
+# [2.5.0-beta.7](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.6...v2.5.0-beta.7) (2024-01-31)
+
+
+### Bug Fixes
+
+* something ([b51711f](https://github.com/ProxityStudios/freshland/commit/b51711fe50c9047da5c96e6fb06a53463d669bec))
+
+
+### Reverts
+
+* no need a minifier tool ([c4d5cea](https://github.com/ProxityStudios/freshland/commit/c4d5cea6c1bb7aef51e969fce8e636ba2fea31f6))
+
 # [2.5.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.2...v2.5.0-beta.3) (2024-01-31)
 
 
