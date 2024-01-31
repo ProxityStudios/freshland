@@ -1,3 +1,10 @@
+# [2.5.0-beta.8](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.7...v2.5.0-beta.8) (2024-01-31)
+
+
+### Bug Fixes
+
+* unresolved plugin ([80919ea](https://github.com/ProxityStudios/freshland/commit/80919ea3c43182ea54b0dd60e2d777c3e614756c))
+
 # [2.5.0-beta.7](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.6...v2.5.0-beta.7) (2024-01-31)
 
 
