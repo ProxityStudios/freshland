@@ -5,26 +5,6 @@
 
 * bump ver ([8190925](https://github.com/ProxityStudios/freshland/commit/819092549c8661058a867bc22f49dd478a234752))
 
-## [3.0.1-beta.1](https://github.com/ProxityStudios/freshland/compare/v3.0.0...v3.0.1-beta.1) (2024-01-31)
-
-
-### Bug Fixes
-
-* update desc ([1aadcef](https://github.com/ProxityStudios/freshland/commit/1aadcefa6a7382ddc8888d0961983a81383007ec))
-
-## [3.0.1-beta.2](https://github.com/ProxityStudios/freshland/compare/v3.0.1-beta.1...v3.0.1-beta.2) (2024-01-31)
-
-### Bug Fixes
-
-* update text ([5632885](https://github.com/ProxityStudios/freshland/commit/5632885e59ebbad09c6f30c9c29f71d9b8f0d001))
-
-## [3.0.1-beta.1](https://github.com/ProxityStudios/freshland/compare/v3.0.0...v3.0.1-beta.1) (2024-01-31)
-
-
-### Bug Fixes
-
-* testinga the action ([69e1cf2](https://github.com/ProxityStudios/freshland/commit/69e1cf22f65d78539a624c882f9fab84c03dd5bb))
-
 # [2.3.0](https://github.com/ProxityStudios/freshland/compare/v2.2.0...v2.3.0) (2024-01-31)
 
 ### Bug Fixes
