@@ -31,11 +31,11 @@ jobs:
          - name: Build
            run: npm run build
 
-         - name: Minifu
-           run: npm run minify && ls minified
+         - name: Minify
+           run: npm run minify
          
          - name: Copy Files
-           run: mkdir package/ && mkdir package/dist && cp -r dist/min/. package/dist && cp package.json npm-shrinkwrap.json README.md LICENSE .npmrc package/ && cp -r templates package/ && chmod u+w package/ 
+           run: mkdir package/ && mkdir package/dist && cp -r dist/minified/. package/dist && cp package.json npm-shrinkwrap.json README.md LICENSE .npmrc package/ && cp -r templates package/ && chmod u+w package/ 
 
          - name: Semantic Release
            run: npx semantic-release

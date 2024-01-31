@@ -55,6 +55,7 @@ module.exports = {
 			rules: {
 				'@typescript-eslint/internal/no-poorly-typed-ts-props': 'off',
 				'@typescript-eslint/explicit-function-return-type': 'off',
+				'@typescript-eslint/no-var-requires': 'off',
 			},
 		},
 	],
