@@ -1,3 +1,10 @@
+# 1.0.0-beta.1 (2024-01-31)
+
+
+### Bug Fixes
+
+* typo fixes ([a9f7eff](https://github.com/ProxityStudios/freshland/commit/a9f7effd1e53a79dd92afa0800be56790800eb08))
+
 # [2.5.0-beta.8](https://github.com/ProxityStudios/freshland/compare/v2.5.0-beta.7...v2.5.0-beta.8) (2024-01-31)
 
 
