@@ -29,11 +29,12 @@
 	},
 	"scripts": {
 		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/cli.ts",
-		"build": "run-s fix clean tsc",
+		"build": "run-s fix clean tsc minify",
 		"tsc": "tsc --build",
 		"clean": "rimraf dist/ package/",
 		"fix": "eslint . --fix",
-		"postpublish": "rimraf dist/ package/"
+		"postpublish": "rimraf dist/ package/",
+		"minify": "terser --compress --mangle --source-map --output dist/min"
 	},
 	"bin": {
 		"freshland": "dist/cli.js"
@@ -64,6 +65,7 @@
 		"prettier": "^3.2.2",
 		"rimraf": "^5.0.5",
 		"semantic-release": "23.0.0",
+		"terser": "5.27.0",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.3.3"
 	},

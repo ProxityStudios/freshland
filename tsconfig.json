@@ -15,6 +15,8 @@
 		"declaration": false,
 		"declarationMap": false, // Allow jumping to source file instead of 'd.ts' file
 
+		"sourceMap": true,
+
 		"allowJs": true,
 
 		"moduleResolution": "Node", // Yup, we are using Node
