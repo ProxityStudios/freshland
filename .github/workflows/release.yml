@@ -32,7 +32,7 @@ jobs:
            run: npm run build
          
          - name: Copy Files
-           run: cp -r dist/ package/ && cp package.json package/ && cp npm-shrinkwrap.json package/ && cp README.md package/ && cp LICENSE package/ && cp .npmrc package/ && cp -r templates/ package/ && chmod -R 777 package/ && chmod -R 777 dist/
+           run: mkdir package/ && mkdir package/dist && cp -r dist/. package/dist && cp package.json npm-shrinkwrap.json README.md LICENSE .npmrc package/ && cp -r templates package/ && chmod u+w package/ 
 
          - name: Semantic Release
            run: npx semantic-release

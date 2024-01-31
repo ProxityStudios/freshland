@@ -16,6 +16,8 @@ tmp/
 /test
 todo
 dist/
+package/
+
 # Coverage reports
 coverage/
 
