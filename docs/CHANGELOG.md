@@ -1,3 +1,9 @@
+## [3.0.1-beta.1](https://github.com/ProxityStudios/freshland/compare/v3.0.0...v3.0.1-beta.1) (2024-01-31)
+
+
+### Bug Fixes
+
+* update desc ([1aadcef](https://github.com/ProxityStudios/freshland/commit/1aadcefa6a7382ddc8888d0961983a81383007ec))
 
 ## [3.0.1-beta.2](https://github.com/ProxityStudios/freshland/compare/v3.0.1-beta.1...v3.0.1-beta.2) (2024-01-31)
 
