@@ -8,7 +8,7 @@
 		"typeRoots": ["./node_modules/@types"],
 
 		"target": "ESNext", // TypeScript is not used for building, allow all modern features
-		"module": "CommonJS", // TypeScript is not used for building, allow all modern features
+		"module": "CommonJS",
 
 		// `tsc` only used to build type declaration files (`.d.ts`)
 		// TODO: add support for types
