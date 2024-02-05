@@ -32,7 +32,7 @@ npx freshland@latest clone ProxityStudios/typescript-starter myapp --install-dep
 | Flag                        | Referance          | Accepted Values              | Default Value      | Description                        |
 | --------------------------- | ------------------ | ---------------------------- | ------------------ | ---------------------------------- |
 | `--upd`, `--update-package` |                    |                              | `false`            | Update package name and version    |
-| `--n`, `--name`             | `<name>`           | `any-string eg: my-app`      | `cloned-repo-name` | Change the package name.            |
+| `--n`, `--name`             | `<name>`           | `any-string eg: my-app`      | `cloned-repo-name` | Change the package name.           |
 | `--v`, `--version`          | `<version>`        | `any-version eg: 1.0.0`      | `1.0.0`            | Change the package version         |
 | `--i`, `--install-deps`     | `<packageManager>` | `npm`, `pnpm`, `bun`, `yarn` | `do-not-install`   | Install dependencies automatically |
 | `--kg`, `--keep-git`        |                    |                              | `false`            | Do not delete ".git" folder        |
