@@ -1,3 +1,17 @@
+# [3.1.0](https://github.com/ProxityStudios/freshland/compare/v3.0.0...v3.1.0) (2024-02-05)
+
+
+### Bug Fixes
+
+* Delete npm-shrinkwrap.json ([ab38179](https://github.com/ProxityStudios/freshland/commit/ab38179c800f93b2c853235c96d3c0d328f7f4f4))
+* tsconfig.json ([ac2a93b](https://github.com/ProxityStudios/freshland/commit/ac2a93bad032751c0b714993f600b08742fc517f))
+* update desc ([11f3624](https://github.com/ProxityStudios/freshland/commit/11f36248daf811b1eb554587eefced89912a79dc))
+
+
+### Features
+
+* bump ver ([eaf8d5e](https://github.com/ProxityStudios/freshland/commit/eaf8d5e643d72420f93ba75417d54266ab934245))
+
 # [3.1.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v3.1.0-beta.2...v3.1.0-beta.3) (2024-02-05)
 
 
