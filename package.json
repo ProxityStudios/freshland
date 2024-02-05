@@ -64,10 +64,10 @@
 		"typescript": "^5.3.3"
 	},
 	"dependencies": {
-		"@commander-js/extra-typings": "^11.1.0",
-		"@inquirer/prompts": "^3.3.0",
-		"commander": "^11.1.0",
-		"shelljs": "^0.8.5",
+		"@commander-js/extra-typings": "11.1.0",
+		"@inquirer/prompts": "3.3.0",
+		"commander": "11.1.0",
+		"shelljs": "0.8.5",
 		"tslog": "4.9.2"
 	}
 }
