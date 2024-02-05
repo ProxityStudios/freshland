@@ -19,8 +19,8 @@ import {
 	PackageManagerEnum,
 } from './types';
 
-// TWO DASH = COMMAND FLAG
-// ONE DASH = GLOBAL FLAG
+// TWO DASH === COMMAND FLAG
+// ONE DASH === GLOBAL FLAG
 export const program = new Command()
 	.name(name)
 	.version(version, '-v, --vers', 'Output the current version')
@@ -28,22 +28,29 @@ export const program = new Command()
 	.option('-d, --debug', 'Enable debug mode')
 	// default command
 	.action(GUIcloneCommand);
+
 program
 	.command('clone')
 	// TODO: implement this
 	// .option('-lr, --latest-release', 'Use latest release')
-	.description('Clone a repo to specified path')
+	.description('Clone a repository to specified path')
 	.argument(
 		'<repo>',
 		'ProxityStudios/typescript-starter OR https://github.com/proxitystudios/typescript-starter'
 	)
 	.argument('<path>', 'path/to/clone')
-	.option('--upd, --update-package', 'Update package name and version')
-	.option('--n, --name <name>', 'Change the package name')
-	.option('--v, --version <version>', 'Change the package version')
+	.option('--upd, --update-package', 'Update the package name and version')
+	.option(
+		'--n, --name <name>',
+		'Specify the package name | --upd flag required'
+	)
+	.option(
+		'--v, --version <version>',
+		'Specify the package version | --upd flag required'
+	)
 	.option(
 		'--i, --install-deps <packageManager>',
-		'Install dependencies automatically (supports npm, yarn, pnpm & bun)'
+		'Install dependencies (supports npm, yarn, pnpm & bun)'
 	)
 	.option('--kg, --keep-git', 'Do not delete ".git" folder')
 	.action(NOGUIcloneCommand);
@@ -54,7 +61,7 @@ program
 		'Installs Eslint, Prettier & Airbnb and automatically configures it.'
 	)
 	.argument('<path>', 'path/to/install')
-	.option('--ts, --typescript', 'Use typescript')
+	.option('--ts, --typescript', 'Use TypeScript')
 	.action(initEPACommand);
 
 export const globalOptions = program.opts();
@@ -135,32 +142,31 @@ async function GUIcloneCommand() {
 
 		repo = await (usingStarter
 			? select({
-					message: 'Select a starter',
+					message: 'Choose a starter to clone',
 					choices: [
 						{
 							name: 'Use TypeScript Starter',
 							value: 'proxitystudios/typescript-starter',
-							description: 'Use TypeScript Starter that includes E.P.A',
+						},
+						{
+							name: 'Use JavaScript Starter',
+							value: 'proxitystudios/javascript-starter',
 						},
 						{
 							name: 'Use Express API Starter Written With TypeScript',
 							value: 'proxitystudios/express-api-starter-ts',
-							description:
-								'Use Express API Starter written with TypeScript that includes E.P.A',
 						},
 						{
 							name: 'Use Discord Bot Starter Written With TypeScript',
 							value: 'proxitystudios/discord-bot-starter-ts',
-							description:
-								'Use Discord Bot Starter written with TypeScript that includes E.P.A',
 						},
 					],
 				})
 			: input({
-					message: 'What repo do you want to clone?',
+					message: 'What repository do you want to clone?',
 					validate: (sourceRepo) => {
 						if (sourceRepo.trim() === '') {
-							return 'Repo cannot be empty.';
+							return 'Repository cannot be empty.';
 						}
 						/*
 						if (
@@ -203,7 +209,7 @@ async function GUIcloneCommand() {
 		let packageVersion: string;
 		if (updatePackageNameAndVersion) {
 			packageName = await input({
-				message: 'What should we call this repo?',
+				message: 'What should we call this repository?',
 				default:
 					destination === '.'
 						? pth.split(/[/\\]/).pop()!
@@ -263,27 +269,23 @@ async function GUIcloneCommand() {
 		let selectedPackageManager;
 		if (installDependencies) {
 			selectedPackageManager = await select({
-				message: 'Select the package manager of the repo',
+				message: 'Select the package manager of the repository',
 				choices: [
 					{
-						name: 'Use "npm" package manager',
+						name: 'This repository uses "npm" as package manager',
 						value: PackageManagerEnum.npm,
-						description: `Install dependencies using ${PackageManagerEnum.npm}`,
 					},
 					{
-						name: 'Use "bun" package manager',
+						name: 'This repository uses "bun" as package manager',
 						value: PackageManagerEnum.bun,
-						description: `Install dependencies using ${PackageManagerEnum.bun}`,
 					},
 					{
-						name: 'Use "pnpm" package manager',
+						name: 'This repository uses "pnpm" as package manager',
 						value: PackageManagerEnum.pnpm,
-						description: `Install dependencies using ${PackageManagerEnum.pnpm}`,
 					},
 					{
-						name: 'Use "yarn" package manager',
+						name: 'This repository uses "yarn" as package manager',
 						value: PackageManagerEnum.yarn,
-						description: `Install dependencies using ${PackageManagerEnum.yarn}`,
 					},
 				],
 			});
