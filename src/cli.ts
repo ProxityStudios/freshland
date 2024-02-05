@@ -19,8 +19,8 @@ import {
 	PackageManagerEnum,
 } from './types';
 
-// IF ITS HAS TWO DASH ITS COMMAND FLAG
-// IF ITS HAS ONE DASH ITS GLOBAL FLAG
+// TWO DASH = COMMAND FLAG
+// ONE DASH = GLOBAL FLAG
 export const program = new Command()
 	.name(name)
 	.version(version, '-v, --vers', 'Output the current version')
