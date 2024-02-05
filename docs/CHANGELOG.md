@@ -1,3 +1,10 @@
+# [3.1.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v3.1.0-beta.2...v3.1.0-beta.3) (2024-02-05)
+
+
+### Bug Fixes
+
+* tsconfig.json ([236f1a8](https://github.com/ProxityStudios/freshland/commit/236f1a8ac41f2c31038fc4cb59594d658e9f5cbc))
+
 # [3.1.0-beta.2](https://github.com/ProxityStudios/freshland/compare/v3.1.0-beta.1...v3.1.0-beta.2) (2024-02-05)
 
 
