@@ -162,6 +162,7 @@ async function GUIcloneCommand() {
 						if (sourceRepo.trim() === '') {
 							return 'Repo cannot be empty.';
 						}
+						/*
 						if (
 							sourceRepo
 								.toLocaleLowerCase()
@@ -175,6 +176,7 @@ async function GUIcloneCommand() {
 						) {
 							return 'Repo is in starter section';
 						}
+						*/
 
 						return true;
 					},
@@ -269,17 +271,17 @@ async function GUIcloneCommand() {
 						description: `Install dependencies using ${PackageManagerEnum.npm}`,
 					},
 					{
-						name: PackageManagerEnum.bun,
+						name: 'Use "bun" package manager',
 						value: PackageManagerEnum.bun,
 						description: `Install dependencies using ${PackageManagerEnum.bun}`,
 					},
 					{
-						name: PackageManagerEnum.pnpm,
+						name: 'Use "pnpm" package manager',
 						value: PackageManagerEnum.pnpm,
 						description: `Install dependencies using ${PackageManagerEnum.pnpm}`,
 					},
 					{
-						name: PackageManagerEnum.yarn,
+						name: 'Use "yarn" package manager',
 						value: PackageManagerEnum.yarn,
 						description: `Install dependencies using ${PackageManagerEnum.yarn}`,
 					},

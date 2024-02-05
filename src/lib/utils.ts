@@ -19,7 +19,7 @@ export function cloneGithubRepo(repo: string, destination: string) {
 
 	logger.info('Cloning into', destination);
 	if (shell.exec(`git clone ${repoURI} ${destination}`).code !== 0) {
-		logger.error('Cannot clone the repo');
+		logger.error('Cannot clone the repository');
 		shell.exit(1);
 	}
 
@@ -234,6 +234,7 @@ export async function initEPAForTS(pth: string) {
 
 	logger.info('Pushing "fix" script to package.json');
 	const packageContent = await fs.readFile('package.json', 'utf8');
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 	const packageJSON: { scripts: object } = JSON.parse(packageContent);
 
 	packageJSON.scripts = {
@@ -248,10 +249,10 @@ export async function initEPAForTS(pth: string) {
 	);
 
 	logger.warn(
-		'[IMPORTANT] To get better experience, install "eslint" and "prettier" extensions'
+		'[IMPORTANT] You should install "eslint" and "prettier" extensions to get better experience'
 	);
 	logger.info('E.P.A installed and configured successfully');
-	logger.info('Now you can run "npm run fix" command');
+	logger.info('Done, now you can run "npm run fix" command!');
 }
 
 export async function initEPAForJS(pth: string) {
@@ -304,6 +305,7 @@ export async function initEPAForJS(pth: string) {
 
 	logger.info('Pushing "fix" script to package.json');
 	const packageContent = await fs.readFile('package.json', 'utf8');
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 	const packageJSON: { scripts: object } = JSON.parse(packageContent);
 
 	packageJSON.scripts = {
@@ -318,10 +320,10 @@ export async function initEPAForJS(pth: string) {
 	);
 
 	logger.warn(
-		'[IMPORTANT] To get better experience, install "eslint" and "prettier" extensions'
+		'[IMPORTANT] You should install "eslint" and "prettier" extensions to get better experience'
 	);
 	logger.info('E.P.A installed and configured successfully');
-	logger.info('Now you can run "npm run fix" command');
+	logger.info('Done, now you can run "npm run fix" command!');
 }
 
 async function checkIfExists(pth: string, type: Check) {
@@ -351,7 +353,7 @@ async function checkIfExists(pth: string, type: Check) {
 			}
 		}
 	} catch (error: any) {
-		if (error.code === 'ENOENT') {
+		if (error?.code === 'ENOENT') {
 			return false;
 		}
 		// TODO:
