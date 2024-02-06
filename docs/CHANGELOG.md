@@ -1,3 +1,10 @@
+# [3.1.0-beta.4](https://github.com/ProxityStudios/freshland/compare/v3.1.0-beta.3...v3.1.0-beta.4) (2024-02-06)
+
+
+### Features
+
+* Add a few new starter repos ([96b447e](https://github.com/ProxityStudios/freshland/commit/96b447ee68ffc8ac9c2c661b033d6e5ee158bd8c))
+
 # [3.1.0-beta.3](https://github.com/ProxityStudios/freshland/compare/v3.1.0-beta.2...v3.1.0-beta.3) (2024-02-05)
 
 
