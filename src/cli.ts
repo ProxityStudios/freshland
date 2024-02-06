@@ -153,12 +153,12 @@ async function GUIcloneCommand() {
 							value: 'proxitystudios/javascript-starter',
 						},
 						{
-							name: 'Use Express API Starter Written With TypeScript',
-							value: 'proxitystudios/express-api-starter-ts',
+							name: 'Use Express API Starter',
+							value: 'express-api-starter',
 						},
 						{
-							name: 'Use Discord Bot Starter Written With TypeScript',
-							value: 'proxitystudios/discord-bot-starter-ts',
+							name: 'Use Discord Bot Starter',
+							value: 'discord-bot-starter',
 						},
 					],
 				})
@@ -188,6 +188,38 @@ async function GUIcloneCommand() {
 					},
 				}));
 
+		if (repo === 'express-api-starter') {
+			repo = await select({
+				message:
+					'Which code language do you want to use? (express-api-starter)',
+				choices: [
+					{
+						name: 'Use TypeScript',
+						value: 'proxitystudios/express-api-starter-ts',
+					},
+					{
+						name: 'Use JavaScript',
+						value: 'proxitystudios/express-api-starter-js',
+					},
+				],
+			});
+		} else if (repo === 'discord-bot-starter') {
+			repo = await select({
+				message:
+					'Which code language do you want to use? (discord-bot-starter)',
+				choices: [
+					{
+						name: 'Use TypeScript',
+						value: 'proxitystudios/discord-bot-starter-ts',
+					},
+					{
+						name: 'Use JavaScript',
+						value: 'proxitystudios/discord-bot-starter-js',
+					},
+				],
+			});
+		}
+
 		const destination = await input({
 			message: 'Where do you want to clone?',
 			validate: (i) => {
@@ -214,8 +246,15 @@ async function GUIcloneCommand() {
 					destination === '.'
 						? pth.split(/[/\\]/).pop()!
 						: destination.replaceAll(' ', '-').split(/[/\\]/).pop()!,
-				transformer: (v) => {
-					return v.replaceAll(' ', '-');
+				validate: (v) => {
+					if (v.trim() === '') {
+						return 'Project name cannot be empty';
+					}
+
+					return true;
+				},
+				transformer: (t) => {
+					return t.replaceAll(' ', '-');
 				},
 			});
 			packageVersion = await input({
