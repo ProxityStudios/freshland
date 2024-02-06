@@ -1,3 +1,10 @@
+# [3.1.0-beta.5](https://github.com/ProxityStudios/freshland/compare/v3.1.0-beta.4...v3.1.0-beta.5) (2024-02-06)
+
+
+### Features
+
+* now init-epa command supports other package managers ([202bc30](https://github.com/ProxityStudios/freshland/commit/202bc301fea2fb04e5ac113312f4ab1474116396))
+
 # [3.1.0-beta.4](https://github.com/ProxityStudios/freshland/compare/v3.1.0-beta.3...v3.1.0-beta.4) (2024-02-06)
 
 
