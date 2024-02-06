@@ -62,6 +62,11 @@ program
 	)
 	.argument('<path>', 'path/to/install')
 	.option('--ts, --typescript', 'Use TypeScript')
+	// requuired option
+	.requiredOption(
+		'--pm, --pck-manager <packageManager>',
+		'Choose the package manager of the repository (supports npm, bun, yarn & pnpm)'
+	)
 	.action(initEPACommand);
 
 export const globalOptions = program.opts();
@@ -70,34 +75,27 @@ if (globalOptions.debug) {
 	logger.debug('Debug mode enabled (--debug)');
 }
 
-// Parse the command-line arguments
 program.parse(process.argv);
 
 async function initEPACommand(pth: string, opts: InitEPACommandOptions) {
 	const { typescript } = opts;
 	const p = path.resolve(pth);
-	await (typescript ? initEPAForTS(p) : initEPAForJS(p));
+	await (typescript
+		? initEPAForTS(p, opts.pckManager as PackageManagerEnum)
+		: initEPAForJS(p, opts.pckManager as PackageManagerEnum));
 }
 
 function NOGUIcloneCommand(
 	repo: string,
 	destination: string,
-	opts: NOGUIcloneCommandOptions
+	options: NOGUIcloneCommandOptions
 ) {
-	// options.debug
 	const pth = path.resolve(destination);
-	const {
-		keepGit,
-		name: packageName,
-		version: packageVersion,
-		installDeps: iDeps,
-		updatePackage,
-	} = opts;
 
 	try {
 		cloneGithubRepo(repo, pth);
 
-		if (keepGit) {
+		if (options.keepGit) {
 			logger.warn('Git deletion skipped. (omit --kg or --keep-git flag)');
 		} else {
 			deleteAndInitGit(pth);
@@ -105,22 +103,35 @@ function NOGUIcloneCommand(
 
 		// FIXME: it uses default package manager (npm)
 		// TODO: only update provided options
-		if (!updatePackage && (packageName ?? packageVersion)) {
+		if (!options.updatePackage && (options.name ?? options.version)) {
 			logger.warn(
 				'You need to provide --update-package flag to change package name and version'
 			);
 		} else {
+			if (globalOptions.debug) {
+				logger.debug('(PACKAGE_NAME) Given value:', options.name);
+				logger.debug('(PACKAGE_VERSION) Given value:', options.version);
+				logger.debug('(DESTINATION) Given value:', destination);
+			}
+
 			updatePackageJSON(
-				packageName
-					? packageName.replaceAll(' ', '-')
+				options.name
+					? options.name.replaceAll(' ', '-')
 					: destination.split('/').pop()!,
-				packageVersion ?? '1.0.0',
+				options.version ?? '1.0.0',
 				pth
 			);
 		}
 
-		if (iDeps) {
-			installDeps(iDeps as PackageManagerEnum, pth);
+		if (options.installDeps) {
+			if (globalOptions.debug) {
+				logger.debug(
+					'(INSTALL_DEPS_PCK_MNGR) Given value:',
+					options.installDeps
+				);
+			}
+
+			installDeps(options.installDeps as PackageManagerEnum, pth);
 		} else {
 			logger.warn('You need to install dependencies manually!');
 		}
@@ -130,8 +141,8 @@ function NOGUIcloneCommand(
 		logger.error('An unexpected error occured or user canceled the process.');
 	}
 }
+
 async function GUIcloneCommand() {
-	// options.debug
 	let repo: string;
 
 	try {
@@ -305,7 +316,7 @@ async function GUIcloneCommand() {
 			});
 		}
 
-		let selectedPackageManager;
+		let selectedPackageManager: PackageManagerEnum | undefined;
 		if (installDependencies) {
 			selectedPackageManager = await select({
 				message: 'Select the package manager of the repository',
@@ -337,14 +348,14 @@ async function GUIcloneCommand() {
 			updatePackageJSON(packageName!, packageVersion!, pth);
 		}
 
-		if (initEPA && repoCodeLanguage) {
+		if (initEPA && repoCodeLanguage && selectedPackageManager) {
 			if (repoCodeLanguage === 'javascript') {
-				await initEPAForJS(pth);
+				await initEPAForJS(pth, selectedPackageManager);
 			}
 			if (repoCodeLanguage === 'typescript') {
-				await initEPAForTS(pth);
+				await initEPAForTS(pth, selectedPackageManager);
 			}
-		} else if (selectedPackageManager) {
+		} else if (!initEPA && selectedPackageManager) {
 			installDeps(selectedPackageManager, pth);
 		} else {
 			logger.warn('You need to install dependencies manually!');

@@ -102,10 +102,9 @@ export function updatePackageJSON(
 
 export function installDeps(packageManager: PackageManager, pth: string) {
 	shell.cd(pth);
-	// TODO: pick the package manager automaticly (support npm, pnpm, yarn & bun)
+	// TODO: automatically pick the package manager (support npm, pnpm, yarn & bun)
 
 	switch (packageManager) {
-		// TODO: support other package managers as well
 		case PackageManagerEnum.npm: {
 			if (!shell.which('npm')) {
 				logger.error(
@@ -184,7 +183,7 @@ export function installDeps(packageManager: PackageManager, pth: string) {
 	}
 }
 
-export async function initEPAForTS(pth: string) {
+export async function initEPAForTS(pth: string, pckManager: PackageManager) {
 	const directoryExists = await checkIfExists(pth, Check.DIRECTORY);
 	const packageJSONExists = await checkIfExists(
 		`${pth}/package.json`,
@@ -200,14 +199,32 @@ export async function initEPAForTS(pth: string) {
 
 	logger.info('Installing E.P.A (for TypeScript)');
 
-	// TODO: check if package.json or the package managers configs exists or not
-
 	logger.info('Installing packages...');
-	shell.exec(
-		'npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import eslint-plugin-import-resolver-typescript @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser'
-	);
+	const packagesString =
+		'eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import eslint-plugin-import-resolver-typescript @typescript-eslint/eslint-plugin prettier eslint-config-airbnb-typescript @typescript-eslint/parser';
 
-	shell.exec('npm i --save');
+	switch (pckManager) {
+		case PackageManagerEnum.npm:
+			shell.exec('npm i --save');
+			shell.exec(`npm install -D ${packagesString}`);
+			break;
+		case PackageManagerEnum.yarn:
+			shell.exec('yarn');
+			shell.exec(`yarn add -D ${packagesString}`);
+			break;
+		case PackageManagerEnum.pnpm:
+			shell.exec('pnpm install');
+			shell.exec(`pnpm add -D ${packagesString}`);
+
+			break;
+		case PackageManagerEnum.bun:
+			shell.exec('bun install');
+			shell.exec(`bun add --dev ${packagesString}`);
+			break;
+		default:
+			logger.error('Invalid package manager');
+			break;
+	}
 
 	logger.info('Packages installed');
 
@@ -255,7 +272,7 @@ export async function initEPAForTS(pth: string) {
 	logger.info('Done, now you can run "npm run fix" command!');
 }
 
-export async function initEPAForJS(pth: string) {
+export async function initEPAForJS(pth: string, pckManager: PackageManager) {
 	const directoryExists = await checkIfExists(pth, Check.DIRECTORY);
 	const packageJSONExists = await checkIfExists(
 		`${pth}/package.json`,
@@ -271,14 +288,32 @@ export async function initEPAForJS(pth: string) {
 
 	logger.info('Installing E.P.A (for JavaScript)');
 
-	// TODO: check if package.json or the package managers configs exists or not
-
 	logger.info('Installing packages...');
-	shell.exec(
-		'npm install -D eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import prettier'
-	);
+	const packagesString =
+		'eslint eslint-config-prettier eslint-config-airbnb-base eslint-plugin-prettier eslint-plugin-import prettier';
 
-	shell.exec('npm i --save');
+	switch (pckManager) {
+		case PackageManagerEnum.npm:
+			shell.exec('npm i --save');
+			shell.exec(`npm install -D ${packagesString}`);
+			break;
+		case PackageManagerEnum.yarn:
+			shell.exec('yarn');
+			shell.exec(`yarn add -D ${packagesString}`);
+			break;
+		case PackageManagerEnum.pnpm:
+			shell.exec('pnpm install');
+			shell.exec(`pnpm add -D ${packagesString}`);
+
+			break;
+		case PackageManagerEnum.bun:
+			shell.exec('bun install');
+			shell.exec(`bun add --dev ${packagesString}`);
+			break;
+		default:
+			logger.error('Invalid package manager');
+			break;
+	}
 
 	logger.info('Packages installed');
 

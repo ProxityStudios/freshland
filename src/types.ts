@@ -18,6 +18,7 @@ export type PackageManager =
 
 export interface InitEPACommandOptions {
 	typescript?: true;
+	pckManager?: string;
 }
 
 export interface NOGUIcloneCommandOptions {
