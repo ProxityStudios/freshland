@@ -1,4 +1,6 @@
 # Misc
+src_old/
+
 lib-cov/
 .git/
 *.seed

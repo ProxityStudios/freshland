@@ -23,6 +23,7 @@ module.exports = {
 	},
 	rules: {
 		'no-prototype-builtins': 'off',
+		'import/no-named-as-default': 'off',
 		'import/prefer-default-export': 'off',
 		'import/no-default-export': 'off',
 		'@typescript-eslint/no-unused-vars': 'warn',

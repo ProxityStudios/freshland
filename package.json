@@ -1,7 +1,7 @@
 {
 	"name": "freshland",
 	"description": "Freshland is a CLI tool that lets you clone GitHub repositories without the git history.",
-	"version": "3.0.0",
+	"version": "experimental",
 	"author": "ProxityStudios",
 	"license": "MIT",
 	"homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
@@ -24,7 +24,7 @@
 		"url": "git+https://github.com/ProxityStudios/freshland.git"
 	},
 	"scripts": {
-		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/cli.ts",
+		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/bin.ts",
 		"build": "run-s fix clean tsc",
 		"tsc": "tsc --build",
 		"clean": "rimraf dist/ package/",
@@ -32,9 +32,9 @@
 		"postpublish": "rimraf dist/ package/"
 	},
 	"bin": {
-		"freshland": "dist/cli.js"
+		"freshland": "dist/bin.js"
 	},
-	"exports": "./dist/cli.js",
+	"exports": "./dist/bin.js",
 	"devDependencies": {
 		"@semantic-release/changelog": "6.0.3",
 		"@semantic-release/commit-analyzer": "11.1.0",
@@ -67,7 +67,7 @@
 		"@commander-js/extra-typings": "11.1.0",
 		"@inquirer/prompts": "3.3.0",
 		"commander": "11.1.0",
-		"shelljs": "0.8.5",
+		"shell-exec": "1.1.2",
 		"tslog": "4.9.2"
 	}
 }
