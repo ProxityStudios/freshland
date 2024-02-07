@@ -1,5 +1,5 @@
 import { confirm, input, select } from '@inquirer/prompts';
-import Constants from '../constants';
+import Constants from '../utils/constants';
 import container from '../container';
 import { logger } from '../utils/logger';
 

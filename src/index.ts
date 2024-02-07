@@ -3,7 +3,7 @@ import path from 'node:path';
 import shellExec from 'shell-exec';
 import { logger } from './utils/logger';
 import { getTemplateIfExists } from './utils';
-import Constants from './constants';
+import Constants from './utils/constants';
 
 interface FreshlandOptions {
 	verbose?: true;
