@@ -1,15 +1,4 @@
-export interface RepositoryInfo {
-	site: string;
-	userName: string;
-	repoName: string;
-	ref: string;
-	url: string;
-	ssh: string;
-	subDirectory?: string;
-	mode: string;
-}
-
-type SupportedPlatform = Record<string, string>;
+import type { RepositorySource, SupportedPlatform } from '../types';
 
 class Parser {
 	static supportedPlatforms: SupportedPlatform = {
@@ -19,7 +8,7 @@ class Parser {
 		'git.sr.ht': '',
 	};
 
-	static parseSource(src: string): RepositoryInfo {
+	static parseSource(src: string): RepositorySource {
 		const match =
 			/^(?:(?:https?:\/\/)?([^:/]+\.[^:/]+)\/|git@([^:/]+)[:/]|([^/]+):)?([^/\s]+)\/([^/\s#]+)(?:((?:\/[^/\s#]+)+))?(?:\/)?(?:#(.+))?/.exec(
 				src

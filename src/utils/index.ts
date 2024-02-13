@@ -1,19 +1,23 @@
 import fs from 'node:fs';
 import https from 'https';
-import URL from 'url';
 import { HttpsProxyAgent } from 'https-proxy-agent';
+import URL from 'url';
 
 import path from 'node:path';
 import Constants from './constants';
 import { logger } from './logger';
+import FLError from '../exceptions/FLError';
 
 export function getTemplateIfExists(templateSource: string): string {
 	const found = Object.entries(Constants.Templates).find(
-		([key, val]) => val === templateSource
+		([, val]) => val === templateSource
 	);
 
 	if (!found) {
-		throw new Error('Invalid template');
+		throw new FLError(
+			`Invalid template ${templateSource}`,
+			'INVALID_TEMPLATE'
+		);
 	}
 
 	return found[1];
@@ -28,13 +32,21 @@ export function checkDirIsEmpty(dir: string, force: boolean) {
 					'Destination directory is not empty. (force mode enabled)'
 				);
 			} else {
-				throw new Error(
-					'Destination directory is not empty, aborting. Use Freshland.setForce ("--force" flag) to override'
+				throw new FLError(
+					'Destination directory is not empty, aborting.',
+					'DEST_NOT_EMPTY',
+					' Use Freshland.setForce ("--force" flag) to override'
 				);
 			}
 		}
 	} catch (err: any) {
-		if (err.code !== 'ENOENT') throw err;
+		if (err.code !== 'ENOENT') {
+			throw new FLError(
+				'File/folder not exists',
+				'FILE_OR_DIR_NOT_EXISTS',
+				err
+			);
+		}
 	}
 }
 
@@ -59,8 +71,11 @@ export function download(
 				const statusCode = response.statusCode ?? 0;
 
 				if (statusCode >= 400) {
-					const error = new Error(
-						`HTTP request failed with status code ${statusCode}`
+					const error = new FLError(
+						`HTTP request failed with status code ${statusCode}`,
+						'HTTP_REQUEST_FAILED',
+						undefined,
+						statusCode
 					);
 					reject(error);
 					return;
@@ -69,7 +84,10 @@ export function download(
 				if (statusCode >= 300 && statusCode < 400) {
 					const redirectUrl = response.headers?.location;
 					if (!redirectUrl) {
-						const error = new Error('Redirect URL not found');
+						const error = new FLError(
+							'Redirect URL not found',
+							'URL_NOT_FOUND'
+						);
 						reject(error);
 						return;
 					}
@@ -90,13 +108,17 @@ export function download(
 					destStream.close(() => resolve());
 				});
 				destStream.on('error', (err) => {
-					logger.info('An error occured while downloading', err);
-
 					reject(err);
 				});
 			})
 			.on('error', (err) => {
-				reject(err);
+				const error = new FLError(
+					'An error occured while downloading',
+					'UNKNOWN_ERROR',
+					err
+				);
+				logger.error(error.getErrorDetails());
+				reject(error);
 			});
 	});
 }
@@ -108,20 +130,22 @@ function getProxyRequestOptions(
 	const parsedUrl = URL.parse(url);
 	return {
 		hostname: parsedUrl.hostname,
-		path: parsedUrl.path,
+		path: parsedUrl.pathname,
 		agent: new HttpsProxyAgent(proxy),
 	};
 }
 
-export function mkdirp(dir: string) {
+export function makeParentDir(dir: string) {
 	const parent = path.dirname(dir);
 	if (parent === dir) return;
 
-	mkdirp(parent);
+	makeParentDir(parent);
 
 	try {
 		fs.mkdirSync(dir);
 	} catch (err: any) {
-		if (err.code !== 'EEXIST') throw err;
+		if (err.code !== 'EEXIST') {
+			throw new FLError('An error occured', 'FILE_OR_DIR_NOT_EXISTS', err);
+		}
 	}
 }

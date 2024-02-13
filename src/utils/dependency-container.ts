@@ -1,4 +1,5 @@
 import type Freshland from '..';
+import FLError from '../exceptions/FLError';
 
 export interface Dependencies {
 	freshland: Freshland;
@@ -16,7 +17,10 @@ class DependencyContainer {
 
 	resolve<T extends keyof Dependencies>(name: T): Dependencies[T] {
 		if (!this.dependencies.has(name)) {
-			throw new Error(`Dependency '${name}' not found in container.`);
+			throw new FLError(
+				`Dependency '${name}' not found in container.`,
+				'CONTAINER_INVALID_DEPENDENCY'
+			);
 		}
 		return this.dependencies.get(name) as Dependencies[T];
 	}

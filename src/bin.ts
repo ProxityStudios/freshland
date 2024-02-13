@@ -3,8 +3,9 @@ import { prompt } from 'enquirer';
 import { logger } from './utils/logger';
 import { version, name, description } from '../package.json';
 import container from './container';
-import { ProcessStatus, type FreshlandMode } from './types';
+import type { FreshlandMode } from './types';
 import Constants from './utils/constants';
+import FLError from './exceptions/FLError';
 
 const freshland = container.resolve('freshland');
 
@@ -20,9 +21,6 @@ const program = new Command()
 			readonly FreshlandMode[]
 		>(['tar', 'git'] as const)
 	)
-	.exitOverride(() => {
-		process.exit(1);
-	})
 	.action(async (options) => {
 		const { confirmTemplate }: { confirmTemplate: boolean } = await prompt({
 			type: 'confirm',
@@ -30,7 +28,6 @@ const program = new Command()
 			message: 'Do you want to use a template?',
 		});
 
-		// TODO: fetch templates urls from ProxityStudios/urls
 		const { source }: { source: string } = await (confirmTemplate
 			? prompt({
 					type: 'select',
@@ -85,7 +82,7 @@ const program = new Command()
 				type: 'confirm',
 				name: 'force',
 				message:
-					"Should we clone if the destination folder isn't empty? (force mode)",
+					"Should we clone the target if it's not empty? (force mode)",
 				initial: false,
 			});
 
@@ -102,9 +99,9 @@ const program = new Command()
 		freshland.getOrSetDestination(destination);
 
 		logger.info('Cloning process started');
-		await freshland.start();
+		await freshland.startProcess();
 		logger.info('Done, you are ready to code!');
-		process.exit(ProcessStatus.OK);
+		process.exit(Constants.ProcessStatus.OK);
 	})
 	.parse();
 
@@ -153,8 +150,9 @@ try {
 		.action(NOGUICloneCommand);
 */
 } catch (err) {
-	logger.error(
-		'An unexpected error occured. Please let us to know. Error:',
+	throw new FLError(
+		'An unexpected error occured. Please let us to know.',
+		'BIN_TOP_LEVEL_ERROR',
 		err
 	);
 }

@@ -7,10 +7,17 @@ import {
 	checkDirIsEmpty,
 	download,
 	getTemplateIfExists,
-	mkdirp,
+	makeParentDir,
 } from './utils';
-import type { FreshlandMode, FreshlandOptions, Refs } from './types';
-import Parser, { RepositoryInfo } from './utils/parser';
+import type {
+	FreshlandMode,
+	FreshlandOptions,
+	Ref,
+	RefArray,
+	RepositorySource,
+} from './types';
+import Parser from './utils/parser';
+import FLError from './exceptions/FLError';
 
 export class Freshland extends EventEmitter {
 	logger = logger;
@@ -29,7 +36,7 @@ export class Freshland extends EventEmitter {
 		super();
 	}
 
-	async start(source?: string, destination?: string) {
+	async startProcess(source?: string, destination?: string) {
 		const src = this.getOrSetSource(source);
 		const dest = this.getOrSetDestination(destination);
 
@@ -59,7 +66,10 @@ export class Freshland extends EventEmitter {
 			: undefined;
 
 		if (!hash) {
-			throw new Error(`Couldn't find commit hash for ${parsedSrc.ref}`);
+			throw new FLError(
+				`Couldn't find commit hash for ${parsedSrc.ref}`,
+				'HASH_NOT_FOUND'
+			);
 		}
 		const tempFile = `${destination}/.tmp/${hash}.tar.gz`;
 
@@ -74,7 +84,7 @@ export class Freshland extends EventEmitter {
 
 		await download(url, tempFile, this.options.proxy);
 
-		mkdirp(destination);
+		makeParentDir(destination);
 
 		await this.untar(tempFile, destination, subDirectory);
 		await shellExec(`rm -rf ${tempFile}`);
@@ -101,21 +111,20 @@ export class Freshland extends EventEmitter {
 		this.isUsingTemplate = true;
 	}
 
-	async getHash(source: RepositoryInfo): Promise<string | null> {
+	async getHash(source: RepositorySource): Promise<string | null> {
 		try {
 			const refs = await this.fetchRefs(source);
 
 			if (source.ref === 'HEAD') {
-				return refs.find((ref) => ref.type === 'HEAD')!.hash;
+				return refs.find((ref) => ref.type === 'HEAD')?.hash ?? null;
 			}
 			return this.selectRef(refs, source.ref);
-		} catch (err: any) {
-			this.logger.error(err);
-			return null;
+		} catch (err) {
+			throw new FLError('Failed to get hash', 'HASH_ERROR', err);
 		}
 	}
 
-	selectRef(refs: Refs, selector: string): string | null {
+	selectRef(refs: RefArray, selector: string): string | null {
 		const matchingRef = refs.find((ref) => ref.name === selector);
 		if (matchingRef) {
 			this.verbose(`Found matching commit hash: ${matchingRef.hash}`);
@@ -133,7 +142,7 @@ export class Freshland extends EventEmitter {
 		return refWithMatchingStart.hash;
 	}
 
-	async fetchRefs(source: RepositoryInfo): Promise<Refs> {
+	async fetchRefs(source: RepositorySource): Promise<RefArray> {
 		try {
 			const { stdout } = await shellExec(`git ls-remote ${source.url}`);
 			return stdout
@@ -141,6 +150,10 @@ export class Freshland extends EventEmitter {
 				.filter(Boolean)
 				.map((row) => {
 					const [hash, ref] = row.split('\t');
+
+					if (!ref) {
+						return null;
+					}
 
 					if (ref === 'HEAD') {
 						return {
@@ -151,8 +164,10 @@ export class Freshland extends EventEmitter {
 
 					const [, type, name] = /refs\/(\w+)\/(.+)/.exec(ref) ?? [];
 					if (!type || !name) {
-						this.logger.error(row);
-						throw new Error(`Could not parse ${ref}`);
+						throw new FLError(
+							`Could not parse ref ${ref}`,
+							'INVALID_REF'
+						);
 					}
 
 					let typeResult: string;
@@ -170,10 +185,14 @@ export class Freshland extends EventEmitter {
 						name,
 						hash,
 					};
-				});
-		} catch (error: any) {
-			this.logger.error(error);
-			throw new Error(`Could not fetch remote ${source.url}`);
+				})
+				.filter((ref): ref is Ref => ref !== null);
+		} catch (err) {
+			throw new FLError(
+				`Could not fetch remote ${source.url}`,
+				'FETCH_REF',
+				err
+			);
 		}
 	}
 
@@ -185,7 +204,7 @@ export class Freshland extends EventEmitter {
 		if (!this.destination && destination)
 			this.destination = path.resolve(destination);
 		if (!this.destination && !destination) {
-			throw new Error('Destination not settled');
+			throw new FLError('Destination not settled', 'DEST_NOT_SETTLED');
 		}
 		return this.destination!;
 	}
@@ -193,7 +212,7 @@ export class Freshland extends EventEmitter {
 	getOrSetSource(src?: string): string {
 		if (!this.src && src) this.src = src;
 		if (!this.src && !src) {
-			throw new Error('Source not settled');
+			throw new FLError('Source not settled', 'SRC_NOT_SETTLED');
 		}
 		return this.src!;
 	}
@@ -214,8 +233,10 @@ export class Freshland extends EventEmitter {
 		if (mode === 'tar' || mode === 'git') {
 			this.mode = mode;
 		} else {
-			throw new Error(
-				'Invalid mode (Freshland supports only "tar" and "git")'
+			throw new FLError(
+				'Invalid mode',
+				'INVALID_MODE',
+				'Possible modes: tar, git'
 			);
 		}
 	}

@@ -5,7 +5,7 @@ export interface FreshlandOptions {
 
 export type FreshlandMode = 'tar' | 'git';
 
-export type Refs = (
+export type Ref =
 	| {
 			type: string;
 			hash: string;
@@ -15,10 +15,18 @@ export type Refs = (
 			type: string;
 			name: string;
 			hash: string;
-	  }
-)[];
+	  };
+export type RefArray = Ref[];
 
-export enum ProcessStatus {
-	OK = 0,
-	FAIL = 1,
+export interface RepositorySource {
+	site: string;
+	userName: string;
+	repoName: string;
+	ref: string;
+	url: string;
+	ssh: string;
+	subDirectory?: string;
+	mode: string;
 }
+
+export type SupportedPlatform = Record<string, string>;
