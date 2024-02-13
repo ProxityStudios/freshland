@@ -48,7 +48,12 @@ export function download(
 
 		const requestOptions: https.RequestOptions = proxy
 			? getProxyRequestOptions(url, proxy)
-			: parsedUrl;
+			: {
+					...parsedUrl,
+					headers: {
+						'user-agent': 'freshland',
+					},
+				};
 		https
 			.get(requestOptions, (response) => {
 				const statusCode = response.statusCode ?? 0;
