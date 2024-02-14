@@ -1,7 +1,8 @@
-import type { RepositorySource, SupportedPlatform } from '../types';
+import FLError from '../exceptions/FLError';
+import type { RepositorySource, SupportedPlatforms } from '../types';
 
 class Parser {
-	static supportedPlatforms: SupportedPlatform = {
+	static supportedPlatforms: SupportedPlatforms = {
 		github: 'com',
 		gitlab: 'com',
 		bitbucket: 'org',
@@ -15,7 +16,7 @@ class Parser {
 			);
 
 		if (!match) {
-			throw new Error(`Unable to parse ${src}`);
+			throw new FLError(`Unable to parse ${src}`, 'INVALID_SOURCE');
 		}
 
 		const site = (match[1] || match[2] || match[3] || 'github').replace(
@@ -24,7 +25,7 @@ class Parser {
 		);
 
 		if (!this.supportedPlatforms.hasOwnProperty(site)) {
-			throw new Error('Platform not supported');
+			throw new FLError('Platform not supported', 'INVALID_PLATFORM');
 		}
 
 		const userName = match[4];

@@ -1,6 +1,6 @@
 /dist
 /node_modules
-/test
+/tests
 /templates
 package/
 src_old

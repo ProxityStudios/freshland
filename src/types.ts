@@ -1,3 +1,8 @@
+import type Freshland from '.';
+
+export interface Dependencies {
+	freshland: Freshland;
+}
 export interface FreshlandOptions {
 	verbose: boolean;
 	proxy?: string;
@@ -29,4 +34,4 @@ export interface RepositorySource {
 	mode: string;
 }
 
-export type SupportedPlatform = Record<string, string>;
+export type SupportedPlatforms = Record<string, string>;

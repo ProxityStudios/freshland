@@ -1,6 +1,5 @@
 /** @type {import("eslint").ESLint.ConfigData} */
 module.exports = {
-	root: true,
 	plugins: ['@typescript-eslint'],
 	extends: [
 		'airbnb-base',
@@ -18,7 +17,7 @@ module.exports = {
 	},
 	settings: {
 		'import/parsers': {
-			'@typescript-eslint/parser': ['.ts', '.tsx'],
+			'@typescript-eslint/parser': ['.ts'],
 		},
 	},
 	rules: {

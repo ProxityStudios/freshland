@@ -4,27 +4,19 @@
 	"compilerOptions": {
 		"outDir": "./dist",
 		"rootDir": "./src",
-
 		"typeRoots": ["./node_modules/@types"],
-
-		"target": "ESNext", // TypeScript is not used for building, allow all modern features
+		"inlineSourceMap": true,
+		"target": "ES2020", 
 		"module": "CommonJS",
-
-		// `tsc` only used to build type declaration files (`.d.ts`)
-		// TODO: add support for types
 		"declaration": false,
-		"declarationMap": false, // Allow jumping to source file instead of 'd.ts' file
-
-
+		"declarationMap": false,
 		"allowJs": true,
-
-		"moduleResolution": "Node", // Yup, we are using Node
-		"forceConsistentCasingInFileNames": true, // Error out if import and file system have a casing mismatch. Recommended by TS.
-		"esModuleInterop": true, // Improve importing from CJS modules, recommended by TS: https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-7.html#support-for-import-d-from-cjs-from-commonjs-modules-with---esmoduleinterop
-		"skipLibCheck": true, // Significant perf increase by skipping checking .d.ts files, particularly those in node_modules. Recommended by TS.
-		"resolveJsonModule": true, // Allow importing .json files
-
-		"removeComments": true,
-		"strict": true, // Of course!
+		"moduleResolution": "Node",
+		"forceConsistentCasingInFileNames": true, 
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"resolveJsonModule": true,
+		"removeComments": false,
+		"strict": true, 
 	},
 }

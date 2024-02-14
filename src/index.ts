@@ -2,13 +2,8 @@ import EventEmitter from 'events';
 import tar from 'tar';
 import path from 'node:path';
 import shellExec from 'shell-exec';
+import fs from 'node:fs';
 import { logger } from './utils/logger';
-import {
-	checkDirIsEmpty,
-	download,
-	getTemplateIfExists,
-	makeParentDir,
-} from './utils';
 import type {
 	FreshlandMode,
 	FreshlandOptions,
@@ -18,21 +13,20 @@ import type {
 } from './types';
 import Parser from './utils/parser';
 import FLError from './exceptions/FLError';
+import Utils from './utils';
 
 export class Freshland extends EventEmitter {
-	logger = logger;
+	protected forceMode = false;
 
-	forceMode = false;
+	protected src?: string;
 
-	src?: string;
+	protected destination?: string;
 
-	destination?: string;
+	protected isUsingTemplate = false;
 
-	isUsingTemplate = false;
+	protected mode: FreshlandMode = 'tar';
 
-	mode: FreshlandMode = 'tar';
-
-	constructor(private options: FreshlandOptions = { verbose: false }) {
+	constructor(private opts: FreshlandOptions = { verbose: false }) {
 		super();
 	}
 
@@ -40,25 +34,32 @@ export class Freshland extends EventEmitter {
 		const src = this.getOrSetSource(source);
 		const dest = this.getOrSetDestination(destination);
 
-		checkDirIsEmpty(dest, this.forceMode);
+		Utils.checkDirIsEmpty(dest, this.forceMode);
 
+		this.verbose('Process started');
 		switch (this.mode) {
 			case 'tar':
+				this.verbose('Cloning with tar');
 				await this.cloneWithTar(src, dest);
-
 				break;
 
 			case 'git':
+				this.verbose('Cloning with git');
 				await this.cloneWithGit(src, dest);
 				break;
 
 			default:
 				break;
 		}
+
+		this.verbose('Done, you are ready to code!');
+		this.emit('done');
 	}
 
-	async cloneWithTar(src: string, destination: string) {
+	private async cloneWithTar(src: string, destination: string) {
 		const parsedSrc = Parser.parseSource(src);
+
+		this.verbose('Getting hash');
 		const hash = await this.getHash(parsedSrc);
 
 		const subDirectory = parsedSrc.subDirectory
@@ -71,7 +72,8 @@ export class Freshland extends EventEmitter {
 				'HASH_NOT_FOUND'
 			);
 		}
-		const tempFile = `${destination}/.tmp/${hash}.tar.gz`;
+		const tmp = `${destination}/.tmp`;
+		const tempFile = `${tmp}/${hash}.tar.gz`;
 
 		let url: string;
 		if (parsedSrc.site === 'gitlab') {
@@ -82,15 +84,28 @@ export class Freshland extends EventEmitter {
 			url = `${parsedSrc.url}/archive/${hash}.tar.gz`;
 		}
 
-		await download(url, tempFile, this.options.proxy);
+		this.verbose('URL', url);
 
-		makeParentDir(destination);
+		try {
+			this.verbose('Download process started');
+			await Utils.download(url, tempFile, this);
+			this.verbose('Download process finished');
 
-		await this.untar(tempFile, destination, subDirectory);
-		await shellExec(`rm -rf ${tempFile}`);
+			Utils.makeParentDir(destination);
+
+			this.verbose('Extracting process started');
+			await this.untar(tempFile, destination, subDirectory);
+			this.verbose('Extracting process finished');
+		} finally {
+			this.verbose('Deleting temporary folder process started');
+			await fs.promises
+				.rm(tmp, { force: true, recursive: true })
+				.catch(console.error);
+			this.verbose('Deleting temporary folder process finished');
+		}
 	}
 
-	async untar(file: string, dest: string, subdir?: string) {
+	private async untar(file: string, dest: string, subdir?: string) {
 		return tar.extract(
 			{
 				file,
@@ -101,17 +116,17 @@ export class Freshland extends EventEmitter {
 		);
 	}
 
-	async cloneWithGit(src: string, dest: string) {
+	private async cloneWithGit(src: string, dest: string) {
 		await shellExec(`git clone --depth 1 ${src} ${dest}`); // dir not empty error code: 128
 		await shellExec(`rm -rf ${path.resolve(dest, '.git')}`);
 	}
 
 	useTemplate(template: string) {
-		this.getOrSetSource(getTemplateIfExists(template));
+		this.getOrSetSource(Utils.getTemplateIfExists(template));
 		this.isUsingTemplate = true;
 	}
 
-	async getHash(source: RepositorySource): Promise<string | null> {
+	private async getHash(source: RepositorySource): Promise<string | null> {
 		try {
 			const refs = await this.fetchRefs(source);
 
@@ -124,7 +139,7 @@ export class Freshland extends EventEmitter {
 		}
 	}
 
-	selectRef(refs: RefArray, selector: string): string | null {
+	private selectRef(refs: RefArray, selector: string): string | null {
 		const matchingRef = refs.find((ref) => ref.name === selector);
 		if (matchingRef) {
 			this.verbose(`Found matching commit hash: ${matchingRef.hash}`);
@@ -142,7 +157,7 @@ export class Freshland extends EventEmitter {
 		return refWithMatchingStart.hash;
 	}
 
-	async fetchRefs(source: RepositorySource): Promise<RefArray> {
+	private async fetchRefs(source: RepositorySource): Promise<RefArray> {
 		try {
 			const { stdout } = await shellExec(`git ls-remote ${source.url}`);
 			return stdout
@@ -164,10 +179,7 @@ export class Freshland extends EventEmitter {
 
 					const [, type, name] = /refs\/(\w+)\/(.+)/.exec(ref) ?? [];
 					if (!type || !name) {
-						throw new FLError(
-							`Could not parse ref ${ref}`,
-							'INVALID_REF'
-						);
+						return null;
 					}
 
 					let typeResult: string;
@@ -197,7 +209,7 @@ export class Freshland extends EventEmitter {
 	}
 
 	verbose(...args: unknown[]): void {
-		if (this.options.verbose) this.logger.debug(...args);
+		if (this.opts.verbose) logger.debug(...args);
 	}
 
 	getOrSetDestination(destination?: string): string {
@@ -222,11 +234,11 @@ export class Freshland extends EventEmitter {
 	}
 
 	setVerboseMode(verbose: boolean) {
-		this.options.verbose = verbose;
+		this.opts.verbose = verbose;
 	}
 
 	setProxy(proxy: string) {
-		this.options.proxy = proxy;
+		this.opts.proxy = proxy;
 	}
 
 	setMode(mode: FreshlandMode) {
@@ -239,6 +251,10 @@ export class Freshland extends EventEmitter {
 				'Possible modes: tar, git'
 			);
 		}
+	}
+
+	get options(): Readonly<FreshlandOptions> {
+		return this.opts;
 	}
 }
 export default Freshland;
