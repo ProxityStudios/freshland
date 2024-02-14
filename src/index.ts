@@ -36,7 +36,7 @@ export class Freshland extends EventEmitter {
 
 		Utils.checkDirIsEmpty(dest, this.forceMode);
 
-		this.verbose('Process started');
+		logger.info('Process started');
 		switch (this.mode) {
 			case 'tar':
 				this.verbose('Cloning with tar');
@@ -52,7 +52,7 @@ export class Freshland extends EventEmitter {
 				break;
 		}
 
-		this.verbose('Done, you are ready to code!');
+		logger.info('Done, you are ready to code!');
 		this.emit('done');
 	}
 
