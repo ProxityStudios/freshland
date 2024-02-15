@@ -116,7 +116,9 @@ class Utils {
 								const percentage = totalSize
 									? Math.round((downloadedSize / totalSize) * 100)
 									: 0;
-								freshland.verbose(`Downloaded ${percentage}%`);
+								if (totalSize) {
+									freshland.verbose(`Downloaded ${percentage}%`);
+								}
 							});
 
 							response.pipe(destStream);
