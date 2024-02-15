@@ -14,6 +14,7 @@ import type {
 import Parser from './utils/parser';
 import FLError from './exceptions/FLError';
 import Utils from './utils';
+import Constants from './utils/constants';
 
 export class Freshland extends EventEmitter {
 	protected forceMode = false;
@@ -39,21 +40,27 @@ export class Freshland extends EventEmitter {
 		logger.info('Process started');
 		switch (this.mode) {
 			case 'tar':
-				this.verbose('Cloning with tar');
+				this.verbose('Mode:', this.mode);
 				await this.cloneWithTar(src, dest);
 				break;
 
 			case 'git':
-				this.verbose('Cloning with git');
+				this.verbose('Mode:', this.mode);
 				await this.cloneWithGit(src, dest);
 				break;
 
 			default:
+				// we already parsing the mode but its ok
+				logger.error('Invalid mode');
 				break;
 		}
 
 		logger.info('Done, you are ready to code!');
 		this.emit('done');
+
+		// FIXME: it takes some time to exit the program after finished
+		// FIXME: for now manually exit the program
+		process.exit(Constants.ProcessStatus.OK);
 	}
 
 	private async cloneWithTar(src: string, destination: string) {
@@ -84,28 +91,23 @@ export class Freshland extends EventEmitter {
 			url = `${parsedSrc.url}/archive/${hash}.tar.gz`;
 		}
 
-		this.verbose('URL', url);
-
 		try {
-			this.verbose('Download process started');
+			this.verbose('Downloading', url);
 			await Utils.download(url, tempFile, this);
-			this.verbose('Download process finished');
 
 			Utils.makeParentDir(destination);
 
-			this.verbose('Extracting process started');
-			await this.untar(tempFile, destination, subDirectory);
-			this.verbose('Extracting process finished');
+			this.verbose('Extracting');
+			await this.extractTar(tempFile, destination, subDirectory);
 		} finally {
-			this.verbose('Deleting temporary folder process started');
+			this.verbose('Deleting temporary directory', tmp);
 			await fs.promises
 				.rm(tmp, { force: true, recursive: true })
 				.catch(console.error);
-			this.verbose('Deleting temporary folder process finished');
 		}
 	}
 
-	private async untar(file: string, dest: string, subdir?: string) {
+	private async extractTar(file: string, dest: string, subdir?: string) {
 		return tar.extract(
 			{
 				file,
@@ -117,8 +119,12 @@ export class Freshland extends EventEmitter {
 	}
 
 	private async cloneWithGit(src: string, dest: string) {
+		this.verbose('Cloning');
 		await shellExec(`git clone --depth 1 ${src} ${dest}`); // dir not empty error code: 128
-		await shellExec(`rm -rf ${path.resolve(dest, '.git')}`);
+		this.verbose('Deleting .git folder');
+		await fs.promises
+			.rm(path.resolve(dest, '.git'), { force: true, recursive: true })
+			.catch(console.error);
 	}
 
 	useTemplate(template: string) {
