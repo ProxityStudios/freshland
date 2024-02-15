@@ -7,7 +7,7 @@ class DependencyContainer {
 
 	private dependencies = new Map<string, unknown>();
 
-	public static getInstance(): DependencyContainer {
+	static getInstance(): DependencyContainer {
 		if (!DependencyContainer.instance) {
 			DependencyContainer.instance = new DependencyContainer();
 		}

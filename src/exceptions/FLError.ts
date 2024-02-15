@@ -1,13 +1,13 @@
 import Constants from '../utils/constants';
 
 class FLError extends Error {
-	public readonly code: string;
+	readonly code: string;
 
-	public readonly statusCode: number;
+	readonly statusCode: number;
 
-	public readonly timestamp: Date;
+	readonly timestamp: Date;
 
-	public readonly details: unknown;
+	readonly details: unknown;
 
 	constructor(
 		message: string,
@@ -24,7 +24,7 @@ class FLError extends Error {
 		Error.captureStackTrace(this, this.constructor);
 	}
 
-	public getErrorDetails(): string {
+	getErrorDetails(): string {
 		if (this.details) {
 			return JSON.stringify(this.details, null, 2);
 		}
