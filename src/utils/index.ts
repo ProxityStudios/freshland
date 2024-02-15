@@ -37,7 +37,7 @@ class Utils {
 					throw new FLError(
 						'Destination directory is not empty, aborting.',
 						'DEST_NOT_EMPTY',
-						' Use Freshland.setForce ("--force" flag) to override'
+						'Use Freshland.setForce ("--force" flag) to continue'
 					);
 				}
 			}
