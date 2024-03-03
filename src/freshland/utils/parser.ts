@@ -1,14 +1,8 @@
-import FLError from '../exceptions/FLError';
-import type { RepositorySource, SupportedPlatforms } from '../types';
+import Constants from '../../constants';
+import FLError from '../../exceptions/FLError';
+import type { RepositorySource } from '../types';
 
 class Parser {
-	static supportedPlatforms: SupportedPlatforms = {
-		github: 'com',
-		gitlab: 'com',
-		bitbucket: 'org',
-		'git.sr.ht': '',
-	};
-
 	static parseSource(src: string): RepositorySource {
 		const match =
 			/^(?:(?:https?:\/\/)?([^:/]+\.[^:/]+)\/|git@([^:/]+)[:/]|([^/]+):)?([^/\s]+)\/([^/\s#]+)(?:((?:\/[^/\s#]+)+))?(?:\/)?(?:#(.+))?/.exec(
@@ -24,7 +18,7 @@ class Parser {
 			''
 		);
 
-		if (!this.supportedPlatforms.hasOwnProperty(site)) {
+		if (!Constants.SupportedPlatforms.hasOwnProperty(site)) {
 			throw new FLError('Platform not supported', 'INVALID_PLATFORM');
 		}
 
@@ -33,11 +27,13 @@ class Parser {
 		const subDirectory = match[6];
 		const ref = match[7] || 'HEAD';
 
-		const domain = `${site}.${this.supportedPlatforms[site]}`;
+		const domain = `${site}.${Constants.SupportedPlatforms[site]}`;
 		const url = `https://${domain}/${userName}/${repoName}`;
 		const ssh = `git@${domain}:${userName}/${repoName}`;
 
-		const mode = this.supportedPlatforms.hasOwnProperty(site) ? 'tar' : 'git';
+		const mode = Constants.SupportedPlatforms.hasOwnProperty(site)
+			? 'tar'
+			: 'git';
 
 		return { site, userName, repoName, ref, url, ssh, subDirectory, mode };
 	}

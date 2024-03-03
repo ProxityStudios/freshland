@@ -1,4 +1,4 @@
-import Constants from '../utils/constants';
+import Constants from '../constants';
 
 class FLError extends Error {
 	readonly code: string;
@@ -13,7 +13,7 @@ class FLError extends Error {
 		message: string,
 		code: string,
 		details?: unknown,
-		statusCode: number = Constants.ProcessStatus.FAIL
+		statusCode: number = Constants.ProcessStatus.ERROR
 	) {
 		super(message);
 		this.code = code;

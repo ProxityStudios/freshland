@@ -4,12 +4,15 @@ import { HttpsProxyAgent } from 'https-proxy-agent';
 import URL from 'url';
 
 import path from 'node:path';
-import Constants from './constants';
-import { logger } from './logger';
-import FLError from '../exceptions/FLError';
-import type Freshland from '..';
+import { logger } from '../../root/logger';
+import FLError from '../../exceptions/FLError';
+import Constants from '../../constants';
 
 class Utils {
+	static async deleteDir(dir: string, force = true, recursive = true) {
+		await fs.promises.rm(dir, { force, recursive });
+	}
+
 	static getTemplateIfExists(templateSource: string): string {
 		const found = Object.entries(Constants.Templates).find(
 			([, val]) => val === templateSource
@@ -41,27 +44,25 @@ class Utils {
 					);
 				}
 			}
-		} catch (err: any) {
-			if (err.code !== 'ENOENT') {
-				throw new FLError('Destination not empty', 'NOT_EMPTY', err);
-			}
+		} catch (err) {
+			/* empty */
 		}
 	}
 
-	static download(
+	static async download(
 		url: string,
 		dest: string,
-		freshland: Freshland
+		proxy?: string
 	): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
 			const parsedUrl = URL.parse(url);
 
-			const requestOptions: https.RequestOptions = freshland.options.proxy
-				? Utils.getProxyRequestOptions(url, freshland.options.proxy)
+			const requestOptions: https.RequestOptions = proxy
+				? Utils.getProxyRequestOptions(url, proxy)
 				: {
 						...parsedUrl,
 						headers: {
-							'User-Agent': 'freshland',
+							'User-Agent': 'Freshland',
 						},
 					};
 
@@ -90,7 +91,7 @@ class Utils {
 							reject(error);
 							return;
 						}
-						resolve(Utils.download(redirectUrl, dest, freshland));
+						resolve(Utils.download(redirectUrl, dest, proxy));
 						return;
 					}
 
@@ -98,29 +99,7 @@ class Utils {
 					fs.promises
 						.mkdir(destDirectory, { recursive: true })
 						.then(() => {
-							const totalSize = parseInt(
-								response.headers['content-length'] ?? '0',
-								10
-							);
-							let downloadedSize = 0;
-
-							if (!totalSize || Number.isNaN(totalSize)) {
-								freshland.verbose(
-									'Total size unknown. Cannot calculate download percentage.'
-								);
-							}
-
 							const destStream = fs.createWriteStream(dest);
-							response.on('data', (chunk) => {
-								downloadedSize += chunk.length;
-								const percentage = totalSize
-									? Math.round((downloadedSize / totalSize) * 100)
-									: 0;
-								if (totalSize) {
-									freshland.verbose(`Downloaded ${percentage}%`);
-								}
-							});
-
 							response.pipe(destStream);
 							destStream.on('finish', () => {
 								destStream.close();
@@ -136,8 +115,8 @@ class Utils {
 				})
 				.on('error', (err) => {
 					const error = new FLError(
-						'An error occured while downloading',
-						'UNKNOWN_ERROR',
+						'An error occurred while downloading',
+						'DOWNLOAD_ERROR',
 						err
 					);
 					reject(error);
@@ -167,7 +146,7 @@ class Utils {
 			fs.mkdirSync(dir);
 		} catch (err: any) {
 			if (err.code !== 'EEXIST') {
-				throw new FLError('An error occured', '', err);
+				throw new FLError('An error occured', 'UNKNOWN', err);
 			}
 		}
 	}

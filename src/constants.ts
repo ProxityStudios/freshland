@@ -1,3 +1,5 @@
+import type { SupportedPlatforms } from './freshland/types';
+
 const CompanyGithubProfile = 'https://github.com/ProxityStudios';
 
 // TODO: fetch templates urls from ProxityStudios/urls
@@ -14,10 +16,21 @@ const Templates = {
 
 enum ProcessStatus {
 	OK = 0,
-	FAIL = 1,
+	ERROR = 1,
 }
 
+const SupportedModes = new Set(['tar', 'git'] as const);
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+const SupportedPlatforms: SupportedPlatforms = {
+	github: 'com',
+	gitlab: 'com',
+	bitbucket: 'org',
+	'git.sr.ht': '',
+};
+
 const Constants = {
+	SupportedModes,
+	SupportedPlatforms,
 	Templates,
 	ProcessStatus,
 	CompanyGithubProfile,

@@ -2,13 +2,12 @@ import { Command, Option } from '@commander-js/extra-typings';
 import { prompt } from 'enquirer';
 
 import { version, name, description } from '../../package.json';
-import type { FreshlandMode } from '../types';
-import Constants from '../utils/constants';
-import FLError from '../exceptions/FLError';
-import container from './root';
+import type { FreshlandMode } from '../freshland/types';
+import Constants from '../constants';
+import Freshland from '../freshland';
 
 export function startProgram() {
-	const freshland = container.resolve('freshland');
+	const freshland = new Freshland();
 
 	const program = new Command()
 		.name(name)
@@ -20,7 +19,7 @@ export function startProgram() {
 		.addOption(
 			new Option('--mode <mode>', 'Change the mode').choices<
 				readonly FreshlandMode[]
-			>(['tar', 'git'] as const)
+			>(Array.from(Constants.SupportedModes))
 		)
 		.action(async (options) => {
 			const { confirmTemplate }: { confirmTemplate: boolean } = await prompt(
@@ -48,10 +47,12 @@ export function startProgram() {
 							{
 								message: 'Use Express API Starter (menu)',
 								name: 'TODO: Implement MENU',
+								disabled: true,
 							},
 							{
 								message: 'Use Discord Bot Starter (menu)',
 								name: 'TODO: Implement MENU',
+								disabled: true,
 							},
 						],
 					})
@@ -101,28 +102,29 @@ export function startProgram() {
 			freshland.getOrSetDestination(destination);
 
 			await freshland.startProcess();
+			// FIXME: do not manually exit the program
+			process.exit(Constants.ProcessStatus.OK);
 		})
 		.parse();
 
 	const globalOpts = program.opts();
 
-	try {
-		if (globalOpts.mode) {
-			freshland.setMode(globalOpts.mode);
-		}
+	if (globalOpts.mode) {
+		freshland.setMode(globalOpts.mode);
+	}
 
-		if (globalOpts.proxy) {
-			freshland.setProxy(globalOpts.proxy);
-		}
+	if (globalOpts.proxy) {
+		freshland.setProxy(globalOpts.proxy);
+	}
 
-		if (globalOpts.verbose) {
-			freshland.setVerboseMode(globalOpts.verbose);
-		}
+	if (globalOpts.verbose) {
+		freshland.setVerboseMode(globalOpts.verbose);
+	}
 
-		if (globalOpts.force) {
-			freshland.setForceMode(globalOpts.force);
-		}
-		/*
+	if (globalOpts.force) {
+		freshland.setForceMode(globalOpts.force);
+	}
+	/*
 	app.command('clone')
 		// TODO: implement this
 		// .option('-lr, --latest-release', 'Use latest release')
@@ -148,11 +150,4 @@ export function startProgram() {
 		.option('--kg, --keep-git', 'Do not delete ".git" folder')
 		.action(NOGUICloneCommand);
 */
-	} catch (err) {
-		throw new FLError(
-			'An unexpected error occured. Please let us to know.',
-			'BIN_TOP_LEVEL_ERROR',
-			err
-		);
-	}
 }
