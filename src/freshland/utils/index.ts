@@ -1,18 +1,14 @@
-import fs from 'node:fs';
-import https from 'https';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import URL from 'url';
 
-import path from 'node:path';
-import { logger } from '../../root/logger';
-import FLError from '../../exceptions/FLError';
+import * as https from 'https';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import Constants from '../../constants';
+import FLError from '../../exceptions/FLError';
+import { logger } from '../../root/logger';
 
 class Utils {
-	static async deleteDir(dir: string, force = true, recursive = true) {
-		await fs.promises.rm(dir, { force, recursive });
-	}
-
 	static getTemplateIfExists(templateSource: string): string {
 		const found = Object.entries(Constants.Templates).find(
 			([, val]) => val === templateSource
@@ -49,78 +45,58 @@ class Utils {
 		}
 	}
 
-	static async download(
+	static downloadFile(
 		url: string,
-		dest: string,
+		saveTo: string,
 		proxy?: string
-	): Promise<void> {
-		return new Promise<void>((resolve, reject) => {
-			const parsedUrl = URL.parse(url);
+	): Promise<string> {
+		return new Promise((resolve, reject) => {
+			const options: https.RequestOptions = {
+				headers: {
+					'User-Agent': 'Mozilla/5.0',
+				},
+			};
 
-			const requestOptions: https.RequestOptions = proxy
-				? Utils.getProxyRequestOptions(url, proxy)
-				: {
-						...parsedUrl,
-						headers: {
-							'User-Agent': 'Freshland',
-						},
-					};
-
-			https
-				.get(requestOptions, (response) => {
-					const statusCode = response.statusCode ?? 0;
-
-					if (statusCode >= 400) {
-						const error = new FLError(
-							`HTTP request failed with status code ${statusCode}`,
-							'HTTP_REQUEST_FAILED',
-							undefined,
-							statusCode
-						);
-						reject(error);
-						return;
-					}
-
-					if (statusCode >= 300 && statusCode < 400) {
-						const redirectUrl = response.headers?.location;
-						if (!redirectUrl) {
-							const error = new FLError(
-								'Redirect URL not found',
-								'URL_NOT_FOUND'
-							);
-							reject(error);
-							return;
-						}
-						resolve(Utils.download(redirectUrl, dest, proxy));
-						return;
-					}
-
-					const destDirectory = path.dirname(dest);
-					fs.promises
-						.mkdir(destDirectory, { recursive: true })
-						.then(() => {
-							const destStream = fs.createWriteStream(dest);
-							response.pipe(destStream);
-							destStream.on('finish', () => {
-								destStream.close();
-								resolve();
-							});
-							destStream.on('error', (err) => {
-								reject(err);
-							});
-						})
-						.catch((err) => {
-							reject(err);
-						});
-				})
-				.on('error', (err) => {
-					const error = new FLError(
-						'An error occurred while downloading',
-						'DOWNLOAD_ERROR',
-						err
-					);
-					reject(error);
+			if (proxy) {
+				options.agent = new HttpsProxyAgent(proxy, {
+					rejectUnauthorized: true,
 				});
+			}
+
+			const request = https.get(url, options, (response) => {
+				if (
+					response.statusCode &&
+					response.statusCode >= 300 &&
+					response.statusCode < 400 &&
+					response.headers.location
+				) {
+					Utils.downloadFile(response.headers.location, saveTo, proxy)
+						.then(resolve)
+						.catch(reject);
+					request.destroy();
+					return;
+				}
+
+				const dest = path.join(saveTo);
+				const fileStream = fs.createWriteStream(dest);
+
+				response.pipe(fileStream);
+
+				fileStream.on('finish', () => {
+					fileStream.close();
+					resolve(saveTo);
+				});
+
+				fileStream.on('error', (error) => {
+					fs.unlink(saveTo, () => {
+						reject(error);
+					});
+				});
+			});
+
+			request.on('error', (error) => {
+				reject(error);
+			});
 		});
 	}
 

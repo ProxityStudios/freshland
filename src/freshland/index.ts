@@ -1,7 +1,8 @@
 import EventEmitter from 'events';
 import tar from 'tar';
-import path from 'path';
+import * as path from 'node:path';
 import shellExec from 'shell-exec';
+import * as fs from 'node:fs';
 import { logger } from '../root/logger';
 import {
 	FreshlandMode,
@@ -55,6 +56,8 @@ class Freshland extends EventEmitter {
 
 			logger.info('Done, you are ready to code!');
 			this.emit('done');
+			// FIXME: do not manually exit the program
+			//	process.exit(Constants.ProcessStatus.OK);
 		} catch (error) {
 			logger.error(error instanceof FLError ? error.message : error);
 			return Promise.resolve();
@@ -75,9 +78,6 @@ class Freshland extends EventEmitter {
 			);
 		}
 
-		const tmpDir = path.join(destination, '.tmp');
-		const tmpFile = path.join(tmpDir, `${hash}.tar.gz`);
-
 		let url: string;
 		if (parsedSrc.site === 'gitlab') {
 			url = `${parsedSrc.url}/repository/archive.tar.gz?ref=${hash}`;
@@ -87,15 +87,22 @@ class Freshland extends EventEmitter {
 			url = `${parsedSrc.url}/archive/${hash}.tar.gz`;
 		}
 
+		const destPath = path.join(destination);
+		const fileName = `${hash}.tar.gz`;
+		const destPathWithFile = `${destPath}/${fileName}`;
+
+		Utils.makeParentDir(destPath);
+
 		this.verbose('Downloading...', url);
-		await Utils.download(url, tmpFile, this.opts.proxy);
+		await Utils.downloadFile(url, destPathWithFile, this.opts.proxy);
 
-		Utils.makeParentDir(destination);
+		this.verbose('Extracting...', destPathWithFile);
+		await this.extractTar(destPathWithFile, destPath, subDirectory);
 
-		this.verbose('Extracting...');
-		await this.extractTar(tmpFile, destination, subDirectory);
-
-		await Utils.deleteDir(tmpDir);
+		await fs.promises.rm(destPathWithFile, {
+			force: true,
+			recursive: true,
+		});
 	}
 
 	private async extractTar(file: string, dest: string, subDir?: string) {
@@ -115,7 +122,10 @@ class Freshland extends EventEmitter {
 		this.verbose('Cloning...');
 		await shellExec(`git clone --depth 1 ${src} ${dest}`);
 		this.verbose('Delete .git folder');
-		await Utils.deleteDir(path.resolve(dest, '.git'));
+		await fs.promises.rm(path.resolve(dest, '.git'), {
+			force: true,
+			recursive: true,
+		});
 	}
 
 	public useTemplate(template: string) {

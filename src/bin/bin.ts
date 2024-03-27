@@ -102,8 +102,6 @@ export function startProgram() {
 			freshland.getOrSetDestination(destination);
 
 			await freshland.startProcess();
-			// FIXME: do not manually exit the program
-			process.exit(Constants.ProcessStatus.OK);
 		})
 		.parse();
 
