@@ -1,26 +1,23 @@
 import shellExec from 'shell-exec';
 import * as path from 'node:path';
-import { EventEmitter } from 'events';
 import * as fs from 'node:fs';
-import { FreshlandMode, FreshlandOptions, Ref, RefArray, RepositorySource } from './types';
+import type { FreshlandMode, FreshlandOptions, Ref, RefArray, RepositorySource } from './types';
 import Utils from './utils';
-import { logger } from '../root/logger';
-import { Builder, BuilderData } from './builder';
+import type { Builder, BuilderData } from './utils/builder';
 import { Parser } from './utils/parser';
+import { Emitter } from './utils/emitter';
+import { logger } from '../root/logger';
 
 export class Freshland {
-  public emitter: EventEmitter;
-  protected mode: FreshlandMode;
+  public readonly emitter: Emitter;
 
-  constructor(private opts: FreshlandOptions = { verbose: false }) {
-    this.emitter = new EventEmitter();
-    this.mode = 'tar';
+  constructor(public readonly options: FreshlandOptions = { verbose: false }) {
+    this.emitter = new Emitter();
   }
 
-  public async clone(_builder: Builder | BuilderData): Promise<void> {
+  public async clone(builder: Builder | BuilderData): Promise<void> {
     try {
-      const builderData = _builder instanceof Builder ? _builder.toJSON() : _builder;
-
+      const builderData = Utils.getBuilderData(builder);
       const isEmptyDir = await Utils.checkDirIsEmpty(builderData.destination);
 
       if (!isEmptyDir && !builderData.force) {
@@ -34,20 +31,19 @@ export class Freshland {
       logger.info('BEEP! Im going to handle all you need');
       switch (builderData.mode) {
         case 'tar':
-          this.verbose('Choosen Mode:', this.mode);
+          this.verbose('Choosen Mode:', builderData.mode);
           await this.cloneUsingTar(builderData);
           break;
         case 'git':
-          this.verbose('Choosen Mode:', this.mode);
+          this.verbose('Choosen Mode:', builderData.mode);
           await this.cloneUsingGit(builderData);
           break;
         default:
-          // unneccesary but ok
-          throw new Error(`Mode "${this.mode}" not supported yet`);
+          throw new Error(`Mode "${builderData.mode}" not supported yet`);
       }
 
       logger.info('Done! you are ready to gift me a coffe');
-      this.emitter.emit('done');
+      this.emitter.emit('finish', builderData);
     } catch (error) {
       logger.error(error);
     }
@@ -70,17 +66,17 @@ export class Freshland {
     }
 
     const fileName = `${hash}.tar.gz`;
-    const destPathWithFile = `${builderData.destination}/${fileName}`;
+    const destWithFileName = `${builderData.destination}/${fileName}`;
 
-    Utils.makeParentDir(builderData.destination);
+    await Utils.makeParentDir(builderData.destination);
 
     this.verbose(`Downloading from "${url}`);
-    await Utils.downloadFile(url, destPathWithFile, this.opts.proxy);
+    await Utils.downloadFile(url, destWithFileName, builderData.proxy);
 
-    this.verbose(`Extracting from "${destPathWithFile}`);
-    await Utils.extractTar(destPathWithFile, builderData.destination, subDirectory);
+    this.verbose(`Extracting from "${destWithFileName}`);
+    await Utils.extractTar(destWithFileName, builderData.destination, subDirectory);
 
-    await fs.promises.rm(destPathWithFile, {
+    await fs.promises.rm(destWithFileName, {
       force: true,
       recursive: true,
     });
@@ -89,17 +85,13 @@ export class Freshland {
   private async cloneUsingGit(builderData: BuilderData) {
     this.verbose('Cloning...');
     await shellExec(`git clone --depth 1 ${builderData.source} ${builderData.destination}`);
+
     this.verbose('Delete .git folder');
     await fs.promises.rm(path.resolve(builderData.destination, '.git'), {
       force: true,
       recursive: true,
     });
   }
-
-  // public useTemplate(template: string) {
-  //   this.source = Utils.getTemplateIfExists(template);
-  //   this.isUsingTemplate = true;
-  // }
 
   private async getCommitHash(source: RepositorySource): Promise<string | null> {
     const refs = await this.fetchRefs(source);
@@ -173,31 +165,7 @@ export class Freshland {
   }
 
   private verbose(...args: unknown[]): void {
-    if (this.opts.verbose) logger.debug(...args);
-  }
-
-  // public setForceMode(force: boolean) {
-  //   this.forceMode = force;
-  // }
-
-  // public setVerboseMode(verbose: boolean) {
-  //   this.opts.verbose = verbose;
-  // }
-
-  // public setProxy(proxy: string) {
-  //   this.opts.proxy = proxy;
-  // }
-
-  // public setMode(mode: FreshlandMode) {
-  //   if (Constants.SupportedModes.has(mode)) {
-  //     this.mode = mode;
-  //   } else {
-  //     throw new Error('Invalid mode. Possible modes: tar, git');
-  //   }
-  // }
-
-  public get options(): Readonly<FreshlandOptions> {
-    return this.opts;
+    if (this.options.verbose) logger.debug(...args);
   }
 }
 

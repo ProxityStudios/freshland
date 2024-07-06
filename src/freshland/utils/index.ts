@@ -1,10 +1,11 @@
 import { HttpsProxyAgent } from 'https-proxy-agent';
+import * as tar from 'tar';
 import URL from 'url';
 
-import * as tar from 'tar';
 import * as https from 'https';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
+import { Builder, BuilderData } from './builder';
 import Constants from '../../constants';
 
 class Utils {
@@ -23,8 +24,8 @@ class Utils {
       const files = await fs.promises.readdir(dir);
       return files.length ? false : true;
     } catch (error) {
-      if ((error as any).code === "ENOENT") return true;
-      throw error; 
+      if ((error as any).code === 'ENOENT') return true;
+      throw error;
     }
   }
 
@@ -86,14 +87,13 @@ class Utils {
     };
   }
 
-  static makeParentDir(dir: string) {
+  static async makeParentDir(dir: string) {
     const parent = path.dirname(dir);
     if (parent === dir) return;
 
-    Utils.makeParentDir(parent);
-
     try {
-      fs.mkdirSync(dir);
+      await this.makeParentDir(parent);
+      await fs.promises.mkdir(dir);
     } catch (err) {
       if ((err as any).code !== 'EEXIST') {
         throw err;
@@ -113,6 +113,10 @@ class Utils {
         .then(() => resolve())
         .catch((error) => reject(error));
     });
+  }
+
+  static getBuilderData(builder: Builder | BuilderData): BuilderData {
+    return builder instanceof Builder ? builder.toJSON() : builder;
   }
 }
 

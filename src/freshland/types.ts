@@ -5,22 +5,17 @@ export interface Dependencies {
 }
 export interface FreshlandOptions {
   verbose: boolean;
-  proxy?: string;
+  proxy?: string; // todo: global proxy
 }
 
 export type FreshlandMode = 'tar' | 'git';
 
-export type Ref =
-  | {
-      type: string;
-      hash: string;
-      name?: undefined;
-    }
-  | {
-      type: string;
-      name: string;
-      hash: string;
-    };
+export type Ref = {
+  type: string;
+  name?: string;
+  hash: string;
+};
+
 export type RefArray = Ref[];
 
 export interface RepositorySource {
@@ -34,4 +29,4 @@ export interface RepositorySource {
   mode: string;
 }
 
-export type SupportedPlatforms = Record<string, string>;
+export type SupportedPlatformsType = Record<string, string>;

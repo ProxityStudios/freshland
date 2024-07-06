@@ -5,7 +5,7 @@ import { version, name, description } from '../../package.json';
 import type { FreshlandMode } from '../freshland/types';
 import Constants from '../constants';
 import Freshland from '../freshland';
-import { Builder } from '../freshland/builder';
+import { Builder } from '../freshland/utils/builder';
 
 export function startProgram() {
   const freshland = new Freshland();
@@ -85,7 +85,7 @@ export function startProgram() {
         const { force }: { force: boolean } = await prompt({
           type: 'confirm',
           name: 'force',
-          message: "Should I abort the cloning if the directory not empty?",
+          message: 'Should I abort the cloning if the directory not empty?',
           initial: false,
         });
 
@@ -94,9 +94,9 @@ export function startProgram() {
 
       if (confirmTemplate) {
         // todo:
-        builder.useTemplate("typescript-starter"); // variable: source
+        builder.useTemplate('typescript-starter'); // variable: source
       } else {
-      builder.setSource(source);
+        builder.setSource(source);
       }
 
       builder.setDestination(destination);

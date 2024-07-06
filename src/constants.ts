@@ -1,4 +1,4 @@
-import type { SupportedPlatforms } from './freshland/types';
+import type { SupportedPlatformsType } from './freshland/types';
 
 const CompanyGithubProfile = 'https://github.com/ProxityStudios';
 
@@ -20,8 +20,7 @@ enum ProcessStatus {
 }
 
 const SupportedModes = new Set(['tar', 'git'] as const);
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-const SupportedPlatforms: SupportedPlatforms = {
+const SupportedPlatforms: SupportedPlatformsType = {
   github: 'com',
   gitlab: 'com',
   bitbucket: 'org',
