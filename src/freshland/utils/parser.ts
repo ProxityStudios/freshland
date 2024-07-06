@@ -1,7 +1,7 @@
 import Constants from '../../constants';
 import type { RepositorySource } from '../types';
 
-class Parser {
+export class Parser {
   static parseSource(src: string): RepositorySource {
     const match =
       /^(?:(?:https?:\/\/)?([^:/]+\.[^:/]+)\/|git@([^:/]+)[:/]|([^/]+):)?([^/\s]+)\/([^/\s#]+)(?:((?:\/[^/\s#]+)+))?(?:\/)?(?:#(.+))?/.exec(
@@ -32,4 +32,3 @@ class Parser {
     return { site, userName, repoName, ref, url, ssh, subDirectory, mode };
   }
 }
-export default Parser;

@@ -15,8 +15,8 @@ pids/
 logs/
 results/
 tmp/
-/test
 todo
+/tests
 dist/
 package/
 

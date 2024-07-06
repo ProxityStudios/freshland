@@ -1,40 +1,30 @@
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import URL from 'url';
 
+import * as tar from 'tar';
 import * as https from 'https';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import Constants from '../../constants';
-import FLError from '../../exceptions/FLError';
-import { logger } from '../../root/logger';
 
 class Utils {
   static getTemplateIfExists(templateSource: string): string {
     const found = Object.entries(Constants.Templates).find(([, val]) => val === templateSource);
 
     if (!found) {
-      throw new FLError(`Invalid template ${templateSource}`, 'INVALID_TEMPLATE');
+      throw new Error(`Invalid template ${templateSource}`);
     }
 
     return found[1];
   }
 
-  static checkDirIsEmpty(dir: string, force: boolean) {
+  static async checkDirIsEmpty(dir: string): Promise<boolean> {
     try {
-      const files = fs.readdirSync(dir);
-      if (files.length > 0) {
-        if (force) {
-          logger.warn('Destination directory is not empty. skipping (force mode enabled)');
-        } else {
-          throw new FLError(
-            'Destination directory is not empty, aborting.',
-            'DEST_NOT_EMPTY',
-            'Use Freshland.setForce ("--force" flag) to continue'
-          );
-        }
-      }
-    } catch (err) {
-      /* empty */
+      const files = await fs.promises.readdir(dir);
+      return files.length ? false : true;
+    } catch (error) {
+      if ((error as any).code === "ENOENT") return true;
+      throw error; 
     }
   }
 
@@ -42,7 +32,7 @@ class Utils {
     return new Promise((resolve, reject) => {
       const options: https.RequestOptions = {
         headers: {
-          'User-Agent': 'Mozilla/5.0',
+          'User-Agent': 'Freshland/4.0',
         },
       };
 
@@ -106,9 +96,23 @@ class Utils {
       fs.mkdirSync(dir);
     } catch (err) {
       if ((err as any).code !== 'EEXIST') {
-        throw new FLError('An error occured', 'UNKNOWN', err);
+        throw err;
       }
     }
+  }
+
+  static async extractTar(file: string, dest: string, subDir?: string) {
+    return new Promise<void>((resolve, reject) => {
+      tar
+        .x({
+          file,
+          cwd: dest,
+          strip: subDir ? subDir.split('/').length : 1,
+          filter: (p: string) => !subDir || p.startsWith(subDir),
+        })
+        .then(() => resolve())
+        .catch((error) => reject(error));
+    });
   }
 }
 

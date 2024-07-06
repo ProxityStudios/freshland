@@ -5,19 +5,21 @@ import { version, name, description } from '../../package.json';
 import type { FreshlandMode } from '../freshland/types';
 import Constants from '../constants';
 import Freshland from '../freshland';
+import { Builder } from '../freshland/builder';
 
 export function startProgram() {
   const freshland = new Freshland();
+  const builder = new Builder();
 
   const program = new Command()
     .name(name)
     .description(description)
-    .version(version, '-v, --vers', 'Output the current version')
-    .option('--verbose', 'Enable verbose mode')
-    .option('--proxy <proxy>', 'Use proxy')
-    .option('--force', 'Enable force mode')
+    .version(version, '-v, --vers', 'Outputs the current version')
+    .option('--verbose', 'Enables verbose mode')
+    .option('--proxy <proxy>', 'Uses proxy')
+    .option('--force', 'Enables force mode')
     .addOption(
-      new Option('--mode <mode>', 'Change the mode').choices<readonly FreshlandMode[]>(
+      new Option('--mode <mode>', 'Changes the mode').choices<readonly FreshlandMode[]>(
         Array.from(Constants.SupportedModes)
       )
     )
@@ -60,7 +62,7 @@ export function startProgram() {
             message: 'What source do you want to clone?',
             validate: (sourceRepo) => {
               if (sourceRepo.trim() === '') {
-                return 'Cannot be empty';
+                return 'This input cannot be empty.';
               }
 
               return true;
@@ -73,7 +75,7 @@ export function startProgram() {
         message: 'Where do you want to clone?',
         validate: (i) => {
           if (i.trim() === '') {
-            return 'Cannot be empty';
+            return 'This input cannot be empty.';
           }
           return true;
         },
@@ -83,41 +85,42 @@ export function startProgram() {
         const { force }: { force: boolean } = await prompt({
           type: 'confirm',
           name: 'force',
-          message: "Should we clone the target if it's not empty? (force mode)",
+          message: "Should I abort the cloning if the directory not empty?",
           initial: false,
         });
 
-        freshland.setForceMode(force);
+        builder.setForce(force);
       }
 
       if (confirmTemplate) {
-        freshland.useTemplate(source);
+        // todo:
+        builder.useTemplate("typescript-starter"); // variable: source
       } else {
-        freshland.getOrSetSource(source);
+      builder.setSource(source);
       }
 
-      freshland.getOrSetDestination(destination);
+      builder.setDestination(destination);
 
-      await freshland.startProcess();
+      await freshland.clone(builder);
     })
     .parse();
 
   const globalOpts = program.opts();
 
   if (globalOpts.mode) {
-    freshland.setMode(globalOpts.mode);
+    builder.setMode(globalOpts.mode);
   }
 
   if (globalOpts.proxy) {
-    freshland.setProxy(globalOpts.proxy);
+    // freshland.setProxy(globalOpts.proxy);
   }
 
   if (globalOpts.verbose) {
-    freshland.setVerboseMode(globalOpts.verbose);
+    builder.setVerbose(globalOpts.verbose);
   }
 
   if (globalOpts.force) {
-    freshland.setForceMode(globalOpts.force);
+    builder.setForce(globalOpts.force);
   }
   /*
 	app.command('clone')
