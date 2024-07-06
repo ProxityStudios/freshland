@@ -1,22 +1,23 @@
 {
-	"include": ["./src/**/*.ts"],
-	"exclude": ["node_modules", "dist"],
 	"compilerOptions": {
-		"outDir": "./dist",
-		"rootDir": "./src",
-		"typeRoots": ["./node_modules/@types"],
-		"inlineSourceMap": true,
-		"target": "ES2020", 
-		"module": "CommonJS",
-		"declaration": false,
-		"declarationMap": false,
-		"allowJs": true,
-		"moduleResolution": "Node",
-		"forceConsistentCasingInFileNames": true, 
-		"esModuleInterop": true,
-		"skipLibCheck": true,
-		"resolveJsonModule": true,
-		"removeComments": false,
-		"strict": true, 
+	  "esModuleInterop": true,
+	  "skipLibCheck": true,
+	  "target": "ESNext",
+	  "module": "CommonJS",
+	  "allowJs": true,
+	  "resolveJsonModule": true,
+	  "forceConsistentCasingInFileNames": true,
+	  "isolatedModules": true,
+	  "strict": true,
+	  "noImplicitOverride": true,
+	  "sourceMap": true,
+	  "outDir": "dist",
 	},
-}
+	"include": [
+	  "src/**/*.ts",
+	],
+	"exclude": [
+	  "node_modules",
+	  "dist"
+	],
+  }

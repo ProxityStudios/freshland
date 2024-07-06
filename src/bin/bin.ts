@@ -7,122 +7,119 @@ import Constants from '../constants';
 import Freshland from '../freshland';
 
 export function startProgram() {
-	const freshland = new Freshland();
+  const freshland = new Freshland();
 
-	const program = new Command()
-		.name(name)
-		.description(description)
-		.version(version, '-v, --vers', 'Output the current version')
-		.option('--verbose', 'Enable verbose mode')
-		.option('--proxy <proxy>', 'Use proxy')
-		.option('--force', 'Enable force mode')
-		.addOption(
-			new Option('--mode <mode>', 'Change the mode').choices<
-				readonly FreshlandMode[]
-			>(Array.from(Constants.SupportedModes))
-		)
-		.action(async (options) => {
-			const { confirmTemplate }: { confirmTemplate: boolean } = await prompt(
-				{
-					type: 'confirm',
-					name: 'confirmTemplate',
-					message: 'Do you want to use a template?',
-				}
-			);
+  const program = new Command()
+    .name(name)
+    .description(description)
+    .version(version, '-v, --vers', 'Output the current version')
+    .option('--verbose', 'Enable verbose mode')
+    .option('--proxy <proxy>', 'Use proxy')
+    .option('--force', 'Enable force mode')
+    .addOption(
+      new Option('--mode <mode>', 'Change the mode').choices<readonly FreshlandMode[]>(
+        Array.from(Constants.SupportedModes)
+      )
+    )
+    .action(async (options) => {
+      const { confirmTemplate }: { confirmTemplate: boolean } = await prompt({
+        type: 'confirm',
+        name: 'confirmTemplate',
+        message: 'Do you want to use a template?',
+      });
 
-			const { source }: { source: string } = await (confirmTemplate
-				? prompt({
-						type: 'select',
-						name: 'source',
-						message: 'Choose a template',
-						choices: [
-							{
-								message: 'Use TypeScript Starter',
-								name: Constants.Templates.TypeScriptStarter,
-							},
-							{
-								message: 'Use JavaScript Starter',
-								name: Constants.Templates.JavaScriptStarter,
-							},
-							{
-								message: 'Use Express API Starter (menu)',
-								name: 'TODO: Implement MENU',
-								disabled: true,
-							},
-							{
-								message: 'Use Discord Bot Starter (menu)',
-								name: 'TODO: Implement MENU',
-								disabled: true,
-							},
-						],
-					})
-				: prompt({
-						type: 'input',
-						name: 'source',
-						message: 'What source do you want to clone?',
-						validate: (sourceRepo) => {
-							if (sourceRepo.trim() === '') {
-								return 'Cannot be empty';
-							}
+      const { source }: { source: string } = await (confirmTemplate
+        ? prompt({
+            type: 'select',
+            name: 'source',
+            message: 'Choose a template',
+            choices: [
+              {
+                message: 'Use TypeScript Starter',
+                name: Constants.Templates.TypeScriptStarter,
+              },
+              {
+                message: 'Use JavaScript Starter',
+                name: Constants.Templates.JavaScriptStarter,
+              },
+              {
+                message: 'Use Express API Starter (menu)',
+                name: 'TODO: Implement MENU',
+                disabled: true,
+              },
+              {
+                message: 'Use Discord Bot Starter (menu)',
+                name: 'TODO: Implement MENU',
+                disabled: true,
+              },
+            ],
+          })
+        : prompt({
+            type: 'input',
+            name: 'source',
+            message: 'What source do you want to clone?',
+            validate: (sourceRepo) => {
+              if (sourceRepo.trim() === '') {
+                return 'Cannot be empty';
+              }
 
-							return true;
-						},
-					}));
+              return true;
+            },
+          }));
 
-			const { destination }: { destination: string } = await prompt({
-				type: 'input',
-				name: 'destination',
-				message: 'Where do you want to clone?',
-				validate: (i) => {
-					if (i.trim() === '') {
-						return 'Cannot be empty';
-					}
-					return true;
-				},
-			});
+      const { destination }: { destination: string } = await prompt({
+        type: 'input',
+        name: 'destination',
+        message: 'Where do you want to clone?',
+        validate: (i) => {
+          if (i.trim() === '') {
+            return 'Cannot be empty';
+          }
+          return true;
+        },
+      });
 
-			if (!options.force) {
-				const { force }: { force: boolean } = await prompt({
-					type: 'confirm',
-					name: 'force',
-					message:
-						"Should we clone the target if it's not empty? (force mode)",
-					initial: false,
-				});
+      if (!options.force) {
+        const { force }: { force: boolean } = await prompt({
+          type: 'confirm',
+          name: 'force',
+          message: "Should we clone the target if it's not empty? (force mode)",
+          initial: false,
+        });
 
-				freshland.setForceMode(force);
-			}
+        freshland.setForceMode(force);
+      }
 
-			if (confirmTemplate) {
-				freshland.useTemplate(source);
-			} else {
-				freshland.getOrSetSource(source);
-			}
+      if (confirmTemplate) {
+        freshland.useTemplate(source);
+      } else {
+        freshland.getOrSetSource(source);
+      }
 
-			freshland.getOrSetDestination(destination);
+      freshland.getOrSetDestination(destination);
 
-			await freshland.startProcess();
-		})
-		.parse();
+      await freshland.startProcess();
+    })
+    .parse();
 
-	const globalOpts = program.opts();
+  const globalOpts = program.opts();
 
-	if (globalOpts.mode) {
-		freshland.setMode(globalOpts.mode);
-	}
+  if (globalOpts.mode) {
+    freshland.setMode(globalOpts.mode);
+  }
 
-	if (globalOpts.proxy) {
-		freshland.setProxy(globalOpts.proxy);
-	}
+  if (globalOpts.proxy) {
+    freshland.setProxy(globalOpts.proxy);
+  }
 
-	if (globalOpts.verbose) {
-		freshland.setVerboseMode(globalOpts.verbose);
-	}
+  if (globalOpts.verbose) {
+    freshland.setVerboseMode(globalOpts.verbose);
+  }
 
-	if (globalOpts.force) {
-		freshland.setForceMode(globalOpts.force);
-	}
-	/*
+  if (globalOpts.force) {
+    freshland.setForceMode(globalOpts.force);
+  }
+  /*
 	app.command('clone')
 		// TODO: implement this
 		// .option('-lr, --latest-release', 'Use latest release')

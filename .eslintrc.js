@@ -1,62 +1,25 @@
 /** @type {import("eslint").ESLint.ConfigData} */
 module.exports = {
-	plugins: ['@typescript-eslint'],
-	extends: [
-		'airbnb-base',
-		'airbnb-typescript/base',
-		'plugin:@typescript-eslint/recommended-type-checked',
-		'plugin:@typescript-eslint/stylistic-type-checked',
-		'plugin:import/recommended',
-		'plugin:import/typescript',
-		'plugin:prettier/recommended',
-	],
-	parser: '@typescript-eslint/parser',
-	parserOptions: {
-		project: true,
-		tsconfigRootDir: __dirname,
-	},
-	settings: {
-		'import/parsers': {
-			'@typescript-eslint/parser': ['.ts'],
-		},
-	},
-	rules: {
-		'no-prototype-builtins': 'off',
-		'import/no-named-as-default': 'off',
-		'import/prefer-default-export': 'off',
-		'import/no-default-export': 'off',
-		'@typescript-eslint/no-unused-vars': 'warn',
-		'@typescript-eslint/no-explicit-any': 'warn',
-		'@typescript-eslint/no-unsafe-assignment': 'warn',
-		'@typescript-eslint/no-unsafe-member-access': 'warn',
-		'no-use-before-define': [
-			'error',
-			{ functions: false, classes: true, variables: true },
-		],
-		'@typescript-eslint/explicit-function-return-type': 'off',
-		'@typescript-eslint/no-use-before-define': [
-			'error',
-			{
-				functions: false,
-				classes: true,
-				variables: true,
-				typedefs: true,
-			},
-		],
-		'class-methods-use-this': 'off',
-	},
-	env: {
-		node: true,
-	},
-	overrides: [
-		{
-			files: ['*.js'],
-			extends: ['plugin:@typescript-eslint/disable-type-checked'],
-			rules: {
-				'@typescript-eslint/internal/no-poorly-typed-ts-props': 'off',
-				'@typescript-eslint/explicit-function-return-type': 'off',
-				'@typescript-eslint/no-var-requires': 'off',
-			},
-		},
-	],
+  root: true,
+  plugins: ['@typescript-eslint', 'import'],
+  extends: [
+    'airbnb-typescript/base',
+    'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:import/typescript',
+  ],
+  parser: '@typescript-eslint/parser',
+  parserOptions: {
+    project: './tsconfig.eslint.json',
+  },
+  env: {
+    node: true,
+    es6: true,
+  },
+  rules: {
+    '@typescript-eslint/no-unused-vars': 'warn',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-namespace': 'off',
+    'import/order': ['error', { groups: ['external', 'builtin', 'internal', 'sibling', 'parent', 'index'] }],
+  },
 };
