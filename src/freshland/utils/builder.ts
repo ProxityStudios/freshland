@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { FreshlandMode } from '../types';
+import { FreshlandMode } from '../../root/types';
 
 export class Builder {
   private mode: FreshlandMode;
@@ -12,12 +12,9 @@ export class Builder {
 
   private destination?: string;
 
-  private verbose: boolean;
-
   constructor() {
     this.mode = 'tar';
     this.force = false;
-    this.verbose = false;
   }
 
   public setProxy(proxy: string) {
@@ -45,11 +42,6 @@ export class Builder {
     return this;
   }
 
-  public setVerbose(verbose: boolean) {
-    this.verbose = verbose;
-    return this;
-  }
-
   public useTemplate(template: 'typescript-starter') {
     // todo: get template from repo
     const templateURL = 'https://github.com/proxitystudios/typescript-starter';
@@ -66,7 +58,6 @@ export class Builder {
       force: this.force,
       source: this.source,
       destination: this.destination,
-      verbose: this.verbose,
     };
   }
 }
@@ -75,7 +66,6 @@ export interface BuilderData {
   mode: FreshlandMode;
   proxy?: string;
   force: boolean;
-  verbose: boolean;
 
   source: string;
   destination: string;

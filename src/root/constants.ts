@@ -1,4 +1,4 @@
-import type { SupportedPlatformsType } from './freshland/types';
+import type { SupportedPlatformsType } from './types';
 
 const CompanyGithubProfile = 'https://github.com/ProxityStudios';
 
@@ -14,11 +14,6 @@ const Templates = {
   DiscordBotJS: `${CompanyGithubProfile}/discord-bot-starter-js`,
 };
 
-enum ProcessStatus {
-  OK = 0,
-  ERROR = 1,
-}
-
 const SupportedModes = new Set(['tar', 'git'] as const);
 const SupportedPlatforms: SupportedPlatformsType = {
   github: 'com',
@@ -31,7 +26,6 @@ const Constants = {
   SupportedModes,
   SupportedPlatforms,
   Templates,
-  ProcessStatus,
   CompanyGithubProfile,
 };
 export default Constants;

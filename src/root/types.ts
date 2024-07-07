@@ -1,4 +1,4 @@
-import type Freshland from '.';
+import type Freshland from '../freshland';
 
 export interface Dependencies {
   freshland: Freshland;

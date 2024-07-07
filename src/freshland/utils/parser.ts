@@ -1,5 +1,5 @@
-import Constants from '../../constants';
-import type { RepositorySource } from '../types';
+import Constants from '../../root/constants';
+import type { RepositorySource } from '../../root/types';
 
 export class Parser {
   static parseSource(src: string): RepositorySource {

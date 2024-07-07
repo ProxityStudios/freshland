@@ -1,18 +1,21 @@
 import shellExec from 'shell-exec';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
-import type { FreshlandMode, FreshlandOptions, Ref, RefArray, RepositorySource } from './types';
-import Utils from './utils';
+import { Utils } from './utils';
 import type { Builder, BuilderData } from './utils/builder';
 import { Parser } from './utils/parser';
 import { Emitter } from './utils/emitter';
+import type { FreshlandOptions, Ref, RefArray, RepositorySource } from '../root/types';
 import { logger } from '../root/logger';
 
 export class Freshland {
   public readonly emitter: Emitter;
 
+  public verboseMode: boolean;
+
   constructor(public readonly options: FreshlandOptions = { verbose: false }) {
     this.emitter = new Emitter();
+    this.verboseMode = options.verbose;
   }
 
   public async clone(builder: Builder | BuilderData): Promise<void> {
@@ -22,7 +25,7 @@ export class Freshland {
 
       if (!isEmptyDir && !builderData.force) {
         throw new Error(
-          'Destination directory is not empty, aborting. Use <Builder>.setForce(true) or provide "--force" flag to bypass this'
+          'Destination directory is not empty, aborting. (you can use "<Builder>.setForce(true)" or provide "--force" flag to bypass)'
         );
       } else {
         logger.warn('Destination directory is not empty. skipping (force mode enabled)');
@@ -84,7 +87,7 @@ export class Freshland {
 
   private async cloneUsingGit(builderData: BuilderData) {
     this.verbose('Cloning...');
-    await shellExec(`git clone --depth 1 ${builderData.source} ${builderData.destination}`);
+    await shellExec(`git clone --depth 1 ${builderData.source.toString()} ${builderData.destination.toString()}`);
 
     this.verbose('Delete .git folder');
     await fs.promises.rm(path.resolve(builderData.destination, '.git'), {
@@ -116,6 +119,7 @@ export class Freshland {
 
     const refWithMatchingStart = refs.find((ref) => ref.hash.startsWith(selector));
 
+    this.verbose('Found ref: ' + refWithMatchingStart);
     return refWithMatchingStart?.hash ?? null;
   }
 
@@ -165,7 +169,11 @@ export class Freshland {
   }
 
   private verbose(...args: unknown[]): void {
-    if (this.options.verbose) logger.debug(...args);
+    if (this.verboseMode) logger.debug(...args);
+  }
+
+  public setVerboseMode(verbose: boolean) {
+    this.verboseMode = verbose;
   }
 }
 

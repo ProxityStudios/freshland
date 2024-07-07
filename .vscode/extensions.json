@@ -1,6 +1,5 @@
 {
 	"recommendations": [
-		"esbenp.prettier-vscode",
 		"wayou.vscode-todo-highlight",
 		"dbaeumer.vscode-eslint"
 	]
