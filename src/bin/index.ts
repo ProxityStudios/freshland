@@ -16,7 +16,7 @@ const builder = new Builder();
 const program = createCommand()
   .name(name)
   .description(description)
-  .version(version, '-v, --vers', 'Outputs the current version')
+  .version(version, '-v, --version', 'Outputs the current version')
   .option('--verbose', 'Enables verbose mode')
   .option('--proxy <proxy>', 'Uses proxy')
   .option('--force', 'Enables force mode')
@@ -88,7 +88,7 @@ const program = createCommand()
         const { force }: { force: boolean } = await prompt({
           type: 'confirm',
           name: 'force',
-          message: 'Should I abort the cloning if the directory not empty?',
+          message: 'Should I continue the cloning if the directory not empty?',
           initial: false,
         });
   
@@ -120,7 +120,9 @@ if (globalOpts.proxy) {
   builder.setProxy(globalOpts.proxy);
 }
 
+logger.info(globalOpts)
 if (globalOpts.verbose) {
+  logger.info(globalOpts.verbose)
   freshland.setVerboseMode(globalOpts.verbose);
 }
 
@@ -160,4 +162,4 @@ program.command('clone')
     }
   });
 
-  program.parse() // NOTE: SHOULD BE AT THE END
+program.parse() // NOTE: SHOULD BE AT THE END

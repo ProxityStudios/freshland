@@ -7,6 +7,7 @@ import { Parser } from './utils/parser';
 import { Emitter } from './utils/emitter';
 import type { FreshlandOptions, Ref, RefArray, RepositorySource } from '../root/types';
 import { logger } from '../root/logger';
+import { ProcessStatus } from '../root/enums';
 
 export class Freshland {
   public readonly emitter: Emitter;
@@ -18,7 +19,7 @@ export class Freshland {
     this.verboseMode = options.verbose;
   }
 
-  public async clone(builder: Builder | BuilderData): Promise<void> {
+  public async clone(builder: Builder | BuilderData): Promise<boolean> {
     try {
       const builderData = Utils.getBuilderData(builder);
       const isEmptyDir = await Utils.checkDirIsEmpty(builderData.destination);
@@ -28,7 +29,7 @@ export class Freshland {
           'Destination directory is not empty, aborting. (you can use "<Builder>.setForce(true)" or provide "--force" flag to bypass)'
         );
       } else {
-        logger.warn('Destination directory is not empty. skipping (force mode enabled)');
+        logger.warn('Destination directory is not empty. Skipping (force mode)');
       }
 
       logger.info('BEEP! Im going to handle all you need');
@@ -47,8 +48,10 @@ export class Freshland {
 
       logger.info('Done! you are ready to gift me a coffe');
       this.emitter.emit('finish', builderData);
+      return true;
     } catch (error) {
       logger.error(error);
+      process.exit(ProcessStatus.ERROR)
     }
   }
 
@@ -57,7 +60,7 @@ export class Freshland {
     const hash = await this.getCommitHash(parsedSrc);
     const subDirectory = parsedSrc.subDirectory ? `${parsedSrc.repoName}-${hash}${parsedSrc.subDirectory}` : undefined;
 
-    if (!hash) throw new Error(`Couldn't find commit hash for ${parsedSrc.ref}`);
+    if (!hash) throw new Error(`Could not find the commit hash for ${parsedSrc.ref}`);
 
     let url: string;
     if (parsedSrc.site === 'gitlab') {
@@ -89,7 +92,7 @@ export class Freshland {
     this.verbose('Cloning...');
     await shellExec(`git clone --depth 1 ${builderData.source.toString()} ${builderData.destination.toString()}`);
 
-    this.verbose('Delete .git folder');
+    this.verbose('Deleting ".git" folder');
     await fs.promises.rm(path.resolve(builderData.destination, '.git'), {
       force: true,
       recursive: true,
@@ -133,9 +136,7 @@ export class Freshland {
       .map((row) => {
         const [hash, ref] = row.split('\t');
 
-        if (!ref) {
-          return null;
-        }
+        if (!ref) return null;
 
         if (ref === 'HEAD') {
           return {
@@ -145,9 +146,7 @@ export class Freshland {
         }
 
         const [, type, name] = /refs\/(\w+)\/(.+)/.exec(ref) ?? [];
-        if (!type || !name) {
-          return null;
-        }
+        if (!type || !name) return null;
 
         let typeResult: string;
 

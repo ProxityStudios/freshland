@@ -95,12 +95,12 @@ export async function makeParentDir(dir: string) {
   }
 }
 
-export async function extractTar(file: string, dest: string, subDir?: string) {
+export async function extractTar(file: string, to: string, subDir?: string) {
   return new Promise<void>((resolve, reject) => {
     tar
       .x({
         file,
-        cwd: dest,
+        cwd: to,
         strip: subDir ? subDir.split('/').length : 1,
         filter: (p: string) => !subDir || p.startsWith(subDir),
       })
