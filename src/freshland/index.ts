@@ -2,12 +2,11 @@ import shellExec from 'shell-exec';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
 import { Utils } from './utils';
-import type { Builder, BuilderData } from './utils/builder';
-import { Parser } from './utils/parser';
-import { Emitter } from './utils/emitter';
-import type { FreshlandOptions, Ref, RefArray, RepositorySource } from '../root/types';
-import { logger } from '../root/logger';
-import { ProcessStatus } from '../root/enums';
+import type { FreshBuilder, FreshBuilderData } from '../structure/FreshBuilder';
+import { Parser } from './parser';
+import { Emitter } from './emitter';
+import type { FreshlandOptions, Ref, RefArray, RepositorySource } from '../types';
+import { logger } from '../logger';
 
 export class Freshland {
   public readonly emitter: Emitter;
@@ -19,7 +18,7 @@ export class Freshland {
     this.verboseMode = options.verbose;
   }
 
-  public async clone(builder: Builder | BuilderData): Promise<boolean> {
+  public async clone(builder: FreshBuilder | FreshBuilderData): Promise<void> {
     try {
       const builderData = Utils.getBuilderData(builder);
       const isEmptyDir = await Utils.checkDirIsEmpty(builderData.destination);
@@ -32,7 +31,6 @@ export class Freshland {
         logger.warn('Destination directory is not empty. Skipping (force mode)');
       }
 
-      logger.info('BEEP! Im going to handle all you need');
       switch (builderData.mode) {
         case 'tar':
           this.verbose('Choosen Mode:', builderData.mode);
@@ -46,15 +44,13 @@ export class Freshland {
           throw new Error(`Mode "${builderData.mode}" not supported yet`);
       }
 
-      logger.info('Done! you are ready to gift me a coffe');
-      this.emitter.emit('finish', builderData);
-      return true;
+      this.emitter.emit('successClone', builderData);
     } catch (error) {
       throw error;
     }
   }
 
-  private async cloneUsingTar(builderData: BuilderData) {
+  private async cloneUsingTar(builderData: FreshBuilderData) {
     const parsedSrc = Parser.parseRepository(builderData.source);
     const hash = await this.getCommitHash(parsedSrc);
     const subDirectory = parsedSrc.subDirectory ? `${parsedSrc.repoName}-${hash}${parsedSrc.subDirectory}` : undefined;
@@ -87,7 +83,7 @@ export class Freshland {
     });
   }
 
-  private async cloneUsingGit(builderData: BuilderData) {
+  private async cloneUsingGit(builderData: FreshBuilderData) {
     this.verbose('Cloning...');
     await shellExec(`git clone --depth 1 ${builderData.source.toString()} ${builderData.destination.toString()}`);
 

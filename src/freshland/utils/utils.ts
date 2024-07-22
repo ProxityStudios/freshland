@@ -5,8 +5,8 @@ import URL from 'url';
 import * as https from 'https';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { Builder, BuilderData } from './builder';
-import Constants from '../../root/constants';
+import { FreshBuilder, FreshBuilderData } from '../../structure/FreshBuilder';
+import Constants from '../../constants';
 
 export function getTemplateIfExists(templateSource: string): string {
   const found = Object.entries(Constants.Templates).find(([, val]) => val === templateSource);
@@ -109,6 +109,6 @@ export async function extractTar(file: string, to: string, subDir?: string) {
   });
 }
 
-export function getBuilderData(builder: Builder | BuilderData): BuilderData {
-  return builder instanceof Builder ? builder.toJSON() : builder;
+export function getBuilderData(builder: FreshBuilder | FreshBuilderData): FreshBuilderData {
+  return builder instanceof FreshBuilder ? builder.toJSON() : builder;
 }

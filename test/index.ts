@@ -1,15 +1,15 @@
 import { Freshland } from '../src/freshland/index';
-import { Builder } from '../src/freshland/utils/builder';
-import { logger } from '../src/root/logger';
+import { logger } from '../src/logger';
+import { FreshBuilder } from '../src/structure/FreshBuilder';
 
 const freshland = new Freshland({ verbose: true });
 
-const builder = new Builder()
+const builder = new FreshBuilder()
   .setRepository('proxitystudios/typescript-starter')
   .setDestination('./tests/zing')
   .setForce(true);
 
-freshland.emitter.on('finish', (builderData) => {
+freshland.emitter.on('successClone', (builderData) => {
   logger.info('OK.', builderData);
 });
 

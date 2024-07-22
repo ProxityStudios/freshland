@@ -4,14 +4,14 @@ import { createCommand, Option } from '@commander-js/extra-typings';
 import { prompt } from 'enquirer';
 
 import { version, name, description } from '../../package.json';
-import type { FreshlandMode } from '../root/types';
-import Constants from '../root/constants';
+import type { FreshlandMode } from '../types';
+import Constants from '../constants';
 import { Freshland } from '../freshland';
-import { Builder } from '../freshland/utils/builder';
-import { logger } from '../root/logger';
+import { FreshBuilder } from '../structure/FreshBuilder';
+import { logger } from '../logger';
 
 const freshland = new Freshland();
-const builder = new Builder();
+const builder = new FreshBuilder();
 
 const program = createCommand()
   .name(name)

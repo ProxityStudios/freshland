@@ -1,10 +1,10 @@
-import {Args, Command, Flags} from '@oclif/core'
+import {Args, Command, Flags, ux} from '@oclif/core'
 import { BaseCLICommand } from '../../structure/BaseCLICommand'
 import { prompt } from 'enquirer'
-import { logger } from '../../root/logger'
-import { freshland } from '../../root/container'
-import { Builder } from '../../freshland/utils/builder'
-import { Parser } from '../../freshland/utils/parser'
+import { logger } from '../../logger'
+import { freshland } from '../../container'
+import { FreshBuilder } from '../../structure/FreshBuilder'
+import { Parser } from '../../freshland/parser'
 
 export default class CloneGui extends BaseCLICommand<typeof CloneGui> {
   static override args = {}
@@ -43,8 +43,12 @@ export default class CloneGui extends BaseCLICommand<typeof CloneGui> {
       }
     ])
 
-    const builder = new Builder().setDestination(response.destination).setRepository(response.repository)
-    await freshland.clone(builder);
-    logger.debug("GUI END");
+    const builder = new FreshBuilder().setDestination(response.destination).setRepository(response.repository)
+    ux.action.start('Starting process')
+    ux.action.status = 'Process still in progress'
+    ux.action.pauseAsync(async () => {
+    })
+    await freshland.clone(builder)
+    ux.action.stop("Done! ready to go")
   }
 }

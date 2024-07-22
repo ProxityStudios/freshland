@@ -1,8 +1,8 @@
 import { Args, Command, Flags } from '@oclif/core'
 import { ux } from '@oclif/core/ux'
 import { BaseCLICommand } from '../../structure/BaseCLICommand'
-import { freshland } from '../../root/container'
-import { Builder } from '../../freshland/utils/builder'
+import { freshland } from '../../container'
+import { FreshBuilder } from '../../structure/FreshBuilder'
 
 export default class CloneIndex extends BaseCLICommand<typeof CloneIndex> {
   static override args = {
@@ -22,7 +22,7 @@ export default class CloneIndex extends BaseCLICommand<typeof CloneIndex> {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(CloneIndex)
 
-    const builder = new Builder().setRepository(args.repository).setDestination(args.destination)
+    const builder = new FreshBuilder().setRepository(args.repository).setDestination(args.destination)
 
     ux.action.start('Starting process')
     ux.action.status = 'Process still in progress'

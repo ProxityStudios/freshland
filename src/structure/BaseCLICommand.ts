@@ -1,5 +1,5 @@
 import {Command, Flags, Interfaces} from '@oclif/core'
-import { logger } from '../root/logger'
+import { logger } from '../logger'
 
 export type Flags<T extends typeof Command> = Interfaces.InferredFlags<typeof BaseCLICommand['baseFlags'] & T['flags']>
 export type Args<T extends typeof Command> = Interfaces.InferredArgs<T['args']>

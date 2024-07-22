@@ -1,7 +1,7 @@
 import path from 'node:path';
-import { FreshlandMode } from '../../root/types';
+import { FreshlandMode } from '../types';
 
-export class Builder {
+export class FreshBuilder {
   private mode: FreshlandMode;
 
   private proxy?: string;
@@ -49,7 +49,7 @@ export class Builder {
     return this;
   }
 
-  public toJSON(): BuilderData {
+  public toJSON(): FreshBuilderData {
     if (!this.repository || !this.destination) throw new Error('Source or destination not set');
 
     return {
@@ -62,7 +62,7 @@ export class Builder {
   }
 }
 
-export interface BuilderData {
+export interface FreshBuilderData {
   mode: FreshlandMode;
   proxy?: string;
   force: boolean;
