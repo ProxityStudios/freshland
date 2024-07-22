@@ -2,14 +2,14 @@ import Constants from '../../root/constants';
 import type { RepositorySource } from '../../root/types';
 
 export class Parser {
-  static parseSource(src: string): RepositorySource {
+  static parseRepository(repo: string): RepositorySource {
     const match =
       /^(?:(?:https?:\/\/)?([^:/]+\.[^:/]+)\/|git@([^:/]+)[:/]|([^/]+):)?([^/\s]+)\/([^/\s#]+)(?:((?:\/[^/\s#]+)+))?(?:\/)?(?:#(.+))?/.exec(
-        src
+        repo
       );
 
     if (!match) {
-      throw new Error(`[NOT_SUPPORTED] Unable to parse source "${src}"`);
+      throw new Error(`[NOT_SUPPORTED] Unable to parse source "${repo}"`);
     }
 
     const site = (match[1] || match[2] || match[3] || 'github').replace(/\.(com|org)$/, '');

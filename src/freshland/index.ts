@@ -50,13 +50,12 @@ export class Freshland {
       this.emitter.emit('finish', builderData);
       return true;
     } catch (error) {
-      logger.error(error);
-      process.exit(ProcessStatus.ERROR)
+      throw error;
     }
   }
 
   private async cloneUsingTar(builderData: BuilderData) {
-    const parsedSrc = Parser.parseSource(builderData.source);
+    const parsedSrc = Parser.parseRepository(builderData.source);
     const hash = await this.getCommitHash(parsedSrc);
     const subDirectory = parsedSrc.subDirectory ? `${parsedSrc.repoName}-${hash}${parsedSrc.subDirectory}` : undefined;
 

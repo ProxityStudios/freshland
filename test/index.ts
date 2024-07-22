@@ -5,7 +5,7 @@ import { logger } from '../src/root/logger';
 const freshland = new Freshland({ verbose: true });
 
 const builder = new Builder()
-  .setSource('proxitystudios/typescript-starter')
+  .setRepository('proxitystudios/typescript-starter')
   .setDestination('./tests/zing')
   .setForce(true);
 

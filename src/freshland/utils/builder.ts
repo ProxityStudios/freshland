@@ -8,7 +8,7 @@ export class Builder {
 
   private force: boolean;
 
-  private source?: string;
+  private repository?: string;
 
   private destination?: string;
 
@@ -22,8 +22,8 @@ export class Builder {
     return this;
   }
 
-  public setSource(source: string) {
-    this.source = source;
+  public setRepository(repository: string) {
+    this.repository = repository;
     return this;
   }
 
@@ -45,18 +45,18 @@ export class Builder {
   public useTemplate(template: 'typescript-starter') {
     // todo: get template from repo
     const templateURL = 'https://github.com/proxitystudios/typescript-starter';
-    this.setSource(templateURL);
+    this.setRepository(templateURL);
     return this;
   }
 
   public toJSON(): BuilderData {
-    if (!this.source || !this.destination) throw new Error('Source or destination not set');
+    if (!this.repository || !this.destination) throw new Error('Source or destination not set');
 
     return {
       mode: this.mode,
       proxy: this.proxy,
       force: this.force,
-      source: this.source,
+      source: this.repository,
       destination: this.destination,
     };
   }

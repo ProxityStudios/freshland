@@ -99,7 +99,7 @@ const program = createCommand()
         // todo:
         builder.useTemplate('typescript-starter'); // variable: source
       } else {
-        builder.setSource(source);
+        builder.setRepository(source);
       }
   
       builder.setDestination(destination);

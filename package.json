@@ -1,74 +1,81 @@
 {
-	"name": "freshland",
-	"description": "Freshland is a CLI tool that lets you clone GitHub repositories without the git history.",
-	"version": "4.0.0-exp",
-	"author": "ProxityStudios",
-	"license": "MIT",
-	"homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
-	"engines": {
-		"node": ">=16.0.0"
-	},
-	"bugs": {
-		"url": "https://github.com/ProxityStudios/freshland/issues"
-	},
-	"keywords": [
-		"freshland",
-		"cloner",
-		"clone",
-		"javascript",
-		"git",
-		"bash-script",
-		"bash"
-	],
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/ProxityStudios/freshland.git"
-	},
-	"scripts": {
-		"test": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register src/bin/index.ts --verbose",
-		"test-export": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register test/index.ts --verbose",
-		"build": "run-s format clean tsc",
-		"tsc": "tsc --build",
-		"clean": "rimraf dist/ package/",
-		"format": "eslint . --fix",
-		"type-check": "tsc -p tsconfig.json --noEmit",
-		"postpublish": "rimraf dist/ package/"
-	},
-	"bin": {
-		"freshland": "dist/bin/index.js"
-	},
-	"exports": "./dist/freshland/index.js",
-	"devDependencies": {
-		"@semantic-release/changelog": "6.0.3",
-		"@semantic-release/commit-analyzer": "13.0.0",
-		"@semantic-release/git": "10.0.1",
-		"@semantic-release/github": "10.0.7",
-		"@semantic-release/npm": "12.0.1",
-		"@semantic-release/release-notes-generator": "14.0.1",
-		"@types/node": "20.14.10",
-		"@types/shelljs": "^0.8.15",
-		"@typescript-eslint/eslint-plugin": "^7.15.0",
-		"@typescript-eslint/parser": "^7.15.0",
-		"eslint": "^8.57.0",
-		"eslint-config-airbnb-base": "^15.0.0",
-		"eslint-config-airbnb-typescript": "^18.0.0",
-		"eslint-config-prettier": "^9.1.0",
-		"eslint-plugin-import": "^2.29.1",
-		"eslint-plugin-prettier": "^5.1.3",
-		"npm-run-all": "^4.1.5",
-		"prettier": "^3.3.2",
-		"rimraf": "^5.0.8",
-		"semantic-release": "24.0.0",
-		"ts-node": "^10.9.2",
-		"typescript": "^5.5.3"
-	},
-	"dependencies": {
-		"@commander-js/extra-typings": "12.1.0",
-		"commander": "12.1.0",
-		"enquirer": "2.4.1",
-		"https-proxy-agent": "7.0.5",
-		"shell-exec": "1.1.2",
-		"tar": "7.4.0",
-		"tslog": "4.9.3"
-	}
+  "name": "freshland",
+  "description": "Freshland is a CLI tool that lets you to clone GitHub repositories",
+  "version": "4.0.0-exp",
+  "author": "ProxityStudios",
+  "license": "MIT",
+  "homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/ProxityStudios/freshland/issues"
+  },
+  "keywords": [
+    "freshland",
+    "cloner",
+    "clone",
+    "javascript",
+    "git",
+    "bash-script",
+    "bash"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProxityStudios/freshland.git"
+  },
+  "scripts": {
+    "test": "./bin/dev.js",
+    "test-export": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register test/index.ts --verbose",
+    "build": "run-s format clean tsc",
+    "tsc": "tsc --build",
+    "clean": "rimraf dist/ package/",
+    "format": "eslint . --fix",
+    "type-check": "tsc -p tsconfig.json --noEmit",
+    "postpublish": "rimraf dist/ package/"
+  },
+  "bin": {
+    "freshland": "./bin/run.js"
+  },
+  "exports": "./dist/freshland/index.js",
+  "devDependencies": {
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/commit-analyzer": "13.0.0",
+    "@semantic-release/git": "10.0.1",
+    "@semantic-release/github": "10.0.7",
+    "@semantic-release/npm": "12.0.1",
+    "@semantic-release/release-notes-generator": "14.0.1",
+    "@types/node": "20.14.10",
+    "@types/shelljs": "^0.8.15",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.2",
+    "rimraf": "^5.0.8",
+    "semantic-release": "24.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.3"
+  },
+  "dependencies": {
+    "@commander-js/extra-typings": "12.1.0",
+    "@oclif/core": "4.0.13",
+    "commander": "12.1.0",
+    "enquirer": "2.4.1",
+    "https-proxy-agent": "7.0.5",
+    "shell-exec": "1.1.2",
+    "tar": "7.4.0",
+    "tslog": "4.9.3"
+  },
+  "oclif": {
+    "bin": "freshland",
+    "commands": "./dist/commands",
+    "dirname": "freshland",
+    "topicSeparator": " "
+  }
 }
