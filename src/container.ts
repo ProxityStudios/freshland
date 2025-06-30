@@ -1,4 +1,4 @@
-import Freshland from "./freshland";
+import Freshland from './freshland';
 
 let _freshland: Freshland;
 function getFreshlandOrCreate() {

@@ -2,9 +2,9 @@ import shellExec from 'shell-exec';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
 import { Utils } from './utils';
-import type { FreshBuilder, FreshBuilderData } from '../structure/FreshBuilder';
 import { Parser } from './parser';
 import { Emitter } from './emitter';
+import type { FreshBuilder, FreshBuilderData } from '../structure/FreshBuilder';
 import type { FreshlandOptions, Ref, RefArray, RepositorySource } from '../types';
 import { logger } from '../logger';
 

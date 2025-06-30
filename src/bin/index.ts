@@ -32,46 +32,46 @@ const program = createCommand()
         name: 'confirmTemplate',
         message: 'Do you want to use a template?',
       });
-  
+
       const { source }: { source: string } = await (confirmTemplate
         ? prompt({
-          type: 'select',
-          name: 'source',
-          message: 'Choose a template',
-          choices: [
-            {
-              message: 'Use TypeScript Starter',
-              name: Constants.Templates.TypeScriptStarter,
-            },
-            {
-              message: 'Use JavaScript Starter',
-              name: Constants.Templates.JavaScriptStarter,
-            },
-            {
-              message: 'Use Express API Starter (menu)',
-              name: 'TODO: Implement MENU',
-              disabled: true,
-            },
-            {
-              message: 'Use Discord Bot Starter (menu)',
-              name: 'TODO: Implement MENU',
-              disabled: true,
-            },
-          ],
-        })
+            type: 'select',
+            name: 'source',
+            message: 'Choose a template',
+            choices: [
+              {
+                message: 'Use TypeScript Starter',
+                name: Constants.Templates.TypeScriptStarter,
+              },
+              {
+                message: 'Use JavaScript Starter',
+                name: Constants.Templates.JavaScriptStarter,
+              },
+              {
+                message: 'Use Express API Starter (menu)',
+                name: 'TODO: Implement MENU',
+                disabled: true,
+              },
+              {
+                message: 'Use Discord Bot Starter (menu)',
+                name: 'TODO: Implement MENU',
+                disabled: true,
+              },
+            ],
+          })
         : prompt({
-          type: 'input',
-          name: 'source',
-          message: 'What source do you want to clone?',
-          validate: (sourceRepo) => {
-            if (sourceRepo.trim() === '') {
-              return 'This input cannot be empty.';
-            }
-  
-            return true;
-          },
-        }));
-  
+            type: 'input',
+            name: 'source',
+            message: 'What source do you want to clone?',
+            validate: (sourceRepo) => {
+              if (sourceRepo.trim() === '') {
+                return 'This input cannot be empty.';
+              }
+
+              return true;
+            },
+          }));
+
       const { destination }: { destination: string } = await prompt({
         type: 'input',
         name: 'destination',
@@ -83,7 +83,7 @@ const program = createCommand()
           return true;
         },
       });
-  
+
       if (!options.force) {
         const { force }: { force: boolean } = await prompt({
           type: 'confirm',
@@ -91,24 +91,24 @@ const program = createCommand()
           message: 'Should I continue the cloning if the directory not empty?',
           initial: false,
         });
-  
+
         builder.setForce(force);
       }
-  
+
       if (confirmTemplate) {
         // todo:
         builder.useTemplate('typescript-starter'); // variable: source
       } else {
         builder.setRepository(source);
       }
-  
+
       builder.setDestination(destination);
-  
+
       await freshland.clone(builder);
     } catch (error) {
-      logger.error("An error occurred or user aborted.", error);
+      logger.error('An error occurred or user aborted.', error);
     }
-  })
+  });
 
 const globalOpts = program.opts();
 
@@ -120,9 +120,9 @@ if (globalOpts.proxy) {
   builder.setProxy(globalOpts.proxy);
 }
 
-logger.info(globalOpts)
+logger.info(globalOpts);
 if (globalOpts.verbose) {
-  logger.info(globalOpts.verbose)
+  logger.info(globalOpts.verbose);
   freshland.setVerboseMode(globalOpts.verbose);
 }
 
@@ -130,7 +130,8 @@ if (globalOpts.force) {
   builder.setForce(globalOpts.force);
 }
 
-program.command('clone')
+program
+  .command('clone')
   // TODO: implement this
   // .option('-lr, --latest-release', 'Use latest release')
   .description('Clones repository')
@@ -155,11 +156,10 @@ program.command('clone')
   // .option('--kg, --keep-git', 'Do not delete ".git" folder')
   .action(async () => {
     try {
-      throw new Error("Function not implemented yet.");
-      
+      throw new Error('Function not implemented yet.');
     } catch (error) {
-      logger.error("An error occured or user aborted.", error)
+      logger.error('An error occured or user aborted.', error);
     }
   });
 
-program.parse() // NOTE: SHOULD BE AT THE END
+program.parse(); // NOTE: SHOULD BE AT THE END
