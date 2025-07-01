@@ -5,7 +5,7 @@ import URL from 'url';
 import * as https from 'https';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { FreshBuilder, FreshBuilderData } from '../../structure/FreshBuilder';
+import { FreshBuilder, FreshBuilderData } from '../../structures/FreshBuilder';
 import Constants from '../../constants';
 
 export function getTemplateIfExists(templateSource: string): string {

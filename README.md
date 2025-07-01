@@ -10,7 +10,7 @@ You can use Freshland in two ways: with a single-line command or with a graphica
 
 | Global Flag      | Description                |
 | ---------------- | -------------------------- |
-| `--v`, `--vers`  | Output the current version |
+| `--v`, `--version`  | Output the current version |
 | `--d`, `--debug` | Enable debug mode          |
 
 ### Single-line command
@@ -18,7 +18,7 @@ You can use Freshland in two ways: with a single-line command or with a graphica
 To clone a repository with a single-line command, use the following syntax:
 
 ```bash
-npx freshland@latest clone <source-repo> <target-dir>
+npx freshland@latest clone <REPOSITORY> <DESTINATION>
 ```
 
 For example, to clone `typescript-starter` repository from `ProxityStudios` into a directory named `myapp`, run:

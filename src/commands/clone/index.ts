@@ -1,30 +1,30 @@
 import { Args, Command, Flags } from '@oclif/core';
 import { ux } from '@oclif/core/ux';
-import { BaseCLICommand } from '../../structure/BaseCLICommand';
 import { freshland } from '../../container';
-import { FreshBuilder } from '../../structure/FreshBuilder';
+import { FreshBuilder } from '../../structures/FreshBuilder';
 
-export default class CloneIndex extends BaseCLICommand<typeof CloneIndex> {
+export default class Clone extends Command {
   static override args = {
-    repository: Args.string({ description: 'SOURCE_REPO', required: true }),
-    destination: Args.directory({ description: 'DESTINATION_DIR', required: true }),
+    repository: Args.string({ description: 'E.G: ProxityStudios/freshland', required: true }),
+    destination: Args.directory({ description: 'Destination of the copied folder', required: true }),
   };
 
-  static override description = 'describe the command here';
+  static override description = 'Clones a repository';
 
-  static override examples = ['<%= config.bin %> <%= command.id %>'];
+  static override examples = ['<%= config.bin %> <%= command.id %> ProxityStudios/freshlland ./freshland-copy'];
 
-  static override flags = {};
+  static override flags = {
+    // gui: Flags.boolean(),
+  };
 
   public async run(): Promise<void> {
-    const { args, flags } = await this.parse(CloneIndex);
+    const { args, flags } = await this.parse(Clone);
 
     const builder = new FreshBuilder().setRepository(args.repository).setDestination(args.destination);
 
-    ux.action.start('Starting process');
-    ux.action.status = 'Process still in progress';
-    ux.action.pauseAsync(async () => {});
+    ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
+    // ux.action.pauseAsync(async () => {});
     await freshland.clone(builder);
-    ux.action.stop('Done! ready to go');
+    ux.action.stop();
   }
 }

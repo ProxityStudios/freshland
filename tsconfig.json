@@ -21,7 +21,7 @@
 	  "outDir": "dist",
 	},
 	"include": [
-	  "src/**/*.ts",
+	  "src/**/*.ts", "src/logger.ts",
 	],
 	"exclude": [
 	  "node_modules",
