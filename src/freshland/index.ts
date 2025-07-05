@@ -23,7 +23,7 @@ export class Freshland {
 
       if (!isEmptyDir && !builderData.force) {
         throw new Error(
-          '[DEST_NOT_EMPTY] Destination isn\'t empty, aborting the process. (use "<FreshBuilder>.setForce(true)" or provide "--force" flag to bypass)'
+          '[DESTINATION_NOT_EMPTY] Destination isn\'t empty, aborting the process. (use "<FreshBuilder>.setForce(true)" or provide "--force" flag to bypass)'
         );
       } //else {
       //   logger.warn("Destination directory isn't empty. Skipping (force mode)");
