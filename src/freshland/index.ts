@@ -38,6 +38,7 @@ export class Freshland {
         //   this.verbose('Choosen Mode:', builderData.mode);
         //   await this.cloneUsingGit(builderData);
         //   break;
+        //
         default:
           throw new Error(`Mode "${builderData.mode}" not supported yet`);
       }
