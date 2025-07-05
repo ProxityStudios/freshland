@@ -25,16 +25,14 @@ export class Freshland {
         throw new Error(
           '[DESTINATION_NOT_EMPTY] Destination isn\'t empty, aborting the process. (use "<FreshBuilder>.setForce(true)" or provide "--force" flag to bypass)'
         );
-      } //else {
-      //   logger.warn("Destination directory isn't empty. Skipping (force mode)");
-      // }
+      }
 
       switch (builderData.mode) {
         case 'tar':
           this.verbose('Choosen Mode:', builderData.mode);
           await this.cloneUsingTar(builderData);
           break;
-        // //case 'git':
+        // case 'git':
         //   this.verbose('Choosen Mode:', builderData.mode);
         //   await this.cloneUsingGit(builderData);
         //   break;
