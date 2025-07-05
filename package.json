@@ -1,7 +1,7 @@
 {
   "name": "freshland",
   "description": "TODO: Freshland is a CLI tool that lets you to clone repositories",
-  "version": "3.1.0-beta.2",
+  "version": "0.0.0",
   "author": "ProxityStudios",
   "license": "MIT",
   "homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
@@ -40,7 +40,7 @@
     "postpublish": "rimraf dist/ package/"
   },
   "bin": {
-    "freshland": "./bin/run.js"
+    "freshland": "bin/run.js"
   },
   "exports": "./dist/freshland/index.js",
   "oclif": {
