@@ -1,7 +1,7 @@
 {
   "name": "freshland",
   "description": "todo: Freshland is a CLI tool that lets you to clone GitHub repositories",
-  "version": "4.0.0-exp",
+  "version": "4.0.0",
   "author": "ProxityStudios",
   "license": "MIT",
   "homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
