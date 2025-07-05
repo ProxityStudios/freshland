@@ -2,6 +2,7 @@ import Constants from '../../constants';
 import type { RepositorySource } from '../../types';
 
 export class Parser {
+  // TODO: allow users to use prefixes. E.G: gitlab@ProxityStudios/freshland - github@ProxityStudios/freshland
   static parseRepository(repo: string): RepositorySource {
     const match =
       /^(?:(?:https?:\/\/)?([^:/]+\.[^:/]+)\/|git@([^:/]+)[:/]|([^/]+):)?([^/\s]+)\/([^/\s#]+)(?:((?:\/[^/\s#]+)+))?(?:\/)?(?:#(.+))?/.exec(
@@ -9,13 +10,13 @@ export class Parser {
       );
 
     if (!match) {
-      throw new Error(`[NOT_SUPPORTED] Unable to parse source "${repo}"`);
+      throw new Error(`[PLATFORM_NOT_SUPPORTED] Unable to parse source "${repo}"`);
     }
 
     const site = (match[1] || match[2] || match[3] || 'github').replace(/\.(com|org)$/, '');
 
     if (!Constants.SupportedPlatforms.hasOwnProperty(site)) {
-      throw new Error('[NOT_SUPPORTED] Platform not supported');
+      throw new Error('[PLATFORM_NOT_SUPPORTED] Platform not supported');
     }
 
     const userName = match[4];

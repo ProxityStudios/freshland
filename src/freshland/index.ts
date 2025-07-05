@@ -34,11 +34,6 @@ export class Freshland {
           this.verbose('Choosen Mode:', builderData.mode);
           await this.cloneUsingTar(builderData);
           break;
-        // case 'git':
-        //   this.verbose('Choosen Mode:', builderData.mode);
-        //   await this.cloneUsingGit(builderData);
-        //   break;
-        //
         default:
           throw new Error(`Mode "${builderData.mode}" not supported yet`);
       }
@@ -56,21 +51,25 @@ export class Freshland {
 
   private async cloneUsingTar(builderData: FreshBuilderData) {
     const parsedSrc = Parser.parseRepository(builderData.source);
-    const hash = await this.getCommitHash(parsedSrc);
-    const subDirectory = parsedSrc.subDirectory ? `${parsedSrc.repoName}-${hash}${parsedSrc.subDirectory}` : undefined;
-
-    if (!hash) throw new Error(`[INVALID_HASH] Could not find the commit hash for ${parsedSrc.ref}`);
+    let fileName: string = `${parsedSrc.ref}.tar.gz`;
+    let subDirectory: string | undefined;
 
     let url: string;
+    // TODO: allow to clone a branch from other platforms E.G: gitlab.com/proxitystudios/freshland#anotherBranch
     if (parsedSrc.site === 'gitlab') {
-      url = `${parsedSrc.urlWithoutRepoAndUsername}/api/v4/projects/${parsedSrc.userName}%2F${parsedSrc.repoName}/repository/archive.tar.gz?sha=${hash}`;
+      url = `${parsedSrc.urlWithoutRepoAndUsername}/api/v4/projects/${parsedSrc.userName}%2F${parsedSrc.repoName}/repository/archive.tar.gz?sha=${parsedSrc.ref}`;
     } else if (parsedSrc.site === 'bitbucket') {
-      url = `${parsedSrc.url}/get/${hash}.tar.gz`;
+      url = `${parsedSrc.url}/get/${parsedSrc.ref}.tar.gz`;
     } else {
+      const hash = await this.getCommitHash(parsedSrc);
+      if (!hash) throw new Error(`[INVALID_HASH] Could not find the commit hash for ${parsedSrc.ref}`);
+
+      subDirectory = parsedSrc.subDirectory ? `${parsedSrc.repoName}-${hash}${parsedSrc.subDirectory}` : undefined;
+
+      fileName = `${hash}.tar.gz`;
       url = `${parsedSrc.url}/archive/${hash}.tar.gz`;
     }
 
-    const fileName = `${hash}.tar.gz`;
     const destWithFileName = `${builderData.destination}/${fileName}`;
 
     await makeParentDir(builderData.destination);
@@ -79,6 +78,8 @@ export class Freshland {
     await downloadFile(url, destWithFileName, builderData.proxy);
 
     this.verbose(`Extracting from "${destWithFileName}`);
+
+    // FIXME: subDirectory only works on Github repos
     await extractTar(destWithFileName, builderData.destination, subDirectory);
 
     await fs.promises.rm(destWithFileName, {
@@ -87,19 +88,8 @@ export class Freshland {
     });
   }
 
-  // private async cloneUsingGit(builderData: FreshBuilderData) {
-  //   this.verbose('Cloning...');
-  //   await shellExec(`git clone --depth 1 ${builderData.source.toString()} ${builderData.destination.toString()}`);
-
-  //   this.verbose('Deleting ".git" folder');
-  //   await fs.promises.rm(path.resolve(builderData.destination, '.git'), {
-  //     force: true,
-  //     recursive: true,
-  //   });
-  // }
-
   private async getCommitHash(source: RepositorySource): Promise<string | null> {
-    const refs = await this.fetchRefs(source);
+    const refs = await this.fetchGithubRefs(source);
 
     if (source.ref === 'HEAD') {
       const hash = refs.find((ref) => ref.type === 'HEAD')?.hash;
@@ -125,7 +115,7 @@ export class Freshland {
     return refWithMatchingStart?.hash ?? null;
   }
 
-  private async fetchRefs(source: RepositorySource): Promise<RefArray> {
+  private async fetchGithubRefs(source: RepositorySource): Promise<RefArray> {
     const { stdout } = await shellExec(`git ls-remote ${source.url}`);
     if (!stdout) throw new Error(`[NO_ACCESS] Could not fetch "${source.url}"`);
 
