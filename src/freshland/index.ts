@@ -63,7 +63,7 @@ export class Freshland {
 
     let url: string;
     if (parsedSrc.site === 'gitlab') {
-      url = `${parsedSrc.url}/repository/archive.tar.gz?ref=${hash}`;
+      url = `${parsedSrc.urlWithoutRepoAndUsername}/api/v4/projects/${parsedSrc.userName}%2F${parsedSrc.repoName}/repository/archive.tar.gz?sha=${hash}`;
     } else if (parsedSrc.site === 'bitbucket') {
       url = `${parsedSrc.url}/get/${hash}.tar.gz`;
     } else {

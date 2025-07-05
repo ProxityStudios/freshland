@@ -3,8 +3,10 @@ import { FreshBuilder } from '../src/structures/FreshBuilder';
 
 const freshland = new Freshland({ verbose: true });
 
-const builder = new FreshBuilder().setRepository('proxitystudios/typescript-starter').setDestination('./tests/zing');
-// .setForce(true);
+const builder = new FreshBuilder()
+  .setRepository('https://gitlab.com/craig.white/express-typescript-starter-api')
+  .setDestination('./tests/zing')
+  .setForce(true);
 // .setProxy('http://192.168.1.2:403');
 
 // freshland.events.on('successClone', (builderData) => {

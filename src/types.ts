@@ -19,11 +19,13 @@ export type Ref = {
 export type RefArray = Ref[];
 
 export interface RepositorySource {
+  domain: 'https://${string}' | 'http://${string}' | string;
   site: string;
   userName: string;
   repoName: string;
   ref: string;
   url: string;
+  urlWithoutRepoAndUsername: string;
   ssh: string;
   subDirectory?: string;
   mode: string;

@@ -25,10 +25,11 @@ export class Parser {
 
     const domain = `${site}.${Constants.SupportedPlatforms[site]}`;
     const url = `https://${domain}/${userName}/${repoName}`;
+    const urlWithoutRepoAndUsername = `https://${domain}`;
     const ssh = `git@${domain}:${userName}/${repoName}`;
 
     const mode = Constants.SupportedPlatforms.hasOwnProperty(site) ? 'tar' : 'git';
 
-    return { site, userName, repoName, ref, url, ssh, subDirectory, mode };
+    return { domain, site, userName, repoName, ref, url, urlWithoutRepoAndUsername, ssh, subDirectory, mode };
   }
 }

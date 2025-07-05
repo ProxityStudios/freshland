@@ -34,10 +34,10 @@
     "test-export": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register test/index.ts --verbose",
     "build": "run-s format clean tsc",
     "tsc": "tsc --build",
-    "clean": "rimraf dist/ package/",
+    "clean": "rimraf dist/",
     "format": "eslint . --fix",
     "type-check": "tsc -p tsconfig.json --noEmit",
-    "postpublish": "rimraf dist/ package/"
+    "postpublish": "rimraf dist/"
   },
   "bin": {
     "freshland": "bin/run.js"

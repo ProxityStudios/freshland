@@ -9,7 +9,7 @@ export default class Clone extends Command {
     destination: Args.directory({ description: 'Destination of the copied repository', required: true }),
   };
 
-  static override description = 'TODO';
+  static override description = 'Clone a repository from supported sources.';
 
   static override examples = ['<%= config.bin %> <%= command.id %> ProxityStudios/freshlland ./freshland-copy'];
 
