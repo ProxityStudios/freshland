@@ -35,7 +35,7 @@ jobs:
            run: mkdir package/ && mkdir package/dist && cp -r dist/. package/dist && cp package.json package-lock.json README.md LICENSE .npmrc package/ && cp -r templates package/ && chmod u+w package/
 
          - name: Semantic Release
-           run: npx semantic-release@21.0.2
+           run: npx semantic-release
            env:
               GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
               NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
