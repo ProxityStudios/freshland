@@ -1,13 +1,13 @@
 {
     "extends": "./tsconfig.json",
-        "compilerOptions": {
+    "compilerOptions": {
         "noEmit": true,
         "allowJs": true
     },
     "include": [
         "./**/*.ts",
         "./**/*.js",
-        ".eslintrc.js",
-        "release.config.js",
+        "./.eslintrc.js",
+        "./release.config.js",
     ]
 }

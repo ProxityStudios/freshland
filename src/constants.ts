@@ -2,7 +2,7 @@ import type { SupportedPlatformsType } from './types';
 
 const CompanyGithubProfile = 'https://github.com/ProxityStudios';
 
-// TODO: fetch templates urls from ProxityStudios/urls
+// TODO: fetch templates from a github repository
 const Templates = {
   TypeScriptStarter: `${CompanyGithubProfile}/typescript-starter`,
   JavaScriptStarter: `${CompanyGithubProfile}/javascript-starter`,

@@ -6,16 +6,14 @@ import { FreshBuilder } from '../../structures/FreshBuilder';
 export default class Clone extends Command {
   static override args = {
     repository: Args.string({ description: 'E.G: ProxityStudios/freshland', required: true }),
-    destination: Args.directory({ description: 'Destination of the copied folder', required: true }),
+    destination: Args.directory({ description: 'Destination of the copied repository', required: true }),
   };
 
-  static override description = 'Clones a repository';
+  static override description = 'TODO';
 
   static override examples = ['<%= config.bin %> <%= command.id %> ProxityStudios/freshlland ./freshland-copy'];
 
-  static override flags = {
-    // gui: Flags.boolean(),
-  };
+  static override flags = {};
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Clone);
@@ -23,7 +21,6 @@ export default class Clone extends Command {
     const builder = new FreshBuilder().setRepository(args.repository).setDestination(args.destination);
 
     ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
-    // ux.action.pauseAsync(async () => {});
     await freshland.clone(builder);
     ux.action.stop();
   }

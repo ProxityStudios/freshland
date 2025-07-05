@@ -5,10 +5,10 @@ export interface Dependencies {
 }
 export interface FreshlandOptions {
   verbose: boolean;
-  proxy?: string; // todo: global proxy
+  proxy?: string; // TODO: use as global proxy
 }
 
-export type FreshlandMode = 'tar' | 'git';
+export type FreshlandMode = 'tar'; //| 'git';
 
 export type Ref = {
   type: string;

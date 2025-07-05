@@ -1,51 +1,54 @@
 import shellExec from 'shell-exec';
-import * as path from 'node:path';
 import * as fs from 'node:fs';
-import { Utils } from './utils';
-import { Parser } from './parser';
+import { Parser } from './utils/parser';
 import { Emitter } from './emitter';
+import { checkDirIsEmpty, downloadFile, extractTar, getBuilderData, makeParentDir } from './utils';
 import type { FreshBuilder, FreshBuilderData } from '../structures/FreshBuilder';
 import type { FreshlandOptions, Ref, RefArray, RepositorySource } from '../types';
-import { logger } from '../logger';
 
 export class Freshland {
-  public readonly emitter: Emitter;
+  public readonly events: Emitter;
 
   public verboseMode: boolean;
 
   constructor(public readonly options: FreshlandOptions = { verbose: false }) {
-    this.emitter = new Emitter();
+    this.events = new Emitter();
     this.verboseMode = options.verbose;
   }
 
-  public async clone(builder: FreshBuilder | FreshBuilderData): Promise<void> {
+  public async clone(builder: FreshBuilder | FreshBuilderData): Promise<{ success: boolean } | Error> {
     try {
-      const builderData = Utils.getBuilderData(builder);
-      const isEmptyDir = await Utils.checkDirIsEmpty(builderData.destination);
+      const builderData = getBuilderData(builder);
+      const isEmptyDir = await checkDirIsEmpty(builderData.destination);
 
       if (!isEmptyDir && !builderData.force) {
         throw new Error(
-          'Destination directory is not empty, aborting. (you can use "<Builder>.setForce(true)" or provide "--force" flag to bypass)'
+          '[DEST_NOT_EMPTY] Destination isn\'t empty, aborting the process. (use "<FreshBuilder>.setForce(true)" or provide "--force" flag to bypass)'
         );
-      } else {
-        logger.warn('Destination directory is not empty. Skipping (force mode)');
-      }
+      } //else {
+      //   logger.warn("Destination directory isn't empty. Skipping (force mode)");
+      // }
 
       switch (builderData.mode) {
         case 'tar':
           this.verbose('Choosen Mode:', builderData.mode);
           await this.cloneUsingTar(builderData);
           break;
-        case 'git':
-          this.verbose('Choosen Mode:', builderData.mode);
-          await this.cloneUsingGit(builderData);
-          break;
+        // case 'git':
+        //   this.verbose('Choosen Mode:', builderData.mode);
+        //   await this.cloneUsingGit(builderData);
+        //   break;
         default:
           throw new Error(`Mode "${builderData.mode}" not supported yet`);
       }
 
-      this.emitter.emit('successClone', builderData);
+      this.events.emit('successClone', builderData);
+
+      return {
+        success: true,
+      };
     } catch (error) {
+      this.events.emit('error', error);
       throw error;
     }
   }
@@ -55,7 +58,7 @@ export class Freshland {
     const hash = await this.getCommitHash(parsedSrc);
     const subDirectory = parsedSrc.subDirectory ? `${parsedSrc.repoName}-${hash}${parsedSrc.subDirectory}` : undefined;
 
-    if (!hash) throw new Error(`Could not find the commit hash for ${parsedSrc.ref}`);
+    if (!hash) throw new Error(`[INVALID_HASH] Could not find the commit hash for ${parsedSrc.ref}`);
 
     let url: string;
     if (parsedSrc.site === 'gitlab') {
@@ -69,13 +72,13 @@ export class Freshland {
     const fileName = `${hash}.tar.gz`;
     const destWithFileName = `${builderData.destination}/${fileName}`;
 
-    await Utils.makeParentDir(builderData.destination);
+    await makeParentDir(builderData.destination);
 
     this.verbose(`Downloading from "${url}`);
-    await Utils.downloadFile(url, destWithFileName, builderData.proxy);
+    await downloadFile(url, destWithFileName, builderData.proxy);
 
     this.verbose(`Extracting from "${destWithFileName}`);
-    await Utils.extractTar(destWithFileName, builderData.destination, subDirectory);
+    await extractTar(destWithFileName, builderData.destination, subDirectory);
 
     await fs.promises.rm(destWithFileName, {
       force: true,
@@ -83,16 +86,16 @@ export class Freshland {
     });
   }
 
-  private async cloneUsingGit(builderData: FreshBuilderData) {
-    this.verbose('Cloning...');
-    await shellExec(`git clone --depth 1 ${builderData.source.toString()} ${builderData.destination.toString()}`);
+  // private async cloneUsingGit(builderData: FreshBuilderData) {
+  //   this.verbose('Cloning...');
+  //   await shellExec(`git clone --depth 1 ${builderData.source.toString()} ${builderData.destination.toString()}`);
 
-    this.verbose('Deleting ".git" folder');
-    await fs.promises.rm(path.resolve(builderData.destination, '.git'), {
-      force: true,
-      recursive: true,
-    });
-  }
+  //   this.verbose('Deleting ".git" folder');
+  //   await fs.promises.rm(path.resolve(builderData.destination, '.git'), {
+  //     force: true,
+  //     recursive: true,
+  //   });
+  // }
 
   private async getCommitHash(source: RepositorySource): Promise<string | null> {
     const refs = await this.fetchRefs(source);
@@ -163,7 +166,7 @@ export class Freshland {
   }
 
   private verbose(...args: unknown[]): void {
-    if (this.verboseMode) logger.debug(...args);
+    if (this.verboseMode) console.debug('Debug', ...args);
   }
 
   public setVerboseMode(verbose: boolean) {

@@ -1,6 +1,4 @@
 # Misc
-src_old/
-
 lib-cov/
 .git/
 *.seed
@@ -38,5 +36,3 @@ node_modules/
 # OS metadata
 .DS_Store/
 Thumbs.db
-
-# Ignore built ts files

@@ -10,9 +10,7 @@ export default class Template extends Command {
   static override examples = ['<%= config.bin %> <%= command.id %>'];
 
   static override flags = {
-    // flag with no value (-f, --force)
     force: Flags.boolean({ char: 'f' }),
-    // flag with a value (-n, --name=VALUE)
     name: Flags.string({ char: 'n', description: 'name to print' }),
   };
 

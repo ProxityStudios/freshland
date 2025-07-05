@@ -2,7 +2,7 @@ import { Args, Command, Flags, ux } from '@oclif/core';
 import { input } from '@inquirer/prompts';
 import { freshland } from '../../container';
 import { FreshBuilder } from '../../structures/FreshBuilder';
-import { Parser } from '../../freshland/parser';
+import { Parser } from '../../freshland/utils/parser';
 
 export default class CloneGUI extends Command {
   static override args = {};

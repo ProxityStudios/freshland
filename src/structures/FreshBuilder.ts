@@ -43,7 +43,7 @@ export class FreshBuilder {
   }
 
   public useTemplate(template: 'typescript-starter') {
-    // todo: get template from repo
+    // TODO: fetch templates from a github repository
     const templateURL = 'https://github.com/proxitystudios/typescript-starter';
     this.setRepository(templateURL);
     return this;

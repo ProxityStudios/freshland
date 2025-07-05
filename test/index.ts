@@ -1,16 +1,25 @@
 import { Freshland } from '../src/freshland/index';
-import { logger } from '../src/logger';
-import { FreshBuilder } from '../src/structure/FreshBuilder';
+import { FreshBuilder } from '../src/structures/FreshBuilder';
 
 const freshland = new Freshland({ verbose: true });
 
-const builder = new FreshBuilder()
-  .setRepository('proxitystudios/typescript-starter')
-  .setDestination('./tests/zing')
-  .setForce(true);
+const builder = new FreshBuilder().setRepository('proxitystudios/typescript-starter').setDestination('./tests/zing');
+// .setForce(true);
+// .setProxy('http://192.168.1.2:403');
 
-freshland.emitter.on('successClone', (builderData) => {
-  logger.info('OK.', builderData);
-});
+// freshland.events.on('successClone', (builderData) => {
+//   logger.info('OK.', builderData);
+// });
 
-freshland.clone(builder);
+// freshland.events.on('error', (err) => {
+//   logger.error('Error.', err);
+// });
+
+freshland
+  .clone(builder)
+  .then((t) => {
+    console.log('Status', t);
+  })
+  .catch((e) => {
+    console.error(e);
+  });

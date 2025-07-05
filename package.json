@@ -1,10 +1,11 @@
 {
   "name": "freshland",
-  "description": "Freshland is a CLI tool that lets you to clone GitHub repositories",
+  "description": "todo: Freshland is a CLI tool that lets you to clone GitHub repositories",
   "version": "4.0.0-exp",
   "author": "ProxityStudios",
   "license": "MIT",
   "homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
+  "main": "dist/freshland/index.js",
   "engines": {
     "node": ">=18.0.0"
   },
@@ -24,6 +25,10 @@
     "type": "git",
     "url": "git+https://github.com/ProxityStudios/freshland.git"
   },
+  "files": [
+    "/bin",
+    "/dist"
+  ],
   "scripts": {
     "test": "./bin/dev.js",
     "test-export": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register test/index.ts --verbose",
@@ -38,6 +43,12 @@
     "freshland": "./bin/run.js"
   },
   "exports": "./dist/freshland/index.js",
+  "oclif": {
+    "bin": "freshland",
+    "commands": "./dist/commands",
+    "dirname": "freshland",
+    "topicSeparator": " "
+  },
   "devDependencies": {
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/commit-analyzer": "13.0.1",
@@ -66,13 +77,6 @@
     "@oclif/core": "4.4.0",
     "https-proxy-agent": "7.0.6",
     "shell-exec": "1.1.2",
-    "tar": "7.4.3",
-    "tslog": "4.9.3"
-  },
-  "oclif": {
-    "bin": "freshland",
-    "commands": "./dist/commands",
-    "dirname": "freshland",
-    "topicSeparator": " "
+    "tar": "7.4.3"
   }
 }
