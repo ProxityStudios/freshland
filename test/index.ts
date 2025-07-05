@@ -18,7 +18,7 @@ const builder = new FreshBuilder().setRepository('proxitystudios/typescript-star
 freshland
   .clone(builder)
   .then((t) => {
-    console.log('Status', t);
+    console.log('Status:', t);
   })
   .catch((e) => {
     console.error(e);

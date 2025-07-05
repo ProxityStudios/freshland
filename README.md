@@ -2,7 +2,7 @@
 
 # Freshland
 
-Freshland is a CLI tool that lets you clone GitHub repositories without the git history. _We're here to make things simpler and simpler for you. We promise._
+Freshland is a CLI tool that lets you clone repositories faster.
 
 ## Usage
 
@@ -42,7 +42,7 @@ npx freshland@latest clone ProxityStudios/typescript-starter myapp --install-dep
 To clone a repository with a GUI, simply run:
 
 ```bash
-npx freshland@latest
+npx freshland@latest clone gui
 ```
 
 You will see a prompt like this:
@@ -63,7 +63,7 @@ npx freshland@latest init-epa <path/to/install> --ts
 
 #### JavaScript
 
-If you're using JavaScript, you don't need to do anything extra, just omit the `--ts` flag. ~_But seriously, give TypeScript a try. It's not that hard_~.
+If you're using JavaScript, you don't need to do anything extra, just omit the `--ts` flag.
 
 ```bash
 npx freshland@latest init-epa <path/to/install>
@@ -75,4 +75,4 @@ npx freshland@latest init-epa <path/to/install>
 
 # Support and Feedback
 
-If you have any questions, issues, or feedback related to Freshland, we're here to help! Join our [Discord server](https://discord.gg/wrhwwJQwas) for support, discussions, and updates.
+If you have any questions, issues, or feedback related to Freshland, create an issue through Github Issues!
