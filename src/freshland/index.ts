@@ -34,7 +34,7 @@ export class Freshland {
           this.verbose('Choosen Mode:', builderData.mode);
           await this.cloneUsingTar(builderData);
           break;
-        // case 'git':
+        // //case 'git':
         //   this.verbose('Choosen Mode:', builderData.mode);
         //   await this.cloneUsingGit(builderData);
         //   break;
