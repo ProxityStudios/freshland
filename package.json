@@ -33,12 +33,12 @@
   "scripts": {
     "test": "./bin/dev.js",
     "test-export": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register test/index.ts --verbose",
-    "build": "run-s format clean tsc",
+    "build": "run-s fetch-templates format clean tsc",
     "tsc": "tsc --build",
     "clean": "rimraf dist/",
     "format": "eslint . --fix",
     "type-check": "tsc -p tsconfig.json --noEmit",
-    "prepublishOnly": "node ./scripts/fetchTemplates.js"
+    "fetch-templates": "node ./scripts/fetchTemplates.js"
   },
   "bin": {
     "freshland": "bin/run.js"
