@@ -18,4 +18,7 @@ CLONE command (same as GUI command):
 <packageManager> freshland@latest clone bitbucket@ProxityStudios/freshland#<branch or CommitHash or tag> ./freshland-fork
 <packageManager> freshland@latest clone github@ProxityStudios/freshland#<branch or CommitHash or tag> ./freshland-fork
 <packageManager> freshland@latest clone git@ProxityStudios/freshland#<branch or CommitHash or tag> ./freshland-fork
+
+<packageManager> freshland@latest clone gitlab@ProxityStudios/freshland#<branch or CommitHash or tag> ./freshland-fork
+<packageManager> freshland@latest clone bitbucket@ProxityStudios/freshland#<branch or CommitHash or tag> ./freshland-fork
 ```
