@@ -4,6 +4,10 @@ import type { RepositorySource } from '../../types';
 export class Parser {
   // TODO: allow users to use prefixes. E.G: gitlab@ProxityStudios/freshland - github@ProxityStudios/freshland
   static parseRepository(repo: string): RepositorySource {
+    if (repo.length > 1000) {
+      throw new Error('[TOO_LONG_INPUT] Input too long');
+    }
+
     const match =
       /^(?:(?:https?:\/\/)?([^:/]+\.[^:/]+)\/|git@([^:/]+)[:/]|([^/]+):)?([^/\s]+)\/([^/\s#]+)(?:((?:\/[^/\s#]+)+))?(?:\/)?(?:#(.+))?/.exec(
         repo
