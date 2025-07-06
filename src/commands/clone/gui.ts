@@ -17,10 +17,10 @@ export default class CloneGUI extends Command {
     const { args, flags } = await this.parse(CloneGUI);
 
     const repository = await input({
-      message: 'Type in the repository full name',
+      message: 'Type in the source',
       validate(value) {
         try {
-          Parser.parseRepository(value);
+          Parser.parseSource(value);
           return true;
         } catch (error) {
           return false;
@@ -32,7 +32,7 @@ export default class CloneGUI extends Command {
       message: 'Type in the destination',
     });
 
-    const builder = new FreshBuilder().setRepository(repository).setDestination(destination);
+    const builder = new FreshBuilder().setSource(repository).setDestination(destination);
 
     ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
     // ux.action.pauseAsync(async () => {});

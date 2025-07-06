@@ -1,5 +1,6 @@
 import path from 'node:path';
-import { FreshlandMode } from '../types';
+import { FreshlandMode, TemplateKeys, TemplateKeysWithS } from '../types';
+import { getTemplateIfExists } from '../freshland/utils';
 
 export class FreshBuilder {
   private mode: FreshlandMode;
@@ -8,7 +9,7 @@ export class FreshBuilder {
 
   private force: boolean;
 
-  private repository?: string;
+  private source?: string;
 
   private destination?: string;
 
@@ -22,8 +23,8 @@ export class FreshBuilder {
     return this;
   }
 
-  public setRepository(repository: string) {
-    this.repository = repository;
+  public setSource(source: string) {
+    this.source = source;
     return this;
   }
 
@@ -42,21 +43,20 @@ export class FreshBuilder {
     return this;
   }
 
-  public useTemplate(template: 'typescript-starter') {
-    // TODO: fetch templates from a github repository
-    const templateURL = 'https://github.com/proxitystudios/typescript-starter';
-    this.setRepository(templateURL);
+  public useTemplate(templateKey: TemplateKeysWithS) {
+    const template = getTemplateIfExists(templateKey);
+    this.setSource(template.uri);
     return this;
   }
 
   public toJSON(): FreshBuilderData {
-    if (!this.repository || !this.destination) throw new Error('Source or destination not set');
+    if (!this.source || !this.destination) throw new Error('Source or destination not set');
 
     return {
       mode: this.mode,
       proxy: this.proxy,
       force: this.force,
-      source: this.repository,
+      source: this.source,
       destination: this.destination,
     };
   }

@@ -27,6 +27,7 @@
   },
   "files": [
     "/bin",
+    "/local-data",
     "/dist"
   ],
   "scripts": {
@@ -37,7 +38,7 @@
     "clean": "rimraf dist/",
     "format": "eslint . --fix",
     "type-check": "tsc -p tsconfig.json --noEmit",
-    "postpublish": "rimraf dist/"
+    "prepublishOnly": "node ./scripts/fetchTemplates.js"
   },
   "bin": {
     "freshland": "bin/run.js"

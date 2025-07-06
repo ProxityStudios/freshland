@@ -1,4 +1,5 @@
 # Misc
+/local-data/templates.json
 lib-cov/
 .git/
 *.seed

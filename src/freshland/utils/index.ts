@@ -2,21 +2,28 @@ import { HttpsProxyAgent } from 'https-proxy-agent';
 import * as tar from 'tar';
 import URL from 'url';
 
-import * as https from 'https';
+import * as https from 'node:https';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { Agent } from 'node:https';
 import { FreshBuilder, FreshBuilderData } from '../../structures/FreshBuilder';
-import Constants from '../../constants';
+import templatesData from '../../../local-data/templates.json';
+import { Template, TemplateKeysWithS, TemplateWithoutName } from '../../types';
 
-export function getTemplateIfExists(templateSource: string): string {
-  const found = Object.entries(Constants.Templates).find(([, val]) => val === templateSource);
+export function getTemplateIfExists(templateKey: TemplateKeysWithS) {
+  const simplifiedTemplates: Template[] = Object.entries<TemplateWithoutName>(templatesData as any).map(
+    ([name, data]) => ({
+      name,
+      ...data,
+    })
+  );
 
-  if (!found) {
-    throw new Error(`Invalid template ${templateSource}`);
+  const foundTemplate = simplifiedTemplates.find((t) => t.name === templateKey);
+
+  if (!foundTemplate) {
+    throw new Error(`[INVALID_TEMPLATE] Invalid template ${String(templateKey)}`);
   }
 
-  return found[1];
+  return foundTemplate;
 }
 
 export async function checkDirIsEmpty(dir: string): Promise<boolean> {
@@ -29,18 +36,19 @@ export async function checkDirIsEmpty(dir: string): Promise<boolean> {
   }
 }
 
+// FIXME: abort downloading when the terminal process canceled
 export function downloadFile(url: string, saveTo: string, proxy?: string): Promise<string> {
   return new Promise((resolve, reject) => {
     const options: https.RequestOptions = {
       headers: {
-        'User-Agent': 'Freshland/4.0',
+        'User-Agent': 'Freshland/4.0.0',
       },
     };
 
     if (proxy) {
       options.agent = new HttpsProxyAgent(proxy, {
         rejectUnauthorized: true,
-      }) as Agent;
+      }) as https.Agent;
     }
 
     const request = https.get(url, options, (response) => {
@@ -78,7 +86,7 @@ export function getProxyRequestOptions(url: string, proxy: string): https.Reques
   return {
     hostname: parsedUrl.hostname,
     path: parsedUrl.pathname,
-    agent: new HttpsProxyAgent(proxy) as Agent,
+    agent: new HttpsProxyAgent(proxy) as https.Agent,
   };
 }
 

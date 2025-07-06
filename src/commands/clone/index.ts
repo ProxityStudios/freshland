@@ -5,7 +5,7 @@ import { FreshBuilder } from '../../structures/FreshBuilder';
 
 export default class Clone extends Command {
   static override args = {
-    repository: Args.string({ description: 'E.G: ProxityStudios/freshland', required: true }),
+    source: Args.string({ description: 'E.G: ProxityStudios/freshland', required: true }),
     destination: Args.directory({ description: 'Destination of the copied repository', required: true }),
   };
 
@@ -18,7 +18,7 @@ export default class Clone extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Clone);
 
-    const builder = new FreshBuilder().setRepository(args.repository).setDestination(args.destination);
+    const builder = new FreshBuilder().setSource(args.source).setDestination(args.destination);
 
     ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
     await freshland.clone(builder);

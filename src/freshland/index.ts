@@ -4,7 +4,7 @@ import { Parser } from './utils/parser';
 import { Emitter } from './emitter';
 import { checkDirIsEmpty, downloadFile, extractTar, getBuilderData, makeParentDir } from './utils';
 import type { FreshBuilder, FreshBuilderData } from '../structures/FreshBuilder';
-import type { FreshlandOptions, Ref, RefArray, RepositorySource } from '../types';
+import type { FreshlandOptions, Ref, RefArray, PlatformSource } from '../types';
 
 export class Freshland {
   public readonly events: Emitter;
@@ -50,7 +50,7 @@ export class Freshland {
   }
 
   private async cloneUsingTar(builderData: FreshBuilderData) {
-    const parsedSrc = Parser.parseRepository(builderData.source);
+    const parsedSrc = Parser.parseSource(builderData.source);
     let fileName: string = `${parsedSrc.ref}.tar.gz`;
     let subDirectory: string | undefined;
 
@@ -88,7 +88,7 @@ export class Freshland {
     });
   }
 
-  private async getCommitHash(source: RepositorySource): Promise<string | null> {
+  private async getCommitHash(source: PlatformSource): Promise<string | null> {
     const refs = await this.fetchGithubRefs(source);
 
     if (source.ref === 'HEAD') {
@@ -115,7 +115,7 @@ export class Freshland {
     return refWithMatchingStart?.hash ?? null;
   }
 
-  private async fetchGithubRefs(source: RepositorySource): Promise<RefArray> {
+  private async fetchGithubRefs(source: PlatformSource): Promise<RefArray> {
     const { stdout } = await shellExec(`git ls-remote ${source.url}`);
     if (!stdout) throw new Error(`[NO_ACCESS] Could not fetch "${source.url}"`);
 

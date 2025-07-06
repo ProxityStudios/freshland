@@ -1,9 +1,9 @@
 import Constants from '../../constants';
-import type { RepositorySource } from '../../types';
+import type { PlatformSource } from '../../types';
 
 export class Parser {
-  // TODO: allow users to use prefixes. E.G: gitlab@ProxityStudios/freshland - github@ProxityStudios/freshland
-  static parseRepository(repo: string): RepositorySource {
+  // FIXME: when users use git.sr.ht, the url going to be git.sr.ht.
+  static parseSource(repo: string): PlatformSource {
     if (repo.length > 1000) {
       throw new Error('[TOO_LONG_INPUT] Input too long');
     }
@@ -35,6 +35,6 @@ export class Parser {
 
     const mode = Constants.SupportedPlatforms.hasOwnProperty(site) ? 'tar' : 'git';
 
-    return { domain, site, userName, repoName, ref, url, urlWithoutRepoAndUsername, ssh, subDirectory, mode };
+    return { site, userName, repoName, ref, url, urlWithoutRepoAndUsername, ssh, subDirectory, mode };
   }
 }

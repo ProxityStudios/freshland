@@ -4,7 +4,7 @@ import { FreshBuilder } from '../src/structures/FreshBuilder';
 const freshland = new Freshland({ verbose: true });
 
 const builder = new FreshBuilder()
-  .setRepository(
+  .setSource(
     // 'https://gitlab.com/craig.white/express-typescript-starter-api#70cfdb05971aac1396dfdef57766f55cef06559aa'
     'https://bitbucket.org/alexinhans/test'
   )
