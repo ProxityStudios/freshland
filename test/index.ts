@@ -1,9 +1,9 @@
 import { Freshland } from '../src/freshland/index';
-import { FreshBuilder } from '../src/structures/FreshBuilder';
+import { FreshlandBuilder } from '../src/structures/FreshlandBuilder';
 
 const freshland = new Freshland({ verbose: true });
 
-const builder = new FreshBuilder()
+const builder = new FreshlandBuilder()
   .setSource(
     // 'https://gitlab.com/craig.white/express-typescript-starter-api#70cfdb05971aac1396dfdef57766f55cef06559aa'
     'https://bitbucket.org/alexinhans/test'
