@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import { FreshBuilderData } from '../structures/FreshBuilder';
+import { FreshBuilderData } from '../structures/FreshlandBuilder';
 
 export class Emitter extends EventEmitter {
   override on<K extends keyof EventMap>(event: K, listener: EventMap[K]): this {
@@ -11,6 +11,7 @@ export class Emitter extends EventEmitter {
   }
 }
 
+// TODO:
 export interface EventMap {
   successClone: (builderData: FreshBuilderData) => void;
   error: (err: any) => void;

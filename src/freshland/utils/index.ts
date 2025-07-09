@@ -5,17 +5,23 @@ import URL from 'url';
 import * as https from 'node:https';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { FreshBuilder, FreshBuilderData } from '../../structures/FreshBuilder';
-import templatesData from '../../../local-data/templates.json';
-import { Template, TemplateKeysWithS, TemplateWithoutName } from '../../types';
+import { FreshlandBuilder, FreshBuilderData } from '../../structures/FreshlandBuilder';
+import templatesRAWData from '../../../local-data/templates.json';
+import { TemplateKeysWithS, TemplateRAWData, Templates, TemplatesRAWData, Template } from '../../types';
 
-export function getTemplateIfExists(templateKey: TemplateKeysWithS) {
-  const simplifiedTemplates: Template[] = Object.entries<TemplateWithoutName>(templatesData as any).map(
+export function getTemplates(): Templates {
+  const simplifiedTemplates: Template[] = Object.entries<TemplateRAWData>(templatesRAWData as TemplatesRAWData).map(
     ([name, data]) => ({
       name,
       ...data,
     })
   );
+
+  return simplifiedTemplates;
+}
+
+export function getTemplateIfExistsOrThrow(templateKey: TemplateKeysWithS) {
+  const simplifiedTemplates = getTemplates();
 
   const foundTemplate = simplifiedTemplates.find((t) => t.name === templateKey);
 
@@ -26,7 +32,7 @@ export function getTemplateIfExists(templateKey: TemplateKeysWithS) {
   return foundTemplate;
 }
 
-export async function checkDirIsEmpty(dir: string): Promise<boolean> {
+export async function checkDirIsEmptyOrThrow(dir: string): Promise<boolean> {
   try {
     const files = await fs.promises.readdir(dir);
     return files.length ? false : true;
@@ -90,12 +96,12 @@ export function getProxyRequestOptions(url: string, proxy: string): https.Reques
   };
 }
 
-export async function makeParentDir(dir: string) {
+export async function makeParentDirOrThrow(dir: string) {
   const parent = path.dirname(dir);
   if (parent === dir) return;
 
   try {
-    await makeParentDir(parent);
+    await makeParentDirOrThrow(parent);
     await fs.promises.mkdir(dir);
   } catch (err) {
     if ((err as any).code !== 'EEXIST') {
@@ -118,6 +124,6 @@ export async function extractTar(file: string, to: string, subDir?: string) {
   });
 }
 
-export function getBuilderData(builder: FreshBuilder | FreshBuilderData): FreshBuilderData {
-  return builder instanceof FreshBuilder ? builder.toJSON() : builder;
+export function getBuilderData(builder: FreshlandBuilder | FreshBuilderData): FreshBuilderData {
+  return builder instanceof FreshlandBuilder ? builder.toJSON() : builder;
 }

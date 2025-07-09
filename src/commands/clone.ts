@@ -1,7 +1,9 @@
 import { Args, Command, Flags } from '@oclif/core';
 import { ux } from '@oclif/core/ux';
-import { freshland } from '../../container';
-import { FreshBuilder } from '../../structures/FreshBuilder';
+import type { CommandError } from '@oclif/core/interfaces';
+import { freshland } from '../container';
+import { FreshlandBuilder } from '../structures/FreshlandBuilder';
+import { ProcessStatus } from '../enums';
 
 export default class Clone extends Command {
   static override args = {
@@ -18,10 +20,21 @@ export default class Clone extends Command {
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Clone);
 
-    const builder = new FreshBuilder().setSource(args.source).setDestination(args.destination);
+    const builder = new FreshlandBuilder().setSource(args.source).setDestination(args.destination);
 
     ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
     await freshland.clone(builder);
     ux.action.stop();
+  }
+
+  protected override async catch(err: CommandError): Promise<any> {
+    const error = err as Error;
+
+    if (error.name === 'ExitPromptError') {
+      console.error('OK. cancelling...');
+      process.exit(ProcessStatus.OK);
+    }
+
+    console.error(error);
   }
 }

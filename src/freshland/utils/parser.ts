@@ -1,9 +1,9 @@
 import Constants from '../../constants';
 import type { PlatformSource } from '../../types';
 
-export class Parser {
+export class FreshlandParser {
   // FIXME: when users use git.sr.ht, the url going to be git.sr.ht.
-  static parseSource(repo: string): PlatformSource {
+  static parseSourceOrThrow(repo: string): PlatformSource {
     if (repo.length > 1000) {
       throw new Error('[TOO_LONG_INPUT] Input too long');
     }
@@ -37,4 +37,7 @@ export class Parser {
 
     return { site, userName, repoName, ref, url, urlWithoutRepoAndUsername, ssh, subDirectory, mode };
   }
+
+  // TODO:
+  // parseTemplate() {}
 }

@@ -1,8 +1,8 @@
 import path from 'node:path';
-import { FreshlandMode, TemplateKeys, TemplateKeysWithS } from '../types';
-import { getTemplateIfExists } from '../freshland/utils';
+import { FreshlandMode, TemplateKeysWithS } from '../types';
+import { getTemplateIfExistsOrThrow } from '../freshland/utils';
 
-export class FreshBuilder {
+export class FreshlandBuilder {
   private mode: FreshlandMode;
 
   private proxy?: string;
@@ -44,7 +44,7 @@ export class FreshBuilder {
   }
 
   public useTemplate(templateKey: TemplateKeysWithS) {
-    const template = getTemplateIfExists(templateKey);
+    const template = getTemplateIfExistsOrThrow(templateKey);
     this.setSource(template.uri);
     return this;
   }

@@ -2,5 +2,4 @@
 /node_modules
 /tests
 /templates
-package/
-src_old
+/package

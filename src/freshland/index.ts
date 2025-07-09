@@ -1,11 +1,12 @@
 import shellExec from 'shell-exec';
 import * as fs from 'node:fs';
-import { Parser } from './utils/parser';
+import { FreshlandParser } from './utils/parser';
 import { Emitter } from './emitter';
-import { checkDirIsEmpty, downloadFile, extractTar, getBuilderData, makeParentDir } from './utils';
-import type { FreshBuilder, FreshBuilderData } from '../structures/FreshBuilder';
+import { checkDirIsEmptyOrThrow, downloadFile, extractTar, getBuilderData, makeParentDirOrThrow } from './utils';
+import type { FreshlandBuilder, FreshBuilderData } from '../structures/FreshlandBuilder';
 import type { FreshlandOptions, Ref, RefArray, PlatformSource } from '../types';
 
+// TODO: handle errors gracefully & implement own error system
 export class Freshland {
   public readonly events: Emitter;
 
@@ -16,16 +17,17 @@ export class Freshland {
     this.verboseMode = options.verbose;
   }
 
-  public async clone(builder: FreshBuilder | FreshBuilderData): Promise<{ success: boolean } | Error> {
+  public async clone(builder: FreshlandBuilder | FreshBuilderData): Promise<true | Error> {
     try {
       const builderData = getBuilderData(builder);
-      const isEmptyDir = await checkDirIsEmpty(builderData.destination);
+      const isEmptyDir = await checkDirIsEmptyOrThrow(builderData.destination);
 
       if (!isEmptyDir && !builderData.force) {
         throw new Error(
           '[DESTINATION_NOT_EMPTY] Destination isn\'t empty, aborting the process. (use "<FreshBuilder>.setForce(true)" or provide "--force" flag to bypass)'
         );
-      } //else {
+      }
+      // else {
       //   logger.warn("Destination directory isn't empty. Skipping (force mode)");
       // }
 
@@ -39,10 +41,7 @@ export class Freshland {
       }
 
       this.events.emit('successClone', builderData);
-
-      return {
-        success: true,
-      };
+      return true;
     } catch (error) {
       this.events.emit('error', error);
       throw error;
@@ -50,11 +49,11 @@ export class Freshland {
   }
 
   private async cloneUsingTar(builderData: FreshBuilderData) {
-    const parsedSrc = Parser.parseSource(builderData.source);
+    const parsedSrc = FreshlandParser.parseSourceOrThrow(builderData.source);
     let fileName: string = `${parsedSrc.ref}.tar.gz`;
     let subDirectory: string | undefined;
-
     let url: string;
+
     // TODO: allow to clone a branch from other platforms E.G: gitlab.com/proxitystudios/freshland#anotherBranch
     if (parsedSrc.site === 'gitlab') {
       url = `${parsedSrc.urlWithoutRepoAndUsername}/api/v4/projects/${parsedSrc.userName}%2F${parsedSrc.repoName}/repository/archive.tar.gz?sha=${parsedSrc.ref}`;
@@ -70,19 +69,20 @@ export class Freshland {
       url = `${parsedSrc.url}/archive/${hash}.tar.gz`;
     }
 
-    const destWithFileName = `${builderData.destination}/${fileName}`;
+    const destinationWithFileName = `${builderData.destination}/${fileName}`;
 
-    await makeParentDir(builderData.destination);
+    this.verbose(`Creating parent directory`);
+    await makeParentDirOrThrow(builderData.destination);
 
     this.verbose(`Downloading from "${url}`);
-    await downloadFile(url, destWithFileName, builderData.proxy);
+    await downloadFile(url, destinationWithFileName, builderData.proxy);
 
-    this.verbose(`Extracting from "${destWithFileName}`);
-
+    this.verbose(`Extracting from "${destinationWithFileName}`);
     // FIXME: subDirectory only works on Github repos
-    await extractTar(destWithFileName, builderData.destination, subDirectory);
+    await extractTar(destinationWithFileName, builderData.destination, subDirectory);
 
-    await fs.promises.rm(destWithFileName, {
+    this.verbose(`Removing copy of downloaded repository: "${destinationWithFileName}`);
+    await fs.promises.rm(destinationWithFileName, {
       force: true,
       recursive: true,
     });
