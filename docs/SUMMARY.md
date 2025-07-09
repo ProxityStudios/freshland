@@ -1,7 +1,9 @@
 [*] Support different platforms
-[] GUI to enhance user experience
+[*] GUI command
 [] Clone private repositories 
 [] Enhance speed
 [] Allow proxies
-[] Templates
+[*] Templates
 [] Automatically install dependencies
+[] E.P.A
+[] Enhanced error handling

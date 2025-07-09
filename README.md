@@ -1,8 +1,6 @@
-[![Join our Discord](https://img.shields.io/discord/843939288349409331?label=Join%20Discord&logo=discord&logoColor=white)](https://discord.gg/wrhwwJQwas)
-
 # Freshland
 
-Freshland is a CLI tool that lets you clone repositories faster.
+Freshland is a CLI tool that lets you clone repositories faster and comes with some additinional features such as E.P.A
 
 ## Usage
 
@@ -18,13 +16,13 @@ You can use Freshland in two ways: with a single-line command or with a graphica
 To clone a repository with a single-line command, use the following syntax:
 
 ```bash
-npx freshland@latest clone <REPOSITORY> <DESTINATION>
+npx freshland@latest clone <SOURCE> <DESTINATION> [FLAGS]
 ```
 
 For example, to clone `typescript-starter` repository from `ProxityStudios` into a directory named `myapp`, run:
 
 ```bash
-npx freshland@latest clone ProxityStudios/typescript-starter myapp --install-deps npm --update-package
+npx freshland@latest clone ProxityStudios/typescript-starter myapp
 ```
 
 **<>** Required | **[]** Optional
@@ -32,8 +30,8 @@ npx freshland@latest clone ProxityStudios/typescript-starter myapp --install-dep
 | Flag                        | Referance          | Accepted Values              | Default Value      | Description                        |
 | --------------------------- | ------------------ | ---------------------------- | ------------------ | ---------------------------------- |
 | `--upd`, `--update-package` |                    |                              | `false`            | Update package name and version    |
-| `--n`, `--name`             | `<name>`           | `any-string eg: my-app`      | `cloned-repo-name` | Change the package name.           |
-| `--v`, `--version`          | `<version>`        | `any-version eg: 1.0.0`      | `1.0.0`            | Change the package version         |
+| `--n`, `--name`             | `<name>`           | `string`      | `cloned-repo-name` | Change the package name.           |
+| `--v`, `--version`          | `<version>`        | `x.x.x`      | `1.0.0`            | Change the package version         |
 | `--i`, `--install-deps`     | `<packageManager>` | `npm`, `pnpm`, `bun`, `yarn` | `do-not-install`   | Install dependencies automatically |
 | `--kg`, `--keep-git`        |                    |                              | `false`            | Do not delete ".git" folder        |
 
@@ -42,7 +40,7 @@ npx freshland@latest clone ProxityStudios/typescript-starter myapp --install-dep
 To clone a repository with a GUI, simply run:
 
 ```bash
-npx freshland@latest clone gui
+npx freshland@latest gui
 ```
 
 You will see a prompt like this:
