@@ -8,6 +8,7 @@ import * as path from 'node:path';
 import { FreshlandBuilder, FreshBuilderData } from '../../structures/FreshlandBuilder';
 import templatesRAWData from '../../../local-data/templates.json';
 import { TemplateKeysWithS, TemplateRAWData, Templates, TemplatesRAWData, Template } from '../../types';
+import { FreshlandError } from '../../structures/FreshlandError';
 
 export function getTemplates(): Templates {
   const simplifiedTemplates: Template[] = Object.entries<TemplateRAWData>(templatesRAWData as TemplatesRAWData).map(
@@ -26,7 +27,7 @@ export function getTemplateIfExistsOrThrow(templateKey: TemplateKeysWithS) {
   const foundTemplate = simplifiedTemplates.find((t) => t.name === templateKey);
 
   if (!foundTemplate) {
-    throw new Error(`[INVALID_TEMPLATE] Invalid template ${String(templateKey)}`);
+    throw new FreshlandError(`Invalid template ${String(templateKey)}`, 'INVALID_TEMPLATE');
   }
 
   return foundTemplate;

@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { FreshlandError } from './FreshlandError';
 import { FreshlandMode, TemplateKeysWithS } from '../types';
 import { getTemplateIfExistsOrThrow } from '../freshland/utils';
 
@@ -50,7 +51,8 @@ export class FreshlandBuilder {
   }
 
   public toJSON(): FreshBuilderData {
-    if (!this.source || !this.destination) throw new Error('Source or destination not set');
+    if (!this.source || !this.destination)
+      throw new FreshlandError('Source or destination not set', 'MISSING_SOURCE_OR_DESTINATION');
 
     return {
       mode: this.mode,

@@ -1,11 +1,12 @@
 import Constants from '../../constants';
+import { FreshlandError } from '../../structures/FreshlandError';
 import type { PlatformSource } from '../../types';
 
 export class FreshlandParser {
   // FIXME: when users use git.sr.ht, the url going to be git.sr.ht.
   static parseSourceOrThrow(repo: string): PlatformSource {
     if (repo.length > 1000) {
-      throw new Error('[TOO_LONG_INPUT] Input too long');
+      throw new FreshlandError('Input too long', 'INPUT_TOO_LONG');
     }
 
     const match =
@@ -14,13 +15,13 @@ export class FreshlandParser {
       );
 
     if (!match) {
-      throw new Error(`[PLATFORM_NOT_SUPPORTED] Unable to parse source "${repo}"`);
+      throw new FreshlandError(`Unable to parse source "${repo}"`, 'PARSE_ERROR');
     }
 
     const site = (match[1] || match[2] || match[3] || 'github').replace(/\.(com|org)$/, '');
 
     if (!Constants.SupportedPlatforms.hasOwnProperty(site)) {
-      throw new Error('[PLATFORM_NOT_SUPPORTED] Platform not supported');
+      throw new FreshlandError('Platform not supported', 'PLATFORM_NOT_SUPPORTED');
     }
 
     const userName = match[4];

@@ -21,6 +21,7 @@ export default class Clone extends Command {
     const { args, flags } = await this.parse(Clone);
 
     const builder = new FreshlandBuilder().setSource(args.source).setDestination(args.destination);
+    console.log(args, builder);
 
     ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
     await freshland.clone(builder);
@@ -35,6 +36,6 @@ export default class Clone extends Command {
       process.exit(ProcessStatus.OK);
     }
 
-    console.error(error);
+    console.error(error.message);
   }
 }

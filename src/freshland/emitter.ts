@@ -1,7 +1,7 @@
 import { EventEmitter } from 'node:events';
 import { FreshBuilderData } from '../structures/FreshlandBuilder';
 
-export class Emitter extends EventEmitter {
+export class FreshlandEmitter extends EventEmitter {
   override on<K extends keyof EventMap>(event: K, listener: EventMap[K]): this {
     return super.on(event, listener);
   }

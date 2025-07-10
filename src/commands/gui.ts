@@ -7,6 +7,7 @@ import { FreshlandBuilder } from '../structures/FreshlandBuilder';
 import { CodeLanguage } from '../types';
 import { getTemplates } from '../freshland/utils';
 import { ProcessStatus } from '../enums';
+import { FreshlandError } from '../structures/FreshlandError';
 
 enum Action {
   CLONE = 'clone',
@@ -48,7 +49,7 @@ export default class GUI extends Command {
         await this.runActionTEMPLATE();
         break;
       default:
-        throw new Error('Action not supported yet');
+        throw new FreshlandError('Action not supported yet', 'INVALID_ACTION');
     }
   }
 

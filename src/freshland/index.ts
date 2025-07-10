@@ -1,30 +1,33 @@
 import shellExec from 'shell-exec';
 import * as fs from 'node:fs';
 import { FreshlandParser } from './utils/parser';
-import { Emitter } from './emitter';
+import { FreshlandEmitter } from './emitter';
 import { checkDirIsEmptyOrThrow, downloadFile, extractTar, getBuilderData, makeParentDirOrThrow } from './utils';
 import type { FreshlandBuilder, FreshBuilderData } from '../structures/FreshlandBuilder';
 import type { FreshlandOptions, Ref, RefArray, PlatformSource } from '../types';
+import { FreshlandError } from '../structures/FreshlandError';
 
 // TODO: handle errors gracefully & implement own error system
 export class Freshland {
-  public readonly events: Emitter;
+  public readonly events: FreshlandEmitter;
 
   public verboseMode: boolean;
 
   constructor(public readonly options: FreshlandOptions = { verbose: false }) {
-    this.events = new Emitter();
-    this.verboseMode = options.verbose;
+    this.events = new FreshlandEmitter();
+    this.verboseMode = true; // options.verbose;
   }
 
   public async clone(builder: FreshlandBuilder | FreshBuilderData): Promise<true | Error> {
     try {
       const builderData = getBuilderData(builder);
+
       const isEmptyDir = await checkDirIsEmptyOrThrow(builderData.destination);
 
       if (!isEmptyDir && !builderData.force) {
-        throw new Error(
-          '[DESTINATION_NOT_EMPTY] Destination isn\'t empty, aborting the process. (use "<FreshBuilder>.setForce(true)" or provide "--force" flag to bypass)'
+        throw new FreshlandError(
+          'Destination isn\'t empty, aborting the process. (use "<FreshBuilder>.setForce(true)" or provide "--force" flag to bypass)',
+          'DESTINATION_NOT_EMPTY'
         );
       }
       // else {
@@ -37,7 +40,7 @@ export class Freshland {
           await this.cloneUsingTar(builderData);
           break;
         default:
-          throw new Error(`Mode "${builderData.mode}" not supported yet`);
+          throw new FreshlandError(`Mode "${builderData.mode}" not supported yet`, 'INVALID_MODE');
       }
 
       this.events.emit('successClone', builderData);
@@ -61,7 +64,7 @@ export class Freshland {
       url = `${parsedSrc.url}/get/${parsedSrc.ref}.tar.gz`;
     } else {
       const hash = await this.getCommitHash(parsedSrc);
-      if (!hash) throw new Error(`[INVALID_HASH] Could not find the commit hash for ${parsedSrc.ref}`);
+      if (!hash) throw new FreshlandError(`Could not find the commit hash for ${parsedSrc.ref}`, 'HASH_NOT_FOUND');
 
       subDirectory = parsedSrc.subDirectory ? `${parsedSrc.repoName}-${hash}${parsedSrc.subDirectory}` : undefined;
 
@@ -89,7 +92,7 @@ export class Freshland {
   }
 
   private async getCommitHash(source: PlatformSource): Promise<string | null> {
-    const refs = await this.fetchGithubRefs(source);
+    const refs = await this.fetchGithubRefsOrThrow(source);
 
     if (source.ref === 'HEAD') {
       const hash = refs.find((ref) => ref.type === 'HEAD')?.hash;
@@ -115,9 +118,9 @@ export class Freshland {
     return refWithMatchingStart?.hash ?? null;
   }
 
-  private async fetchGithubRefs(source: PlatformSource): Promise<RefArray> {
+  private async fetchGithubRefsOrThrow(source: PlatformSource): Promise<RefArray> {
     const { stdout } = await shellExec(`git ls-remote ${source.url}`);
-    if (!stdout) throw new Error(`[NO_ACCESS] Could not fetch "${source.url}"`);
+    if (!stdout) throw new FreshlandError(`Could not fetch "${source.url}"`, 'FETCH_ERROR');
 
     return stdout
       .split('\n')
