@@ -61,7 +61,6 @@
     "@semantic-release/npm": "12.0.2",
     "@semantic-release/release-notes-generator": "14.0.3",
     "@types/node": "24.0.7",
-    "@types/shelljs": "^0.8.16",
     "@typescript-eslint/eslint-plugin": "7.18.0",
     "@typescript-eslint/parser": "7.18.0",
     "eslint": "8.57.1",
@@ -80,7 +79,6 @@
     "@inquirer/prompts": "7.5.3",
     "@oclif/core": "4.4.0",
     "https-proxy-agent": "7.0.6",
-    "shell-exec": "1.1.2",
     "tar": "7.4.3"
   }
 }

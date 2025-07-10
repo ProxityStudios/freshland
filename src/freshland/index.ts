@@ -1,5 +1,5 @@
-import shellExec from 'shell-exec';
 import * as fs from 'node:fs';
+import { spawn } from 'node:child_process';
 import { FreshlandParser } from './utils/parser';
 import { FreshlandEmitter } from './emitter';
 import { checkDirIsEmptyOrThrow, downloadFile, extractTar, getBuilderData, makeParentDirOrThrow } from './utils';
@@ -118,10 +118,33 @@ export class Freshland {
     return refWithMatchingStart?.hash ?? null;
   }
 
+  // TODO: implement other platforms & use REST API instead of git ls-remote
   private async fetchGithubRefsOrThrow(source: PlatformSource): Promise<RefArray> {
-    const { stdout } = await shellExec(`git ls-remote ${source.url}`);
-    if (!stdout) throw new FreshlandError(`Could not fetch "${source.url}"`, 'FETCH_ERROR');
+    const lsRemote = spawn('git', ['ls-remote', source.url], { shell: true });
 
+    return new Promise((resolve, reject) => {
+      let stdout = '';
+      let stderr = '';
+
+      lsRemote.stdout.on('data', (data) => {
+        stdout += data.toString();
+      });
+
+      lsRemote.stderr.on('data', (data) => {
+        stderr += data.toString();
+      });
+
+      lsRemote.on('close', (code) => {
+        if (code !== 0) {
+          reject(new FreshlandError(`git ls-remote failed with code ${code}: ${stderr}`, 'FETCH_ERROR'));
+        } else {
+          resolve(this.parseRefs(stdout));
+        }
+      });
+    });
+  }
+
+  private parseRefs(stdout: string): RefArray {
     return stdout
       .split('\n')
       .filter(Boolean)
