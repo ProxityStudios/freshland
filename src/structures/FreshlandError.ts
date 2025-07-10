@@ -10,4 +10,16 @@ export class FreshlandError extends Error {
 
     Object.setPrototypeOf(this, FreshlandError.prototype);
   }
+
+  toJSON() {
+    return {
+      message: this.message,
+      code: this.code,
+      status: this.status,
+    };
+  }
+
+  override toString() {
+    return `[${this.code}] (${this.status}): ${this.message}`;
+  }
 }

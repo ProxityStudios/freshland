@@ -21,21 +21,9 @@ export default class Clone extends Command {
     const { args, flags } = await this.parse(Clone);
 
     const builder = new FreshlandBuilder().setSource(args.source).setDestination(args.destination);
-    console.log(args, builder);
 
-    ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
+    // ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
     await freshland.clone(builder);
-    ux.action.stop();
-  }
-
-  protected override async catch(err: CommandError): Promise<any> {
-    const error = err as Error;
-
-    if (error.name === 'ExitPromptError') {
-      console.error('OK. cancelling...');
-      process.exit(ProcessStatus.OK);
-    }
-
-    console.error(error.message);
+    // ux.action.stop();
   }
 }

@@ -6,6 +6,7 @@ import { checkDirIsEmptyOrThrow, downloadFile, extractTar, getBuilderData, makeP
 import type { FreshlandBuilder, FreshBuilderData } from '../structures/FreshlandBuilder';
 import type { FreshlandOptions, Ref, RefArray, PlatformSource } from '../types';
 import { FreshlandError } from '../structures/FreshlandError';
+import { ProcessStatus } from '../enums';
 
 // TODO: handle errors gracefully & implement own error system
 export class Freshland {
@@ -18,7 +19,8 @@ export class Freshland {
     this.verboseMode = true; // options.verbose;
   }
 
-  public async clone(builder: FreshlandBuilder | FreshBuilderData): Promise<true | Error> {
+  public async clone(builder: FreshlandBuilder | FreshBuilderData) {
+    console.log('Cloning...');
     try {
       const builderData = getBuilderData(builder);
 
@@ -42,12 +44,10 @@ export class Freshland {
         default:
           throw new FreshlandError(`Mode "${builderData.mode}" not supported yet`, 'INVALID_MODE');
       }
-
-      this.events.emit('successClone', builderData);
-      return true;
-    } catch (error) {
-      this.events.emit('error', error);
-      throw error;
+    } catch (err) {
+      const error = err as FreshlandError;
+      console.error(error.toString());
+      process.exit(ProcessStatus.ERROR);
     }
   }
 
@@ -160,7 +160,7 @@ export class Freshland {
   }
 
   private verbose(...args: unknown[]): void {
-    if (this.verboseMode) console.debug('Debug', ...args);
+    if (this.verboseMode) console.debug('VERBOSE', ...args);
   }
 
   public setVerboseMode(verbose: boolean) {
