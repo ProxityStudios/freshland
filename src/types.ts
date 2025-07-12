@@ -1,5 +1,5 @@
 import type Freshland from './freshland';
-import type templatesData from '../local-data/templates.json';
+import type templatesData from '../.data/templates.json';
 
 export type URIType = `https://${string}` | `http://${string}`;
 

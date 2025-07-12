@@ -2,7 +2,7 @@
 [*] GUI command
 [] Clone private repositories 
 [] Enhance speed
-[] Allow proxies
+[*] Allow proxies
 [*] Templates
 [] Automatically install dependencies
 [] E.P.A

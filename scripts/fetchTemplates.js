@@ -46,7 +46,7 @@ async function download(url, saveTo) {
 }
 
 async function fetchTemplates() {
-  const filePath = path.join(__dirname, '../local-data/templates.json');
+  const filePath = path.join(__dirname, '../.data/templates.json');
   fs.unlink(filePath, () => {
     console.log(filePath, 'done');
   });

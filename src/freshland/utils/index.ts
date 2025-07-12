@@ -6,7 +6,7 @@ import * as https from 'node:https';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { FreshlandBuilder, FreshBuilderData } from '../../structures/freshlandBuilder';
-import templatesRAWData from '../../../local-data/templates.json';
+import templatesRAWData from '../../../.data/templates.json';
 import { TemplateKeysWithS, TemplateRAWData, Templates, TemplatesRAWData, Template } from '../../types';
 import { FreshlandError } from '../../structures/freshlandError';
 

@@ -2,7 +2,7 @@ import { Flags as OCFlags } from '@oclif/core';
 import { Flags, FreshlandBaseCommand } from '../structures/freshlandBaseCommand';
 
 export default class Version extends FreshlandBaseCommand<typeof Version> {
-  static override summary = 'child class that extends BaseCommand';
+  static override description = 'TODO:';
 
   static override examples = ['<%= config.bin %> <%= command.id %>'];
 

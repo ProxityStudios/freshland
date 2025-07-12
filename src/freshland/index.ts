@@ -191,7 +191,7 @@ export class Freshland {
   setGlobalProxy(proxy: string) {
     this.options.globalProxy = proxy;
     fs.writeFileSync(
-      path.resolve(__dirname, '../../local-data/proxy.json'),
+      path.resolve(__dirname, '../../.data/proxy.json'),
       JSON.stringify({ globalProxy: proxy }, null, 2)
     );
   }
@@ -199,14 +199,14 @@ export class Freshland {
   clearGlobalProxy() {
     this.options.globalProxy = undefined;
     fs.writeFileSync(
-      path.resolve(__dirname, '../../local-data/proxy.json'),
+      path.resolve(__dirname, '../../.data/proxy.json'),
       JSON.stringify({ globalProxy: undefined }, null, 2)
     );
   }
 
   loadGlobalProxy() {
     try {
-      const data = fs.readFileSync(path.resolve(__dirname, '../../local-data/proxy.json'), 'utf-8');
+      const data = fs.readFileSync(path.resolve(__dirname, '../../.data/proxy.json'), 'utf-8');
       this.options.globalProxy = JSON.parse(data).globalProxy;
     } catch {
       // file not found or invalid, ignore

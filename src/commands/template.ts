@@ -1,8 +1,6 @@
 import { Args, Command, Flags as OCFlags, ux } from '@oclif/core';
-import type { CommandError } from '@oclif/core/interfaces';
 import { freshland } from '../container';
 import { FreshlandBuilder } from '../structures/freshlandBuilder';
-import { ProcessStatus } from '../enums';
 import { Flags, FreshlandBaseCommand } from '../structures/freshlandBaseCommand';
 
 // TODO: Check existing version of templates.json and update if its outdated.
