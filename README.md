@@ -8,8 +8,8 @@ You can use Freshland in two ways: with a single-line command or with a graphica
 
 | Global Flag      | Description                |
 | ---------------- | -------------------------- |
-| `--v`, `--version`  | Output the current version |
 | `--d`, `--debug` | Enable debug mode          |
+| `--gp`, `--global-proxy` | Globally sets the given proxy          |
 
 ### Single-line command
 
@@ -30,14 +30,10 @@ npx freshland@latest clone ProxityStudios/typescript-starter myapp
 | Flag                        | Referance          | Accepted Values              | Default Value      | Description                        |
 | --------------------------- | ------------------ | ---------------------------- | ------------------ | ---------------------------------- |
 | `--upd`, `--update-package` |                    |                              | `false`            | Update package name and version    |
-| `--n`, `--name`             | `<name>`           | `string`      | `cloned-repo-name` | Change the package name.           |
-| `--v`, `--version`          | `<version>`        | `x.x.x`      | `1.0.0`            | Change the package version         |
 | `--i`, `--install-deps`     | `<packageManager>` | `npm`, `pnpm`, `bun`, `yarn` | `do-not-install`   | Install dependencies automatically |
-| `--kg`, `--keep-git`        |                    |                              | `false`            | Do not delete ".git" folder        |
 
 ### Graphical user interface
-
-To clone a repository with a GUI, simply run:
+TODO:
 
 ```bash
 npx freshland@latest gui

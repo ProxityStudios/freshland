@@ -1,9 +1,7 @@
 import { Args, Command, Flags } from '@oclif/core';
 import { ux } from '@oclif/core/ux';
-import type { CommandError } from '@oclif/core/interfaces';
 import { freshland } from '../container';
 import { FreshlandBuilder } from '../structures/FreshlandBuilder';
-import { ProcessStatus } from '../enums';
 
 export default class Clone extends Command {
   static override args = {

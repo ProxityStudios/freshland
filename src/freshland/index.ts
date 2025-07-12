@@ -119,6 +119,7 @@ export class Freshland {
   }
 
   // TODO: implement other platforms & use REST API instead of git ls-remote
+  // FIXME: validate source.url incase of injection attacks
   private async fetchGithubRefsOrThrow(source: PlatformSource): Promise<RefArray> {
     const lsRemote = spawn('git', ['ls-remote', source.url], { shell: true });
 

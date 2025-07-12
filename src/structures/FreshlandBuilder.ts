@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { FreshlandError } from './FreshlandError';
-import { FreshlandMode, TemplateKeysWithS } from '../types';
+import type { FreshlandMode, TemplateKeysWithS } from '../types';
 import { getTemplateIfExistsOrThrow } from '../freshland/utils';
 
 export class FreshlandBuilder {

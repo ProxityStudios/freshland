@@ -25,6 +25,7 @@ export default class GUI extends Command {
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(GUI);
+
     const action = await select<Action>({
       message: 'Select an action',
       choices: [

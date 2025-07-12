@@ -9,7 +9,7 @@ export interface Dependencies {
 
 export interface FreshlandOptions {
   verbose: boolean;
-  proxy?: string; // TODO: use as global proxy
+  globalProxy?: string;
 }
 
 export type FreshlandMode = 'tar'; //| 'git';
@@ -49,6 +49,8 @@ export interface TemplatesRAWData {
 export interface TemplateRAWData {
   codeLanguage: CodeLanguage;
   displayName: string;
+  // disabled: boolean;
+  // description: string;
   uri: URIType;
 }
 
