@@ -1,6 +1,6 @@
 {
   "name": "freshland",
-  "description": "TODO: Freshland is a CLI tool that lets you to clone repositories faster and comes with additinional features.",
+  "description": "Freshland is a CLI tool that lets you to clone repositories faster and comes with additinional features.",
   "version": "4.0.0-beta.7",
   "author": "ProxityStudios",
   "license": "MIT",
@@ -14,15 +14,12 @@
   },
   "keywords": [
     "freshland",
-    "cloner",
-    "clone",
-    "javascript",
-    "git",
-    "bash-script",
-    "bash",
     "eslint",
+    "prettier",
     "template",
-    "templates"
+    "templates",
+    "cli",
+    "clone"
   ],
   "repository": {
     "type": "git",
