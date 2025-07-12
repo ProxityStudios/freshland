@@ -5,10 +5,10 @@ import URL from 'url';
 import * as https from 'node:https';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { FreshlandBuilder, FreshBuilderData } from '../../structures/FreshlandBuilder';
+import { FreshlandBuilder, FreshBuilderData } from '../../structures/freshlandBuilder';
 import templatesRAWData from '../../../local-data/templates.json';
 import { TemplateKeysWithS, TemplateRAWData, Templates, TemplatesRAWData, Template } from '../../types';
-import { FreshlandError } from '../../structures/FreshlandError';
+import { FreshlandError } from '../../structures/freshlandError';
 
 export function getTemplates(): Templates {
   const simplifiedTemplates: Template[] = Object.entries<TemplateRAWData>(templatesRAWData as TemplatesRAWData).map(
@@ -43,39 +43,54 @@ export async function checkDirIsEmptyOrThrow(dir: string): Promise<boolean> {
   }
 }
 
-// FIXME: abort downloading when the terminal process canceled
-export function downloadFile(url: string, saveTo: string, proxy?: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const options: https.RequestOptions = {
-      headers: {
-        'User-Agent': 'Freshland/4.0.0',
-      },
-    };
+export async function downloadFile(url: string, saveTo: string, proxy?: string): Promise<string> {
+  const options: https.RequestOptions = {
+    headers: {
+      'User-Agent': 'Freshland/4.0.0',
+    },
+  };
 
-    if (proxy) {
-      options.agent = new HttpsProxyAgent(proxy, {
-        rejectUnauthorized: true,
-      }) as https.Agent;
-    }
+  if (proxy) {
+    options.agent = new HttpsProxyAgent(proxy, {
+      // rejectUnauthorized: true,
+      timeout: 6000,
+      sessionTimeout: 6000,
+    }) as https.Agent;
+  }
+
+  let fileStream: fs.WriteStream | undefined;
+  let aborted = false;
+
+  return new Promise<string>((resolve, reject) => {
+    console.log(`Downloading from ${url} to ${saveTo}`, options.agent ? `via proxy ${proxy}` : '');
 
     const request = https.get(url, options, (response) => {
       if (response.statusCode && response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
-        downloadFile(response.headers.location, saveTo, proxy).then(resolve).catch(reject);
+        console.log(`Redirecting to ${response.headers.location}`);
         request.destroy();
+        downloadFile(response.headers.location, saveTo, proxy).then(resolve).catch(reject);
         return;
       }
 
-      const dest = path.join(saveTo);
-      const fileStream = fs.createWriteStream(dest);
+      if (proxy && [407, 502, 503, 504].includes(response.statusCode ?? 0)) {
+        aborted = true;
+        request.destroy();
+        reject(new FreshlandError(`Received status code ${response.statusCode}`, 'PROXY_ERROR'));
+        return;
+      }
+
+      const destination = path.join(saveTo);
+      fileStream = fs.createWriteStream(destination);
 
       response.pipe(fileStream);
 
       fileStream.on('finish', () => {
-        fileStream.close();
+        fileStream?.close();
         resolve(saveTo);
       });
 
       fileStream.on('error', (error) => {
+        fileStream?.close();
         fs.unlink(saveTo, () => {
           reject(error);
         });
@@ -83,8 +98,33 @@ export function downloadFile(url: string, saveTo: string, proxy?: string): Promi
     });
 
     request.on('error', (error) => {
-      reject(error);
+      if (aborted) return;
+
+      if (fileStream) {
+        fileStream.close();
+        fs.unlink(saveTo, () => {
+          reject(error);
+        });
+      } else {
+        reject(error);
+      }
     });
+
+    const cleanup = () => {
+      aborted = true;
+      request.destroy();
+
+      if (fileStream) {
+        fileStream.close();
+        fs.unlink(saveTo, () => {});
+      }
+
+      console.log('Download aborted and file removed.');
+      process.exit(0);
+    };
+
+    process.on('SIGINT', cleanup);
+    process.on('SIGTERM', cleanup);
   });
 }
 

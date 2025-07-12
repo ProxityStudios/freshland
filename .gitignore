@@ -1,5 +1,6 @@
 # Misc
 /local-data/templates.json
+/local-data/proxy.json
 lib-cov/
 .git/
 *.seed

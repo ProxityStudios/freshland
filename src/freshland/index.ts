@@ -1,11 +1,12 @@
 import * as fs from 'node:fs';
 import { spawn } from 'node:child_process';
+import path from 'node:path';
 import { FreshlandParser } from './utils/parser';
 import { FreshlandEmitter } from './emitter';
 import { checkDirIsEmptyOrThrow, downloadFile, extractTar, getBuilderData, makeParentDirOrThrow } from './utils';
-import type { FreshlandBuilder, FreshBuilderData } from '../structures/FreshlandBuilder';
+import type { FreshlandBuilder, FreshBuilderData } from '../structures/freshlandBuilder';
 import type { FreshlandOptions, Ref, RefArray, PlatformSource } from '../types';
-import { FreshlandError } from '../structures/FreshlandError';
+import { FreshlandError } from '../structures/freshlandError';
 import { ProcessStatus } from '../enums';
 
 // TODO: handle errors gracefully & implement own error system
@@ -17,6 +18,8 @@ export class Freshland {
   constructor(public readonly options: FreshlandOptions = { verbose: false }) {
     this.events = new FreshlandEmitter();
     this.verboseMode = true; // options.verbose;
+
+    this.loadGlobalProxy();
   }
 
   public async clone(builder: FreshlandBuilder | FreshBuilderData) {
@@ -78,17 +81,14 @@ export class Freshland {
     await makeParentDirOrThrow(builderData.destination);
 
     this.verbose(`Downloading from "${url}`);
-    await downloadFile(url, destinationWithFileName, builderData.proxy);
+    await downloadFile(url, destinationWithFileName, this.options.globalProxy ?? builderData.proxy);
 
     this.verbose(`Extracting from "${destinationWithFileName}`);
     // FIXME: subDirectory only works on Github repos
     await extractTar(destinationWithFileName, builderData.destination, subDirectory);
 
     this.verbose(`Removing copy of downloaded repository: "${destinationWithFileName}`);
-    await fs.promises.rm(destinationWithFileName, {
-      force: true,
-      recursive: true,
-    });
+    await fs.promises.unlink(destinationWithFileName);
   }
 
   private async getCommitHash(source: PlatformSource): Promise<string | null> {
@@ -189,6 +189,23 @@ export class Freshland {
 
   public setVerboseMode(verbose: boolean) {
     this.verboseMode = verbose;
+  }
+
+  setGlobalProxy(proxy: string) {
+    this.options.globalProxy = proxy;
+    fs.writeFileSync(
+      path.resolve(__dirname, '../../local-data/proxy.json'),
+      JSON.stringify({ globalProxy: proxy }, null, 2)
+    );
+  }
+
+  loadGlobalProxy() {
+    try {
+      const data = fs.readFileSync(path.resolve(__dirname, '../../local-data/proxy.json'), 'utf-8');
+      this.options.globalProxy = JSON.parse(data).globalProxy;
+    } catch {
+      // file not found or invalid, ignore
+    }
   }
 }
 

@@ -1,5 +1,5 @@
 import Constants from '../../constants';
-import { FreshlandError } from '../../structures/FreshlandError';
+import { FreshlandError } from '../../structures/freshlandError';
 import type { PlatformSource } from '../../types';
 
 export class FreshlandParser {

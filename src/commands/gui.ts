@@ -3,11 +3,11 @@ import { input, select } from '@inquirer/prompts';
 import type { CommandError } from '@oclif/core/interfaces';
 import { FreshlandParser } from '../freshland/utils/parser';
 import { freshland } from '../container';
-import { FreshlandBuilder } from '../structures/FreshlandBuilder';
+import { FreshlandBuilder } from '../structures/freshlandBuilder';
 import { CodeLanguage } from '../types';
 import { getTemplates } from '../freshland/utils';
 import { ProcessStatus } from '../enums';
-import { FreshlandError } from '../structures/FreshlandError';
+import { FreshlandError } from '../structures/freshlandError';
 
 enum Action {
   CLONE = 'clone',
