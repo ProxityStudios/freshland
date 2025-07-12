@@ -1,4 +1,4 @@
-import { Args, Command, Flags, ux } from '@oclif/core';
+import { Args, Command, Flags } from '@oclif/core';
 
 // TODO:
 export default class Version extends Command {
@@ -12,6 +12,10 @@ export default class Version extends Command {
 
   public async run(): Promise<void> {
     const { args, flags } = await this.parse(Version);
-    this.log('Running version command');
+
+    this.log('Version:', this.config.version);
+    this.log('Node Version: ' + process.version);
+    this.log('Platform: ' + process.platform);
+    this.log('Architecture: ' + process.arch);
   }
 }
