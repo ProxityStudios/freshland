@@ -44,7 +44,7 @@
   "bin": {
     "freshland": "bin/run.js"
   },
-  "exports": "./dist/freshland/index.js",
+  "exports": "./dist/index.js",
   "oclif": {
     "bin": "freshland",
     "commands": "./dist/commands",
@@ -76,6 +76,7 @@
   "dependencies": {
     "@inquirer/prompts": "7.5.3",
     "@oclif/core": "4.4.0",
+    "freshland": "4.0.0-beta.9",
     "https-proxy-agent": "7.0.6",
     "tar": "7.4.3"
   }
