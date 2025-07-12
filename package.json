@@ -7,7 +7,7 @@
   "homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
   "main": "dist/freshland/index.js",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=16.0.0"
   },
   "bugs": {
     "url": "https://github.com/ProxityStudios/freshland/issues"
@@ -33,7 +33,7 @@
   "scripts": {
     "test": "./bin/dev.js",
     "test-export": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register test/index.ts --verbose",
-    "build": "run-s fetch-templates format clean tsc",
+    "build": "run-s format clean tsc",
     "tsc": "tsc --build",
     "clean": "rimraf dist/",
     "format": "eslint . --fix",

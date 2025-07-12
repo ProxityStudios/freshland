@@ -5,8 +5,8 @@
 	"compilerOptions": {
 		"skipLibCheck": true,
 		"target": "ES2022",
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
+		"module": "node16",
+		"moduleResolution": "node16",
 		"esModuleInterop": true,
 		"allowJs": true,
 		"resolveJsonModule": true,
@@ -17,6 +17,9 @@
 		"sourceMap": false,
 		"declaration": true,
 		"declarationMap": false,
+		"typeRoots": [
+			"node_modules/@types",
+		],
 		"rootDir": "./src",
 		"outDir": "dist",
 	},
