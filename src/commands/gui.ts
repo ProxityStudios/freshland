@@ -22,7 +22,10 @@ export default class GUI extends FreshlandBaseCommand<typeof GUI> {
 
   static override examples = ['<%= config.bin %> <%= command.id %> TODO:'];
 
-  static override flags = {};
+  // TODO:
+  static override flags = {
+    proxy: OCFlags.string({ description: 'Proxy URL to use for the request e.g: http://username:password@ip:port' }),
+  };
 
   public async run(): Promise<Flags<typeof GUI>> {
     const { args, flags } = await this.parse(GUI);

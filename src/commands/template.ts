@@ -16,12 +16,16 @@ export default class Template extends FreshlandBaseCommand<typeof Template> {
 
   static override examples = ['<%= config.bin %> <%= command.id %> TODO:'];
 
-  static override flags = {};
+  static override flags = {
+    proxy: OCFlags.string({ description: 'Proxy URL to use for the request e.g: http://username:password@ip:port' }),
+  };
 
   public async run(): Promise<Flags<typeof Template>> {
     const { args, flags } = await this.parse(Template);
 
     const builder = new FreshlandBuilder().useTemplate(args.template).setDestination(args.destination);
+
+    if (flags.proxy) builder.setProxy(flags.proxy);
 
     ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
     await freshland.clone(builder);

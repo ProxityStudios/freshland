@@ -11,14 +11,18 @@ export default class Clone extends FreshlandBaseCommand<typeof Clone> {
 
   static override description = 'Clone a repository from supported sources.';
 
-  static override examples = ['<%= config.bin %> <%= command.id %> ProxityStudios/freshlland ./freshland-copy'];
+  static override examples = ['<%= config.bin %> <%= command.id %> ProxityStudios/freshland ./freshland-copy'];
 
-  static override flags = {};
+  static override flags = {
+    proxy: OCFlags.string({ description: 'Proxy URL to use for the request e.g: http://username:password@ip:port' }),
+  };
 
   public async run(): Promise<Flags<typeof Clone>> {
     const { args, flags } = await this.parse(Clone);
 
     const builder = new FreshlandBuilder().setSource(args.source).setDestination(args.destination);
+
+    if (flags.proxy) builder.setProxy(flags.proxy);
 
     // ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
     await freshland.clone(builder);
