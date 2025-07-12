@@ -1,21 +1,19 @@
-import { Args, Command, Flags } from '@oclif/core';
+import { Flags as OCFlags } from '@oclif/core';
+import { Flags, FreshlandBaseCommand } from '../structures/freshlandBaseCommand';
 
-// TODO:
-export default class Version extends Command {
-  static override args = {};
+export default class Version extends FreshlandBaseCommand<typeof Version> {
+  static override summary = 'child class that extends BaseCommand';
 
-  static override description = 'TODO:';
-
-  static override examples = ['<%= config.bin %> <%= command.id %> TODO:'];
+  static override examples = ['<%= config.bin %> <%= command.id %>'];
 
   static override flags = {};
 
-  public async run(): Promise<void> {
-    const { args, flags } = await this.parse(Version);
-
+  public override async run(): Promise<Flags<typeof Version>> {
     this.log('Version:', this.config.version);
     this.log('Node Version: ' + process.version);
     this.log('Platform: ' + process.platform);
     this.log('Architecture: ' + process.arch);
+
+    return this.flags;
   }
 }

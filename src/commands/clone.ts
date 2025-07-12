@@ -1,9 +1,9 @@
-import { Args, Command, Flags } from '@oclif/core';
-import { ux } from '@oclif/core/ux';
+import { Args, Command, Flags as OCFlags } from '@oclif/core';
 import { freshland } from '../container';
 import { FreshlandBuilder } from '../structures/freshlandBuilder';
+import { Flags, FreshlandBaseCommand } from '../structures/freshlandBaseCommand';
 
-export default class Clone extends Command {
+export default class Clone extends FreshlandBaseCommand<typeof Clone> {
   static override args = {
     source: Args.string({ description: 'E.G: ProxityStudios/freshland', required: true }),
     destination: Args.directory({ description: 'Destination of the copied repository', required: true }),
@@ -15,7 +15,7 @@ export default class Clone extends Command {
 
   static override flags = {};
 
-  public async run(): Promise<void> {
+  public async run(): Promise<Flags<typeof Clone>> {
     const { args, flags } = await this.parse(Clone);
 
     const builder = new FreshlandBuilder().setSource(args.source).setDestination(args.destination);
@@ -23,5 +23,7 @@ export default class Clone extends Command {
     // ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
     await freshland.clone(builder);
     // ux.action.stop();
+
+    return this.flags;
   }
 }

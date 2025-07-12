@@ -1,4 +1,4 @@
-import { Args, Command, Flags, ux } from '@oclif/core';
+import { Args, Command, Flags as OCFlags, ux } from '@oclif/core';
 import { input, select } from '@inquirer/prompts';
 import type { CommandError } from '@oclif/core/interfaces';
 import { FreshlandParser } from '../freshland/utils/parser';
@@ -8,13 +8,14 @@ import { CodeLanguage } from '../types';
 import { getTemplates } from '../freshland/utils';
 import { ProcessStatus } from '../enums';
 import { FreshlandError } from '../structures/freshlandError';
+import { Flags, FreshlandBaseCommand } from '../structures/freshlandBaseCommand';
 
 enum Action {
   CLONE = 'clone',
   TEMPLATE = 'template',
 }
 
-export default class GUI extends Command {
+export default class GUI extends FreshlandBaseCommand<typeof GUI> {
   static override args = {};
 
   static override description = 'TODO: description of gui command';
@@ -23,7 +24,7 @@ export default class GUI extends Command {
 
   static override flags = {};
 
-  public async run(): Promise<void> {
+  public async run(): Promise<Flags<typeof GUI>> {
     const { args, flags } = await this.parse(GUI);
 
     const action = await select<Action>({
@@ -52,6 +53,8 @@ export default class GUI extends Command {
       default:
         throw new FreshlandError('Action not supported yet', 'INVALID_ACTION');
     }
+
+    return this.flags;
   }
 
   private async runActionCLONE() {
@@ -118,16 +121,5 @@ export default class GUI extends Command {
     ux.action.start('Cloning', 'Still in progress', { style: 'aesthetic' });
     await freshland.clone(builder);
     ux.action.stop();
-  }
-
-  protected override async catch(err: CommandError): Promise<any> {
-    const error = err as Error;
-
-    if (error.name === 'ExitPromptError') {
-      console.error('OK. cancelling...');
-      process.exit(ProcessStatus.OK);
-    }
-
-    console.error(error);
   }
 }

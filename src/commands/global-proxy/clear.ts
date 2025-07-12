@@ -1,8 +1,8 @@
-import { Args, Command, Flags } from '@oclif/core';
+import { Args, Command, Flags as OCFlags } from '@oclif/core';
 import { freshland } from '../../container';
+import { Flags, FreshlandBaseCommand } from '../../structures/freshlandBaseCommand';
 
-// TODO:
-export default class GlobalProxyClear extends Command {
+export default class GlobalProxyClear extends FreshlandBaseCommand<typeof GlobalProxyClear> {
   static override args = {};
 
   static override description = 'TODO:';
@@ -11,10 +11,12 @@ export default class GlobalProxyClear extends Command {
 
   static override flags = {};
 
-  public async run(): Promise<void> {
+  public async run(): Promise<Flags<typeof GlobalProxyClear>> {
     const { args, flags } = await this.parse(GlobalProxyClear);
 
-    // freshland.setGlobalProxy(args.proxy);
-    // this.log('Global proxy set to http://' + freshland.options.globalProxy);
+    freshland.clearGlobalProxy();
+    this.log('Global proxy cleared successfully.');
+
+    return this.flags;
   }
 }

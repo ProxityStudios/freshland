@@ -1,5 +1,5 @@
 import { Freshland } from '../src/freshland/index';
-import { FreshlandBuilder } from '../src/structures/FreshlandBuilder';
+import { FreshlandBuilder } from '../src/structures/freshlandBuilder';
 
 const freshland = new Freshland({ verbose: true });
 

@@ -15,7 +15,7 @@ export class Freshland {
 
   public verboseMode: boolean;
 
-  constructor(public readonly options: FreshlandOptions = { verbose: false }) {
+  constructor(public readonly options: FreshlandOptions = { verbose: false, globalProxy: undefined }) {
     this.events = new FreshlandEmitter();
     this.verboseMode = true; // options.verbose;
 
@@ -35,9 +35,6 @@ export class Freshland {
           'DESTINATION_NOT_EMPTY'
         );
       }
-      // else {
-      //   logger.warn("Destination directory isn't empty. Skipping (force mode)");
-      // }
 
       switch (builderData.mode) {
         case 'tar':
@@ -196,6 +193,14 @@ export class Freshland {
     fs.writeFileSync(
       path.resolve(__dirname, '../../local-data/proxy.json'),
       JSON.stringify({ globalProxy: proxy }, null, 2)
+    );
+  }
+
+  clearGlobalProxy() {
+    this.options.globalProxy = undefined;
+    fs.writeFileSync(
+      path.resolve(__dirname, '../../local-data/proxy.json'),
+      JSON.stringify({ globalProxy: undefined }, null, 2)
     );
   }
 

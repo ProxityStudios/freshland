@@ -1,7 +1,8 @@
-import { Args, Command, Flags } from '@oclif/core';
+import { Args, Command, Flags as OCFlags } from '@oclif/core';
 import { freshland } from '../../container';
+import { Flags, FreshlandBaseCommand } from '../../structures/freshlandBaseCommand';
 
-export default class GlobalProxySet extends Command {
+export default class GlobalProxyClear extends FreshlandBaseCommand<typeof GlobalProxyClear> {
   static override args = {
     proxy: Args.string({
       description: 'The global proxy to set, e.g., "http://username:password@ip:port"',
@@ -15,10 +16,14 @@ export default class GlobalProxySet extends Command {
 
   static override flags = {};
 
-  public async run(): Promise<void> {
-    const { args, flags } = await this.parse(GlobalProxySet);
+  public async run(): Promise<Flags<typeof GlobalProxyClear>> {
+    const { args, flags } = await this.parse(GlobalProxyClear);
+
+    // TODO: Validate the proxy format if necessary
 
     freshland.setGlobalProxy(args.proxy);
     this.log('Global proxy set to flags:', args.proxy);
+
+    return this.flags;
   }
 }
