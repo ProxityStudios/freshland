@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const { exec } = require('node:child_process');
+const { execFile } = require('node:child_process');
 const fs = require('node:fs');
 const path = require('node:path');
 
@@ -14,7 +14,7 @@ if (!fs.existsSync(dataDirectory)) {
 
 const fetchTemplatesScript = path.join(__dirname, 'fetchTemplates.js');
 
-exec(`node ${fetchTemplatesScript}`, (error, stdout, stderr) => {
+execFile('node', [fetchTemplatesScript], (error, stdout, stderr) => {
   if (error) {
     console.error(`Error executing fetchTemplates script: ${error.message}`);
     return;
