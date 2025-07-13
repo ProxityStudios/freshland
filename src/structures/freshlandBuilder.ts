@@ -40,7 +40,7 @@ export class FreshlandBuilder {
   }
 
   public setDestination(destination: string) {
-    this.destination = path.resolve(process.cwd(), destination);
+    this.destination = path.resolve(destination);
     return this;
   }
 
