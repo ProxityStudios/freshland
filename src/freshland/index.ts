@@ -8,6 +8,7 @@ import type { FreshlandBuilder, FreshBuilderData } from '../structures/freshland
 import type { FreshlandOptions, Ref, RefArray, PlatformSource } from '../types';
 import { FreshlandError } from '../structures/freshlandError';
 import { ProcessStatus } from '../enums';
+import { ProxyConfigRAWDataPath } from '../paths';
 
 // TODO: handle errors gracefully & implement own error system
 export class Freshland {
@@ -188,25 +189,19 @@ export class Freshland {
     this.verboseMode = verbose;
   }
 
-  setGlobalProxy(proxy: string) {
-    this.options.globalProxy = proxy;
-    fs.writeFileSync(
-      path.resolve(__dirname, '../../.data/proxy.json'),
-      JSON.stringify({ globalProxy: proxy }, null, 2)
-    );
+  setGlobalProxy(globalProxy: string) {
+    this.options.globalProxy = globalProxy;
+    fs.writeFileSync(ProxyConfigRAWDataPath, JSON.stringify({ globalProxy }, null, 2));
   }
 
   clearGlobalProxy() {
     this.options.globalProxy = undefined;
-    fs.writeFileSync(
-      path.resolve(__dirname, '../../.data/proxy.json'),
-      JSON.stringify({ globalProxy: undefined }, null, 2)
-    );
+    fs.writeFileSync(ProxyConfigRAWDataPath, JSON.stringify({ globalProxy: undefined }, null, 2));
   }
 
   loadGlobalProxy() {
     try {
-      const data = fs.readFileSync(path.resolve(__dirname, '../../.data/proxy.json'), 'utf-8');
+      const data = fs.readFileSync(ProxyConfigRAWDataPath, 'utf-8');
       this.options.globalProxy = JSON.parse(data).globalProxy;
     } catch {
       // file not found or invalid, ignore
