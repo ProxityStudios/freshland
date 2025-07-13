@@ -6,17 +6,20 @@ import * as https from 'node:https';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 import { FreshlandBuilder, FreshBuilderData } from '../../structures/freshlandBuilder';
-import templatesRAWData from '../../../.data/templates.json';
 import { TemplateKeysWithS, TemplateRAWData, Templates, TemplatesRAWData, Template } from '../../types';
 import { FreshlandError } from '../../structures/freshlandError';
+import { TemplatesRAWDataPath } from '../../paths';
 
 export function getTemplates(): Templates {
-  const simplifiedTemplates: Template[] = Object.entries<TemplateRAWData>(templatesRAWData as TemplatesRAWData).map(
-    ([name, data]) => ({
-      name,
-      ...data,
-    })
-  );
+  const templatesData: TemplatesRAWData = JSON.parse(fs.readFileSync(TemplatesRAWDataPath, 'utf-8'));
+  if (!templatesData || typeof templatesData !== 'object') {
+    throw new FreshlandError('Invalid templates data', 'INVALID_TEMPLATES_DATA');
+  }
+
+  const simplifiedTemplates: Template[] = Object.entries<TemplateRAWData>(templatesData).map(([name, data]) => ({
+    name,
+    ...data,
+  }));
 
   return simplifiedTemplates;
 }

@@ -7,3 +7,4 @@
 [] Automatically install dependencies
 [] E.P.A
 [] Enhanced error handling
+[] ESM & CJS support

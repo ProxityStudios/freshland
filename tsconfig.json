@@ -1,12 +1,12 @@
 {
 	"ts-node": {
-		"transpileOnly": true
+		"transpileOnly": true,
 	},
 	"compilerOptions": {
 		"skipLibCheck": true,
 		"target": "ES2022",
-		"module": "node16",
-		"moduleResolution": "node16",
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
 		"esModuleInterop": true,
 		"allowJs": true,
 		"resolveJsonModule": true,
@@ -17,17 +17,10 @@
 		"sourceMap": false,
 		"declaration": true,
 		"declarationMap": false,
-		"typeRoots": [
-			"node_modules/@types",
-		],
 		"rootDir": "./src",
 		"outDir": "dist",
 	},
 	"include": [
 		"src/**/*.ts"
-	],
-	"exclude": [
-		"node_modules",
-		"dist"
 	],
 }

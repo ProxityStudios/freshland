@@ -5,9 +5,8 @@
   "author": "ProxityStudios",
   "license": "MIT",
   "homepage": "https://github.com/ProxityStudios/freshland/blob/main/README.md",
-  "main": "dist/freshland/index.js",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=22.0.0"
   },
   "bugs": {
     "url": "https://github.com/ProxityStudios/freshland/issues"
@@ -33,8 +32,9 @@
   "scripts": {
     "test": "./bin/dev.js",
     "test-export": "node --enable-source-maps --experimental-specifier-resolution=node -r ts-node/register test/index.ts --verbose",
-    "build": "run-s format clean tsc",
-    "tsc": "tsc --build",
+    "build": "run-s format clean build:esm build:cjs",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
     "clean": "rimraf dist/",
     "format": "eslint . --fix",
     "type-check": "tsc -p tsconfig.json --noEmit",
@@ -44,11 +44,33 @@
   "bin": {
     "freshland": "bin/run.js"
   },
-  "exports": "./dist/index.js",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js"
+    }
+  },
   "oclif": {
     "bin": "freshland",
-    "commands": "./dist/commands",
+    "commands": "./src/commands",
     "dirname": "freshland",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-warn-if-update-available",
+      "@oclif/plugin-not-found"
+    ],
+    "update": {
+      "autoupdate": {
+        "rollout": 50,
+        "debounce": 60
+      },
+      "node": {
+        "version": "22.16.0"
+      }
+    },
     "topicSeparator": " "
   },
   "devDependencies": {
@@ -76,6 +98,9 @@
   "dependencies": {
     "@inquirer/prompts": "7.5.3",
     "@oclif/core": "4.4.0",
+    "@oclif/plugin-help": "6.2.31",
+    "@oclif/plugin-not-found": "3.2.59",
+    "@oclif/plugin-warn-if-update-available": "3.1.44",
     "https-proxy-agent": "7.0.6",
     "tar": "7.4.3"
   }

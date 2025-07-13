@@ -1,5 +1,5 @@
 import type Freshland from './freshland';
-import type templatesData from '../.data/templates.json';
+// import type templatesData from '../.data/templates.json';
 
 export type URIType = `https://${string}` | `http://${string}`;
 
@@ -36,9 +36,15 @@ export interface PlatformSource {
 
 export type SupportedPlatformsType = Record<string, string>;
 
-export type TemplateKeys = keyof typeof templatesData;
-
-export type TemplateKeysWithS = TemplateKeys | (string & { __brand?: 'TemplateKeysWithS' });
+// TODO:
+// export type TemplateKeys = keyof typeof templatesData;
+export type TemplateKeysWithS =
+  | 'javascript-starter'
+  | 'typescript-starter'
+  | 'discort-bot-starter-ts'
+  | 'discort-bot-starter-js'
+  | 'express-api-starter-ts'
+  | (string & { __brand?: 'TemplateKeysWithS' });
 
 export type CodeLanguage = 'typescript' | 'javascript'; // TODO:
 
