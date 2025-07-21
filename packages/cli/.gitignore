@@ -1,0 +1,39 @@
+# Misc
+/.data
+lib-cov/
+.git/
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.swp
+pids/
+logs/
+results/
+tmp/
+todo
+/tests
+dist/
+package/
+
+# Coverage reports
+coverage/
+
+# API keys and secrets
+.env
+.env.production
+.env.development
+
+# Dependency directory
+node_modules/
+
+# Editors
+.idea/
+*.iml
+
+# OS metadata
+.DS_Store/
+Thumbs.db

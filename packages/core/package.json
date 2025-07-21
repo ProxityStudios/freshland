@@ -1,0 +1,35 @@
+{
+  "name": "@repick/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./dist/index.js",
+  "exports": "./dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "jest",
+    "watch-input": "tsc --watch --preserveWatchOutput",
+    "build": "tsc --project tsconfig.json",
+    "check-types": "tsc --noEmit --project tsconfig.json",
+    "postinstall": "node ./scripts/postinstall.js"
+  },
+  "keywords": [],
+  "author": "Proxity Studios",
+  "license": "MIT",
+  "devDependencies": {
+    "@jest/globals": "^30.0.4",
+    "jest": "^30.0.4",
+    "ts-jest": "^29.4.0",
+  	"@repick/typescript-config": "workspace:*",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "https-proxy-agent": "^7.0.6",
+    "@repick/common": "workspace:*",
+    "tar": "^7.4.3"
+  }
+}

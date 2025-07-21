@@ -1,0 +1,33 @@
+{
+	"ts-node": {
+		"transpileOnly": true,
+		"esm": true
+	},
+  	"extends": "@repick/typescript-config/base.json",
+	"compilerOptions": {
+		"skipLibCheck": true,
+		"target": "ES2022",
+		"module": "nodenext",
+		"moduleResolution": "nodenext",
+		"esModuleInterop": true,
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"forceConsistentCasingInFileNames": true,
+		"isolatedModules": true,
+		"strict": true,
+		"noImplicitOverride": true,
+		"sourceMap": false,
+		"declaration": true,
+		"declarationMap": false,
+		"rootDir": "./src",
+		"outDir": "dist",
+	},
+	"include": [
+		"src"
+	],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"__tests__"
+	]
+}

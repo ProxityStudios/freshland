@@ -1,0 +1,86 @@
+{
+  "name": "repick",
+  "description": "Repick is a CLI tool that lets you to clone repositories faster and comes with additinional features.",
+  "version": "0.0.0",
+  "author": "Proxity Studios",
+  "license": "MIT",
+  "homepage": "https://github.com/ProxityStudios/repick/blob/main/README.md",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "bugs": {
+    "url": "https://github.com/ProxityStudios/repick/issues"
+  },
+  "keywords": [
+    "repick",
+    "eslint",
+    "prettier",
+    "template",
+    "templates",
+    "cli",
+    "clone"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ProxityStudios/repick.git"
+  },
+  "files": [
+    "/bin",
+    "/scripts",
+    "/dist"
+  ],
+  "scripts": {
+    "dev": "./bin/dev.js",
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc -p tsconfig.json --noEmit",
+    "fetch-templates": "node ./scripts/fetchTemplates.js",
+    "postinstall": "node ./scripts/postinstall.js"
+  },
+  "bin": {
+    "repick": "bin/run.js"
+  },
+  "oclif": {
+    "bin": "repick",
+    "commands": "./src/commands",
+    "dirname": "repick",
+    "plugins": [
+      "@oclif/plugin-help",
+      "@oclif/plugin-warn-if-update-available",
+      "@oclif/plugin-not-found"
+    ],
+    "update": {
+      "autoupdate": {
+        "rollout": 50,
+        "debounce": 60
+      },
+      "node": {
+        "version": "22.16.0"
+      }
+    },
+    "topicSeparator": " "
+  },
+  "devDependencies": {
+    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/commit-analyzer": "13.0.1",
+    "@semantic-release/git": "10.0.1",
+    "@semantic-release/github": "11.0.3",
+    "@semantic-release/npm": "12.0.2",
+    "@semantic-release/release-notes-generator": "14.0.3",
+    "@types/node": "24.0.7",
+    "semantic-release": "24.2.6",
+  	"@repick/typescript-config": "workspace:*",
+    "ts-node": "^10.9.2",
+    "typescript": "5.5.4"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "7.5.3",
+    "@oclif/core": "4.4.0",
+    "@oclif/plugin-help": "6.2.31",
+    "@repick/core": "workspace:*",
+    "@repick/common": "workspace:*",
+    "@oclif/plugin-not-found": "3.2.59",
+    "@oclif/plugin-warn-if-update-available": "3.1.44",
+    "https-proxy-agent": "7.0.6",
+    "tar": "7.4.3"
+  }
+}
